@@ -1,0 +1,1027 @@
+
+<script>
+(function(){
+"use strict";
+var P = window.__P, L = window.__LEAGUES, U = window.__U;
+var esc = U.esc, pc = U.pc;
+
+function fileToDiv(f){
+  for (var k in L) if (L[k].file === f) return k;
+  return null;
+}
+/* Long dataset names -> the label people use, from the curated map the model
+   already keeps. Regex-stripping suffixes turns Feyenoord Rotterdam into
+   something no supporter says, so don't. */
+function tidy(n){
+  return (P.names && P.names[n]) ? P.names[n]
+       : n.replace(/ (FC|AFC|CF|SC|BC|SV)$/, "").replace(/^(FC|AFC|SV|SC|RC|AS|AJ|US|AC|SS|CA|RCD|CD) /, "");
+}
+function card(id){
+  return P.card.filter(function(f){ return f.id === id; })[0] || null;
+}
+
+/* Fixtures with both sides genuinely fitted — the only ones the model
+   has real evidence for. Everything else is flagged in the interface. */
+function solid(list){ return list.filter(function(f){ return f.thin === 0; }); }
+
+function flagFor(f){
+  if (f.thin === 0) return "";
+  return '<span class="flag flag-thin">'+(f.thin === 2 ? "limited data" : "carried across tier")+'</span>';
+}
+
+/* ============================================================
+   Fixture row and pick card
+   ============================================================ */
+
+function teamLine(f, which){
+  var name = which === "h" ? f.home : f.away;
+  var g = which === "h" ? f.pred[0] : f.pred[1];
+  return '<span class="fx-team">'+U.crest(name)+
+    '<span class="nm">'+esc(name)+'</span></span>';
+}
+
+var SHORT_MKT = {
+  o15:"O1.5", u15:"U1.5", o25:"O2.5", u25:"U2.5", o35:"O3.5", u35:"U3.5",
+  btts:"BTTS Y", nobtts:"BTTS N"
+};
+
+/* The top pick from Total goals and Both teams to score, compact enough
+   for a fixture row: "O2.5 55% · BTTS Y 58%". Match outcome is already
+   the row's headline, so it isn't repeated here. */
+function marketsLine(f){
+  var best = U.bestPerGroup(f);
+  var picks = [best["Total goals"], best["Both teams to score"]].filter(Boolean);
+  if (!picks.length) return "";
+  return picks.map(function(s){
+    return (SHORT_MKT[s.key] || s.label)+' <b>'+pc(s.model)+'%</b>';
+  }).join(" &middot; ");
+}
+
+function fixtureRow(f){
+  var ml = marketsLine(f);
+  return '<button class="fx" data-match="'+esc(f.id)+'" aria-label="'+
+      esc(f.home+" versus "+f.away+", model predicts "+f.pred[0]+"–"+f.pred[1])+'">'+
+    '<span><span class="fx-time">'+esc(f.time)+'</span></span>'+
+    '<span class="fx-teams">'+teamLine(f,"h")+teamLine(f,"a")+
+      (ml ? '<span class="fx-markets">'+ml+'</span>' : "")+'</span>'+
+    '<span class="fx-pred tnum">'+f.pred[0]+'&ndash;'+f.pred[1]+'<small>predicted</small></span>'+
+    '<span class="fx-prob">'+U.prail(f.probs)+
+      '<span class="nums tnum"><span><b>'+pc(f.probs[0])+'</b>%</span>'+
+      '<span><b>'+pc(f.probs[1])+'</b>%</span><span><b>'+pc(f.probs[2])+'</b>%</span></span></span>'+
+    '<span class="fx-conf">'+U.confChip(f.conf)+'</span>'+
+  '</button>';
+}
+
+function pickCard(f){
+  var b = U.confBand(f.conf);
+  var i = f.probs.indexOf(Math.max.apply(null, f.probs));
+  var verdict = i === 1 ? "Draw" : (i === 0 ? f.homeShort : f.awayShort) + " to win";
+  // the most likely SCORE and the most likely OUTCOME need not agree: 1-1 can
+  // be the single commonest scoreline while a home win is the likelier result
+  var predOutcome = f.pred[0] > f.pred[1] ? 0 : (f.pred[0] < f.pred[1] ? 2 : 1);
+  var split = predOutcome !== i;
+  return '<button class="pick" data-match="'+esc(f.id)+'">'+
+    '<span class="pick-top">'+
+      '<span class="pick-league">'+esc(L[f.div].name)+'</span>'+
+      '<span class="badge badge-soon">'+esc(f.time)+'</span>'+
+    '</span>'+
+    '<span class="pick-teams">'+
+      '<span class="pick-team'+(f.pred[0]>=f.pred[1]?"":" dim")+'">'+U.crest(f.home)+
+        '<span class="nm">'+esc(f.home)+'</span><span class="sc tnum">'+f.pred[0]+'</span></span>'+
+      '<span class="pick-team'+(f.pred[1]>f.pred[0]?"":" dim")+'">'+U.crest(f.away)+
+        '<span class="nm">'+esc(f.away)+'</span><span class="sc tnum">'+f.pred[1]+'</span></span>'+
+    '</span>'+
+    U.prail(f.probs, "md")+
+    '<span class="pick-foot">'+
+      '<span class="pick-verdict"><b>'+esc(verdict)+'</b> &middot; '+pc(Math.max.apply(null,f.probs))+'%'+
+      (split ? '<br><span style="color:var(--faint);font-size:11.5px">likeliest score '+
+        f.pred[0]+'&ndash;'+f.pred[1]+'</span>' : "")+'</span>'+
+      U.confChip(f.conf)+
+    '</span>'+
+  '</button>';
+}
+
+/* ============================================================
+   Today
+   ============================================================ */
+
+function viewToday(state){
+  var day = U.DATES.filter(function(d){ return d.key === state.day; })[0] || U.DATES[0];
+  var all = day.list;
+  var list = state.league === "all" ? all : all.filter(function(f){ return f.div === state.league; });
+
+  var picks = solid(all).slice().sort(function(a,b){ return b.conf - a.conf; }).slice(0,3);
+  var value = [];
+  solid(all).forEach(function(f){ value = value.concat(U.priced(f)); });
+  value.sort(function(a,b){ return b.edge - a.edge; });
+  value = value.filter(function(s){ return s.model >= 0.35; }).slice(0,3);
+
+  var bt = P.backtest;
+  var best = picks[0];
+  var h = "";
+
+  h += '<header class="hero">'+U.heroArt()+'<div class="hero-inner">'+
+    '<p class="eyebrow"><span class="dot"></span>'+esc(U.fmtLong(day.date))+
+      '<span class="sep">/</span><span class="grey">2026/27, week one</span></p>'+
+    '<h1>'+(best
+      ? esc(best.homeShort+' '+best.pred[0]+'–'+best.pred[1]+' '+best.awayShort)+
+        ' is the model&rsquo;s firmest call today.'
+      : 'No fixtures priced for this date.')+'</h1>'+
+    '<p class="lede">Every fixture below is priced by a Dixon-Coles model fitted on '+
+      Object.keys(P.meta.train).reduce(function(a,k){ return a + P.meta.train[k].n; }, 0).toLocaleString()+
+      ' real 2025/26 results and the '+
+      Object.keys(P.season.played).reduce(function(a,k){ return a + P.season.played[k]; }, 0)+
+      ' played so far in 2026/27. Predicted scoreline, outcome probabilities and a confidence rating '+
+      'for each, plus the gap against the bookmakers&rsquo; own price.</p>'+
+    '<div class="hero-stats">'+
+      '<div class="hstat"><span class="hstat-k">Fixtures priced</span>'+
+        '<div class="hstat-v tnum">'+all.length+'</div>'+
+        '<div class="hstat-note">across '+Object.keys(all.reduce(function(a,f){ a[f.div]=1; return a; },{})).length+' leagues</div></div>'+
+      '<div class="hstat"><span class="hstat-k">Correct outcomes</span>'+
+        '<div class="hstat-v tnum">'+bt.overall.outcome.rate.toFixed(1)+'<small>%</small></div>'+
+        '<div class="hstat-note">out of sample, '+bt.n+' matches</div></div>'+
+      '<div class="hstat"><span class="hstat-k">Above baseline</span>'+
+        '<div class="hstat-v tnum">+'+(bt.overall.outcome.rate - bt.home_baseline).toFixed(1)+'<small>pts</small></div>'+
+        '<div class="hstat-note">vs always calling the home side</div></div>'+
+      '<div class="hstat"><span class="hstat-k">Called right this season</span>'+
+        '<div class="hstat-v tnum">'+(P.graded.length
+          ? P.graded.filter(function(g){ return g.hit; }).length+'<small>/'+P.graded.length+'</small>'
+          : '&mdash;')+'</div>'+
+        '<div class="hstat-note">'+(P.graded.length
+          ? '2026/27 matches played so far'
+          : 'no matches played yet')+'</div></div>'+
+    '</div></div></header>';
+
+  h += '<div class="wrap">';
+
+  h += '<section class="section" style="margin-top:26px"><div class="section-head">'+
+    '<div><div class="seg" role="group" aria-label="Match date">'+
+      U.DATES.map(function(d){
+        return '<button data-day="'+esc(d.key)+'" aria-pressed="'+(d.key===state.day)+'">'+
+               esc(d.label)+'</button>';
+      }).join("")+
+    '</div></div>'+
+    '<div class="chiprow" role="group" aria-label="Filter by league">'+
+      '<button class="chip" data-league="all" aria-pressed="'+(state.league==="all")+'">All leagues</button>'+
+      Object.keys(L).map(function(k){
+        var n = all.filter(function(f){ return f.div === k; }).length;
+        if (!n) return "";
+        return '<button class="chip" data-league="'+k+'" aria-pressed="'+(state.league===k)+'">'+
+               esc(L[k].name)+' <span class="tnum" style="opacity:.6">'+n+'</span></button>';
+      }).join("")+
+    '</div></div></section>';
+
+  h += gradedStrip();
+
+  if (picks.length){
+    h += '<section class="section" style="margin-top:22px">'+
+      '<div class="section-head"><div><h2>Today&rsquo;s strongest calls</h2>'+
+      '<div class="sub">Highest confidence on the card, restricted to fixtures where both sides have '+
+      'at least 20 matches behind them in the fit.</div></div></div>'+
+      '<div class="picks">'+picks.map(pickCard).join("")+'</div></section>';
+  }
+
+  if (value.length){
+    h += '<section class="section"><div class="section-head">'+
+      '<div><h2>Furthest from the bookmakers</h2>'+
+      '<div class="sub">Where the model and the market disagree most. A gap is a disagreement between '+
+      'two estimates, not a profit.</div></div>'+
+      '<div class="right"><button class="btn btn-ghost" data-go="tips">All tips</button></div></div>'+
+      '<div class="grid-3">'+value.map(valueCard).join("")+'</div></section>';
+  }
+
+  h += '<section class="section"><div class="section-head">'+
+    '<div><h2>'+(state.league === "all" ? "All fixtures" : esc(L[state.league].name))+'</h2>'+
+    '<div class="sub">Kick-off times as published by the fixture feed. Select a match for the full '+
+    'market board.</div></div><div class="right tnum">'+list.length+' shown</div></div>';
+
+  if (!list.length){
+    h += '<div class="empty">'+U.emptyPitch()+
+      '<h3>No '+esc(L[state.league].name)+' fixtures on this date</h3>'+
+      '<p>There are '+all.length+' matches on the card in other leagues.</p>'+
+      '<div class="actions"><button class="btn" data-league="all">Show all leagues</button></div></div>';
+  } else {
+    h += '<div class="fx-head"><span>Kick-off</span>'+
+      '<span class="fx-head-fixture"><span>Fixture</span></span>'+
+      '<span>Predicted</span><span>Home / draw / away</span>'+
+      '<span style="text-align:right">Confidence</span></div>';
+    Object.keys(L).forEach(function(k){
+      var rows = list.filter(function(f){ return f.div === k; });
+      if (!rows.length) return;
+      h += '<div class="league-block"><div class="league-head">'+U.flag(k)+
+        '<h3>'+esc(L[k].name)+'</h3><span class="cnt">'+esc(L[k].country)+'</span></div>'+
+        rows.map(fixtureRow).join("")+'</div>';
+    });
+  }
+  h += '</section>' + U.disclaimer() + U.footer() + '</div>';
+  return h;
+}
+
+/* What has actually been played this season, and how the model did on it.
+   Every one of these was predicted by a fit that had not seen the match. */
+function gradedStrip(){
+  var g = P.graded;
+  var started = Object.keys(P.season.started).filter(function(d){ return P.season.started[d]; });
+  var notYet  = Object.keys(P.season.started).filter(function(d){ return !P.season.started[d]; });
+
+  if (!g.length){
+    return '<section class="section"><div class="note">'+
+      '<b>Nothing has been played yet.</b> The 2026/27 season opens on this card, so every fixture '+
+      'below is priced on last season alone.</div></section>';
+  }
+
+  var hits = g.filter(function(x){ return x.hit; }).length;
+  var ou = g.filter(function(x){ return x.o25_hit; }).length;
+
+  return '<section class="section"><div class="section-head">'+
+    '<div><h2>This season so far</h2>'+
+    '<div class="sub">The '+g.length+' matches already played in 2026/27, each predicted by a model '+
+    'that had not seen it. This is the only fully current evidence there is.</div></div>'+
+    '<div class="right tnum">'+hits+'/'+g.length+' outcomes &middot; '+ou+'/'+g.length+' over/under</div>'+
+    '</div>'+
+    '<div class="card" style="padding:6px 14px 14px">'+
+      '<div class="res" style="margin-top:8px">'+
+      g.slice(0, 8).map(function(x){
+        return '<div class="res-row" style="grid-template-columns:52px 1fr auto 1fr 78px">'+
+          '<span class="dt">'+esc(U.fmtShort(x.date))+'</span>'+
+          '<span class="hm">'+esc(x.home)+'</span>'+
+          '<span class="sc tnum '+(x.hit?"hit":"miss")+'">'+x.hg+'&ndash;'+x.ag+'</span>'+
+          '<span class="aw">'+esc(x.away)+'</span>'+
+          '<span style="text-align:right;font-family:var(--mono);font-size:11px;color:var(--faint)">'+
+            'said '+x.pred[0]+'&ndash;'+x.pred[1]+'</span>'+
+        '</div>';
+      }).join("")+'</div>'+
+      '<p style="margin-top:14px;font-size:12.5px">Green outline: the model called the outcome right. '+
+      'Red: it did not. '+
+      (notYet.length
+        ? esc(notYet.map(function(d){ return L[d].name; }).join(", "))+
+          (notYet.length === 1 ? ' has' : ' have')+' not kicked off yet, so nothing there has been graded.'
+        : '')+
+      '</p></div></section>';
+}
+
+function valueCard(s){
+  var f = s.fx;
+  return '<button class="pick" data-match="'+esc(f.id)+'">'+
+    '<span class="pick-top"><span class="pick-league">'+esc(L[f.div].name)+'</span>'+
+      '<span class="badge badge-soon">'+esc(f.time)+'</span></span>'+
+    '<span style="font-family:var(--display);font-variation-settings:\'wdth\' 100;font-weight:600;'+
+      'font-size:14.5px;color:var(--white);line-height:1.35">'+esc(f.homeShort)+' v '+esc(f.awayShort)+'</span>'+
+    '<span style="font-size:13.5px;color:var(--text);font-weight:600">'+esc(s.label)+'</span>'+
+    '<span class="tip-vs"><span class="bar"><i style="width:'+(s.model*100).toFixed(1)+'%"></i>'+
+      '<span class="mk" style="left:'+(s.book*100).toFixed(1)+'%"></span></span>'+
+      '<span class="lab"><span>model '+pc(s.model)+'%</span><span>book '+pc(s.book)+'%</span></span></span>'+
+    '<span class="pick-foot"><span class="pick-verdict">Price '+U.odds(s.odds)+'</span>'+
+      '<span class="tip-edge">+'+(s.edge*100).toFixed(1)+'<small>pts</small></span></span>'+
+  '</button>';
+}
+
+/* ============================================================
+   Tips
+   ============================================================ */
+
+function viewTips(state){
+  var day = U.DATES.filter(function(d){ return d.key === state.day; })[0] || U.DATES[0];
+  var pool = solid(day.list);
+
+  var value = [];
+  pool.forEach(function(f){ value = value.concat(U.priced(f)); });
+  value = value.filter(function(s){ return s.model >= 0.35; });
+  value.sort(function(a,b){ return b.edge - a.edge; });
+  value = value.slice(0, 12);
+
+  var strong = [];
+  pool.forEach(function(f){
+    U.selections(f).forEach(function(s){
+      if (s.key === "o15" || s.key === "u35") return;   // near-certainties, no information
+      strong.push(s);
+    });
+  });
+  strong.sort(function(a,b){ return b.model - a.model; });
+  strong = strong.slice(0, 12);
+
+  var h = '<div class="wrap"><section class="section" style="margin-top:34px">'+
+    '<div class="section-head"><div><h2>Tips</h2>'+
+    '<div class="sub">Every selection here is read straight off the model&rsquo;s score matrix for that '+
+    'fixture. Nothing is hand-picked, and only fixtures with real evidence behind both sides qualify.</div></div>'+
+    '<div class="seg" role="group" aria-label="Match date">'+
+      U.DATES.map(function(d){
+        return '<button data-day="'+esc(d.key)+'" aria-pressed="'+(d.key===state.day)+'">'+
+               esc(d.label)+'</button>';
+      }).join("")+
+    '</div></div>';
+
+  if (!pool.length){
+    h += '<div class="empty">'+U.emptyPitch()+'<h3>No tips for this date</h3>'+
+      '<p>Tips are only published for fixtures where both sides have at least 20 matches behind them '+
+      'in the fit. Nothing on this date qualifies.</p></div>'+
+      U.disclaimer()+U.footer()+'</section></div>';
+    return h;
+  }
+
+  h += '<div class="note" style="margin-bottom:18px"><b>How to read the gap.</b> The book&rsquo;s '+
+    'percentage is its own price with the margin divided out, so the two columns are comparable. '+
+    'A positive gap means the model rates that outcome more likely than the bookmakers do — it does '+
+    'not mean the bet wins, and over the record period the model was right '+
+    P.backtest.overall.outcome.rate.toFixed(1)+'% of the time on match outcomes.</div>';
+
+  h += '<div class="card" style="padding:6px 12px 14px">'+
+    '<div class="card-k" style="padding-top:14px"><span>Furthest from the book</span>'+
+    '<span>'+value.length+' selections with a price</span></div>'+
+    '<div class="tip-head"><span>#</span><span>Fixture</span><span>Selection</span>'+
+    '<span style="text-align:right">Model</span><span>Model vs book</span>'+
+    '<span style="text-align:right">Gap</span></div>'+
+    value.map(function(s, i){ return tipRow(s, i+1, true); }).join("")+
+  '</div>';
+
+  h += '<div class="section" style="margin-top:14px"><div class="card" style="padding:6px 12px 14px">'+
+    '<div class="card-k" style="padding-top:14px"><span>Highest-probability calls</span>'+
+    '<span>all markets, priced or not</span></div>'+
+    '<div class="tip-head"><span>#</span><span>Fixture</span><span>Selection</span>'+
+    '<span style="text-align:right">Model</span><span>Model vs book</span>'+
+    '<span style="text-align:right">Gap</span></div>'+
+    strong.map(function(s, i){ return tipRow(s, i+1, false); }).join("")+
+    '<p style="margin:14px 12px 0;font-size:12.5px;color:var(--muted)">A high probability is not the '+
+    'same as a good price. Double chance and clean-sheet lines sit near the top here precisely because '+
+    'they are the easiest calls to make.</p>'+
+  '</div></div>';
+
+  h += U.disclaimer() + U.footer() + '</section></div>';
+  return h;
+}
+
+function tipRow(s, rank, showEdge){
+  var f = s.fx;
+  var vs = s.book == null
+    ? '<span class="tip-vs"><span class="lab"><span>no price published</span></span></span>'
+    : '<span class="tip-vs"><span class="bar"><i style="width:'+(s.model*100).toFixed(1)+'%"></i>'+
+      '<span class="mk" style="left:'+(s.book*100).toFixed(1)+'%"></span></span>'+
+      '<span class="lab"><span>model</span><span>book '+pc(s.book)+'%</span></span></span>';
+  var edge = s.edge == null
+    ? '<span class="tip-edge" style="color:var(--faint)">—</span>'
+    : '<span class="tip-edge" style="color:'+(s.edge>=0?"var(--turf-bright)":"var(--loss)")+'">'+
+      (s.edge>=0?"+":"")+(s.edge*100).toFixed(1)+'<small>pts</small></span>';
+  return '<button class="tip" data-match="'+esc(f.id)+'">'+
+    '<span class="tip-rank tnum">'+rank+'</span>'+
+    '<span class="tip-fx"><b>'+esc(f.homeShort)+' v '+esc(f.awayShort)+'</b>'+
+      '<span>'+esc(L[f.div].name)+' &middot; '+esc(f.time)+'</span></span>'+
+    '<span class="tip-sel">'+esc(s.label)+'<small>'+esc(s.group)+'</small></span>'+
+    '<span class="tip-num tnum">'+pc(s.model)+'%<small>'+
+      (s.odds ? U.odds(s.odds) : "no price")+'</small></span>'+
+    vs + edge +
+  '</button>';
+}
+
+/* ============================================================
+   Match card
+   ============================================================ */
+
+function viewMatch(state){
+  var f = card(state.match);
+  if (!f) return '<div class="wrap"><div class="empty" style="margin-top:60px">'+U.emptyPitch()+
+    '<h3>That match isn&rsquo;t on the card</h3><p>The card covers '+U.fmtShort(U.DATES[0].date)+
+    ' to '+U.fmtShort(U.DATES[U.DATES.length-1].date)+' 2026.</p>'+
+    '<div class="actions"><button class="btn" data-go="today">Back to fixtures</button></div></div></div>';
+
+  var b = U.confBand(f.conf);
+  var h = '<div class="wrap">';
+  h += '<button class="back" data-go="today">'+
+    '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">'+
+    '<path d="M8.5 3L4.5 7l4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>'+
+    '</svg>All fixtures</button>';
+
+  h += '<div class="md-head">'+
+    '<div class="md-side">'+U.crest(f.home,true)+'<div><div class="nm">'+esc(f.home)+'</div>'+
+      '<div class="meta">home &middot; xG '+f.lam.toFixed(2)+'</div></div></div>'+
+    '<div class="md-score"><span class="k">Predicted score</span>'+
+      '<div class="v tnum">'+f.pred[0]+'&ndash;'+f.pred[1]+'</div>'+
+      '<div class="kick">'+esc(L[f.div].name)+' &middot; '+esc(U.fmtShort(f.date))+' '+esc(f.time)+'</div></div>'+
+    '<div class="md-side away">'+U.crest(f.away,true)+'<div><div class="nm">'+esc(f.away)+'</div>'+
+      '<div class="meta">xG '+f.mu.toFixed(2)+' &middot; away</div></div></div>'+
+  '</div>';
+
+  h += '<div class="grid-2">'+
+    '<div class="card"><div class="card-k"><span>Outcome probability</span>'+
+      '<span>'+(f.book && f.book.probs ? "book overround "+(f.book.overround*100).toFixed(1)+"%" : "no price")+'</span></div>'+
+      U.prail(f.probs,"lg")+
+      '<div class="prail-key">'+
+        '<span><i style="background:var(--turf)"></i>'+esc(f.homeShort)+' win</span>'+
+        '<span><i style="background:var(--draw)"></i>Draw</span>'+
+        '<span><i style="background:var(--amber)"></i>'+esc(f.awayShort)+' win</span>'+
+      '</div>'+
+      (f.book && f.book.probs
+        ? '<p style="margin-top:14px">Bookmakers price the same three outcomes at '+
+          pc(f.book.probs[0])+'% / '+pc(f.book.probs[1])+'% / '+pc(f.book.probs[2])+
+          '% once their margin is divided out.</p>'
+        : '<p style="margin-top:14px">No bookmaker price was published for this fixture, so there is '+
+          'nothing to compare the model against.</p>')+
+    '</div>'+
+    '<div class="card"><div class="card-k"><span>Confidence</span><span>'+esc(b.label)+'</span></div>'+
+      '<div class="dial-wrap">'+U.dial(f.conf)+
+        '<div class="dial-txt"><div class="n tnum">'+f.conf+'<span>/100</span></div>'+
+        '<div class="lab">'+esc(b.label)+' confidence</div>'+
+        '<div class="sub">'+calibLine(f.conf)+'</div>'+
+      '</div></div></div>'+
+  '</div>';
+
+  if (f.thin > 0){
+    h += '<div class="section" style="margin-top:14px"><div class="note">'+
+      '<b>Thin evidence for this fixture.</b> '+esc(f.home)+' — '+esc(f.why.home)+'. '+
+      esc(f.away)+' — '+esc(f.why.away)+'. A side with no prior-season record in this division starts '+
+      'from a league-floor prior rather than a fitted strength, and the confidence rating is cut to '+
+      'reflect that. Treat this line as weaker than its number suggests.</div></div>';
+  }
+
+  h += '<div class="section" style="margin-top:14px"><div class="grid-2">'+
+    '<div class="card"><div class="card-k"><span>Market board</span><span>model vs book</span></div>'+
+      marketBoard(f)+'</div>'+
+    '<div class="card"><div class="card-k"><span>Most likely scorelines</span>'+
+      '<span>of '+((P.meta.maxg+1)*(P.meta.maxg+1))+' considered</span></div>'+
+      '<div class="sgrid">'+f.scores.map(function(s, i){
+        return '<div class="sgrid-row"><span class="sc tnum">'+s.h+'&ndash;'+s.a+'</span>'+
+          '<span class="sgrid-bar"><i style="width:'+(s.p / f.scores[0].p * 100).toFixed(1)+'%"></i></span>'+
+          '<span class="pc tnum">'+(s.p*100).toFixed(1)+'%</span></div>';
+      }).join("")+'</div>'+
+      '<p style="margin-top:14px">Expected goals '+f.mk.exp_home.toFixed(2)+' &ndash; '+
+      f.mk.exp_away.toFixed(2)+'. The published scoreline is the single most likely result, not the '+
+      'rounded average — those are rarely the same thing.</p>'+
+      '<div style="margin-top:14px">'+(f.thin===0
+        ? '<span class="flag flag-ok">both sides fitted</span>'
+        : flagFor(f))+'</div>'+
+    '</div>'+
+  '</div></div>';
+
+  h += evidencePanel(f);
+
+  h += U.disclaimer() + U.footer() + '</div>';
+  return h;
+}
+
+function resultColor(r){
+  return r === "W" ? "var(--turf-bright)" : r === "L" ? "var(--loss)" : "var(--faint)";
+}
+
+function formList(name, form){
+  if (!form.length) return '<div class="h2h-row"><span class="tm" style="color:var(--faint)">'+
+    'No matches on record for '+esc(name)+'.</span></div>';
+  return form.map(function(m){
+    return '<div class="h2h-row"><span class="dt">'+esc(U.fmtShort(m.date))+'</span>'+
+      '<span class="tm">'+(m.venue==="H"?"vs ":"@ ")+esc(m.opp)+'</span>'+
+      '<span class="sc tnum" style="color:'+resultColor(m.result)+'">'+m.gf+'&ndash;'+m.ga+'</span></div>';
+  }).join("");
+}
+
+function splitCard(label, sub, s){
+  if (!s || !s.played) return '<div class="card"><div class="card-k"><span>'+esc(label)+'</span></div>'+
+    '<p>No record at this venue.</p></div>';
+  var gd = s.gf - s.ga;
+  return '<div class="card"><div class="card-k"><span>'+esc(label)+'</span><span>'+esc(sub)+'</span></div>'+
+    '<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">'+
+      '<span style="font-family:var(--mono);font-size:22px;font-weight:600;color:var(--text)" class="tnum">'+
+        s.w+'&ndash;'+s.d+'&ndash;'+s.l+'<span style="font-size:11px;color:var(--faint);font-weight:400;'+
+        'margin-left:6px;text-transform:uppercase;letter-spacing:.06em">W-D-L</span></span>'+
+    '</div>'+
+    '<p style="margin-top:10px">'+s.gf+'&ndash;'+s.ga+' goals ('+(gd>=0?'+':'')+gd+'), '+
+    s.ppg.toFixed(2)+' points per game across '+s.played+' match'+(s.played===1?'':'es')+'.</p>'+
+  '</div>';
+}
+
+function evidencePanel(f){
+  var e = f.evidence;
+  var h = '<div class="section" style="margin-top:14px">'+
+    '<div class="section-head"><h2>Evidence</h2>'+
+      '<span class="sub">Recent form, head-to-head and home/away record — all read off real results, '+
+      'nothing modelled.</span></div>';
+
+  h += '<div class="grid-2">'+
+    '<div class="card"><div class="card-k"><span>Recent form</span><span>last 5, most recent first</span></div>'+
+      '<div class="h2h" style="margin-bottom:14px">'+
+        '<div class="h2h-row" style="border-bottom:0;padding-bottom:4px">'+
+          '<span class="dt"></span><span class="tm" style="color:var(--text);font-weight:500">'+esc(f.home)+'</span></div>'+
+        formList(f.home, e.form.home)+
+      '</div>'+
+      '<div class="h2h">'+
+        '<div class="h2h-row" style="border-bottom:0;padding-bottom:4px">'+
+          '<span class="dt"></span><span class="tm" style="color:var(--text);font-weight:500">'+esc(f.away)+'</span></div>'+
+        formList(f.away, e.form.away)+
+      '</div>'+
+    '</div>'+
+    '<div class="card"><div class="card-k"><span>Head-to-head</span><span>'+
+      (e.h2h.length ? "last "+e.h2h.length+" meeting"+(e.h2h.length===1?"":"s") : "no meetings on record")+'</span></div>'+
+      (e.h2h.length
+        ? '<div class="h2h">'+e.h2h.map(function(m){
+            return '<div class="h2h-row"><span class="dt">'+esc(U.fmtShort(m.date))+'</span>'+
+              '<span class="tm">'+esc(m.home)+' v '+esc(m.away)+'</span>'+
+              '<span class="sc tnum">'+m.hg+'&ndash;'+m.ag+'</span></div>';
+          }).join("")+'</div>'
+        : '<p>'+esc(f.home)+' and '+esc(f.away)+' have not met in the data this model trains on.</p>')+
+    '</div>'+
+  '</div>';
+
+  h += '<div class="grid-2" style="margin-top:14px">'+
+    splitCard(f.home+' at home', 'record', e.split.home)+
+    splitCard(f.away+' away', 'record', e.split.away)+
+  '</div></div>';
+
+  return h;
+}
+
+function thisSeasonBlurb(){
+  var started = P.season.started, played = P.season.played;
+  var divs = Object.keys(started);
+  var live = divs.filter(function(d){ return started[d]; });
+  var notYet = divs.filter(function(d){ return !started[d]; });
+  var total = live.reduce(function(a,d){ return a + played[d]; }, 0);
+  var liveTxt = live.map(function(d){
+    return esc(L[d].name)+" ("+played[d]+")";
+  }).join(", ");
+  var s = live.length
+    ? liveTxt+" "+(live.length>1?"have":"has")+" kicked off."
+    : "Nothing has kicked off yet.";
+  if (notYet.length)
+    s += " "+notYet.map(function(d){ return esc(L[d].name); }).join(", ")+
+      " "+(notYet.length>1?"open":"opens")+" on this card.";
+  return s+" Those "+total+" real results are in the fit and, being days rather than months old, "+
+    "carry the most weight of anything in it. A side with only a match or two played is shrunk toward "+
+    "its league average rather than allowed to take an extreme rating off one result, and its fixtures "+
+    "are flagged.";
+}
+
+function baselineSentence(byLeague){
+  var files = Object.keys(byLeague);
+  var fails = files.filter(function(f){ return byLeague[f].outcome <= byLeague[f].home_base; });
+  var lead = 'The pale mark is that league&rsquo;s own always-home rate. Beating it is the minimum bar. ';
+  if (!fails.length)
+    return lead + 'The model clears it in all '+files.length+' leagues.';
+  var names = fails.map(function(f){
+    var div = fileToDiv(f), r = byLeague[f];
+    return esc(L[div].name)+' ('+r.outcome.toFixed(1)+'% vs '+r.home_base.toFixed(1)+'%)';
+  });
+  return lead + 'The model clears it in '+(files.length - fails.length)+' of '+files.length+
+    ' leagues and <b style="color:var(--text)">falls short in '+names.join(', ')+'</b>, where a '+
+    'flatter spread of results makes the coin-toss baseline hard to beat.';
+}
+
+function calibLine(conf){
+  var band = P.backtest.calibration.filter(function(c){
+    var lo = parseInt(c.band, 10);
+    return conf >= lo;
+  })[0];
+  if (!band || band.hit == null || band.n < 20)
+    return "How tightly the simulated outcomes agree. Too few settled matches in this band to quote a hit rate.";
+  return "How tightly the simulated outcomes agree. Calls in this band came in " +
+    band.hit.toFixed(1) + "% of the time across " + band.n + " settled matches.";
+}
+
+function marketBoard(f){
+  var groups = [
+    ["Match outcome", ["home","draw","away"]],
+    ["Total goals",   ["o25","u25","o15","o35"]],
+    ["Both teams to score", ["btts","nobtts"]],
+    ["Double chance", ["dc_1x","dc_x2","dc_12"]],
+    ["Clean sheet",   ["cs_home","cs_away"]],
+    ["Winning margin",["margin_1","margin_2p"]]
+  ];
+  var best = U.bestPerGroup(f);
+  return '<div class="mkt">'+groups.map(function(g){
+    var b = best[g[0]];
+    var badge = b ? '<span class="mkt-best">'+esc(U.selLabel(f, b.key))+' &middot; '+pc(b.model)+'%</span>' : "";
+    return '<div class="mkt-group"><div class="mkt-title"><span>'+esc(g[0])+'</span>'+badge+'</div>'+
+      g[1].map(function(k){
+        var mp = U.prob(f, k), bp = U.bookProb(f, k), od = U.bookOdds(f, k);
+        return '<div class="mkt-row">'+
+          '<span class="nm">'+esc(U.selLabel(f, k))+'</span>'+
+          '<span class="pc tnum">'+pc(mp)+'%</span>'+
+          '<span class="mkt-bar"><i style="width:'+(mp*100).toFixed(1)+'%"></i>'+
+            (bp != null ? '<span class="mk" style="left:'+(bp*100).toFixed(1)+'%"></span>' : "")+
+          '</span>'+
+          '<span class="bk tnum">'+(od ? U.odds(od) : "—")+'</span>'+
+        '</div>';
+      }).join("")+'</div>';
+  }).join("")+'</div>'+
+  '<p style="margin-top:12px;font-size:12px;color:var(--faint)">Bar is the model. The pale mark is the '+
+  'bookmakers&rsquo; own probability where a price exists; the right-hand column is that price.</p>';
+}
+
+/* ============================================================
+   Track record
+   ============================================================ */
+
+function trendChart(){
+  var data = P.backtest.trend;
+  var W = 760, H = 210, PL = 40, PR = 16, PT = 16, PB = 28;
+  var vals = data.map(function(d){ return d.outcome; });
+  var lo = Math.max(0, Math.floor((Math.min.apply(null, vals) - 4) / 5) * 5);
+  var hi = Math.ceil((Math.max.apply(null, vals) + 4) / 5) * 5;
+  var x = function(i){ return PL + i * (W-PL-PR) / (data.length-1); };
+  var y = function(v){ return PT + (hi - v) / (hi - lo) * (H-PT-PB); };
+
+  var line = data.map(function(d,i){ return (i?"L":"M")+x(i).toFixed(1)+" "+y(d.outcome).toFixed(1); }).join(" ");
+  var area = line + " L"+x(data.length-1).toFixed(1)+" "+(H-PB)+" L"+x(0).toFixed(1)+" "+(H-PB)+" Z";
+
+  var grid = "";
+  for (var v = lo; v <= hi; v += (hi-lo) >= 40 ? 20 : 10){
+    grid += '<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#1A252D"/>'+
+      '<text x="'+(PL-9)+'" y="'+(y(v)+4)+'" text-anchor="end" font-family="IBM Plex Mono" '+
+      'font-size="10" fill="#788C96">'+v+'</text>';
+  }
+  var base = P.backtest.home_baseline;
+  var capW = 200, capX = W - PR - capW, capY = y(base) + 6;
+  grid += '<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y(base)+'" y2="'+y(base)+'" stroke="#788C96" '+
+    'stroke-dasharray="3 4"/>'+
+    '<rect x="'+capX+'" y="'+capY+'" width="'+capW+'" height="14" fill="#090E13" fill-opacity=".82"/>'+
+    '<text x="'+(W-PR)+'" y="'+(capY+11)+'" text-anchor="end" font-family="IBM Plex Mono" '+
+    'font-size="9.5" fill="#788C96" letter-spacing=".08em">ALWAYS-HOME BASELINE '+base.toFixed(1)+'%</text>';
+
+  var ticks = "";
+  data.forEach(function(d,i){
+    if (i % 4 !== 0 && i !== data.length-1) return;
+    ticks += '<text x="'+x(i).toFixed(1)+'" y="'+(H-9)+'" text-anchor="middle" font-family="IBM Plex Mono" '+
+      'font-size="9.5" fill="#788C96">'+esc(U.fmtShort(d.week))+'</text>';
+  });
+
+  var pts = data.map(function(d,i){
+    return '<circle cx="'+x(i).toFixed(1)+'" cy="'+y(d.outcome).toFixed(1)+'" r="2.4" fill="#2FCB77" fill-opacity=".55"/>';
+  }).join("");
+
+  return '<div class="chart-scroll"><svg viewBox="0 0 '+W+' '+H+'" width="100%" '+
+    'style="min-width:620px;display:block" role="img" aria-label="Correct-outcome rate by week across '+
+    data.length+' weeks of out-of-sample matches, against an always-home baseline of '+base.toFixed(1)+' percent.">'+
+    '<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0%" stop-color="#1FA35C" stop-opacity=".26"/>'+
+      '<stop offset="100%" stop-color="#1FA35C" stop-opacity="0"/></linearGradient></defs>'+
+    grid + ticks +
+    '<path d="'+area+'" fill="url(#ar)"/>'+
+    '<path d="'+line+'" fill="none" stroke="#2FCB77" stroke-width="1.9" stroke-linejoin="round"/>'+
+    pts +
+  '</svg></div>';
+}
+
+function viewRecord(){
+  var bt = P.backtest;
+  var mkNames = {
+    outcome:["Match outcome","Home, draw or away"],
+    ou25:["Over/under 2.5 goals","Which side of the line the total lands"],
+    btts:["Both teams to score","Yes or no"],
+    cs:["Clean sheet","Whether the favoured side keeps one"],
+    dc:["Double chance","Two of the three outcomes"],
+    margin:["Winning margin","One goal, or two and above"],
+    exact:["Exact score","The full scoreline, both goals"]
+  };
+  var order = ["dc","cs","ou25","btts","margin","outcome","exact"];
+
+  var h = '<div class="wrap"><section class="section" style="margin-top:34px">'+
+    '<div class="section-head"><div><h2>Track record</h2>'+
+    '<div class="sub">Measured by refitting the model week by week and predicting only matches it had '+
+    'not seen. '+bt.n+' out-of-sample predictions between '+esc(U.fmtShort(bt.window[0]))+' and '+
+    esc(U.fmtShort(bt.window[1]))+'.</div></div></div>';
+
+  h += '<div class="kpis">'+
+    kpi("Correct outcome", bt.overall.outcome.rate.toFixed(1), "%",
+        "against a "+bt.home_baseline.toFixed(1)+"% always-home baseline")+
+    kpi("Exact score", bt.overall.exact.rate.toFixed(1), "%",
+        "the hardest market there is")+
+    kpi("Log loss", bt.logloss.toFixed(3), "",
+        "lower is better; 1.099 is a coin-flip across three outcomes")+
+    kpi("Matches scored", String(bt.n), "",
+        Object.keys(bt.by_league).length+" leagues, none of them fitted on the match being predicted")+
+  '</div>';
+
+  h += '<div class="section" style="margin-top:14px"><div class="chart-card">'+
+    '<div class="card-k"><span>Correct outcome by week</span><span>'+bt.trend.length+' weeks</span></div>'+
+    trendChart()+
+    '<p style="margin-top:12px;font-size:12.5px;color:var(--muted)">Each point is one week of matches, '+
+    'typically 20 to 40. Weekly swings of fifteen points are ordinary at that sample size — the line '+
+    'is noisy because football is, not because the model changed.</p>'+
+  '</div></div>';
+
+  h += '<div class="section" style="margin-top:14px"><div class="grid-2">'+
+    '<div class="card"><div class="card-k"><span>By market</span><span>same '+bt.n+' matches</span></div>'+
+      '<div class="acc"><div class="acc-row head" style="grid-template-columns:1fr 1fr 62px">'+
+        '<span>Market</span><span>Hit rate</span><span style="text-align:right">%</span></div>'+
+      order.map(function(k){
+        var r = bt.overall[k];
+        return '<div class="acc-row" style="grid-template-columns:1fr 1fr 62px">'+
+          '<span class="acc-name" style="display:block">'+esc(mkNames[k][0])+
+            '<small style="display:block;color:var(--faint);font-size:11.5px;margin-top:3px">'+
+            esc(mkNames[k][1])+'</small></span>'+
+          '<span class="acc-bar"><i style="width:'+r.rate.toFixed(1)+'%"></i>'+
+            '<span class="base" style="left:50%"></span></span>'+
+          '<span class="acc-num">'+r.rate.toFixed(1)+'</span></div>';
+      }).join("")+'</div>'+
+      '<p style="margin-top:14px;font-size:12.5px">The pale mark sits at 50%. Double chance and clean '+
+      'sheet clear it comfortably because they are broad questions; exact score sits far below because '+
+      'there are dozens of plausible scorelines in any match.</p></div>'+
+
+    '<div class="card"><div class="card-k"><span>By league</span></div>'+
+      '<div class="acc"><div class="acc-row head" style="grid-template-columns:1fr 1fr 54px 54px">'+
+        '<span>League</span><span>Correct outcome</span><span style="text-align:right">%</span>'+
+        '<span style="text-align:right">n</span></div>'+
+      Object.keys(bt.by_league).map(function(file){
+        var r = bt.by_league[file], div = fileToDiv(file);
+        return '<div class="acc-row" style="grid-template-columns:1fr 1fr 54px 54px">'+
+          '<span class="acc-name">'+U.flag(div)+esc(L[div].name)+'</span>'+
+          '<span class="acc-bar"><i style="width:'+((r.outcome-25)/40*100).toFixed(1)+'%"></i>'+
+            '<span class="base" style="left:'+((r.home_base-25)/40*100).toFixed(1)+'%"></span></span>'+
+          '<span class="acc-num">'+r.outcome.toFixed(1)+'</span>'+
+          '<span class="acc-num dim">'+r.n+'</span></div>';
+      }).join("")+'</div>'+
+      '<p style="margin-top:14px;font-size:12.5px">'+baselineSentence(bt.by_league)+'</p>'+
+    '</div>'+
+  '</div></div>';
+
+  h += '<div class="section" style="margin-top:14px"><div class="card">'+
+    '<div class="card-k"><span>Does the confidence rating mean anything?</span><span>calibration</span></div>'+
+    '<div class="acc"><div class="acc-row head" style="grid-template-columns:88px 1fr 62px 64px">'+
+      '<span>Band</span><span>Called correctly</span><span style="text-align:right">Hit</span>'+
+      '<span style="text-align:right">Matches</span></div>'+
+    bt.calibration.map(function(c){
+      if (c.hit == null) return '<div class="acc-row" style="grid-template-columns:88px 1fr 62px 64px">'+
+        '<span style="font-family:var(--mono);font-size:12px;color:var(--text)">'+esc(c.band)+'</span>'+
+        '<span style="font-size:12.5px;color:var(--faint)">no settled matches in this band</span>'+
+        '<span class="acc-num dim">—</span><span class="acc-num dim">0</span></div>';
+      return '<div class="acc-row" style="grid-template-columns:88px 1fr 62px 64px">'+
+        '<span style="font-family:var(--mono);font-size:12px;color:var(--text)">'+esc(c.band)+'</span>'+
+        '<span class="acc-bar"><i style="width:'+c.hit.toFixed(1)+'%;background:'+
+          U.confColor(parseInt(c.band,10)+8)+'"></i></span>'+
+        '<span class="acc-num">'+c.hit.toFixed(1)+'</span>'+
+        '<span class="acc-num dim">'+c.n+'</span></div>';
+    }).join("")+'</div>'+
+    '<p style="margin-top:14px;font-size:12.5px">This is the check that matters, and it holds: the '+
+    'bands rank in the right order, from '+
+    bt.calibration[0].hit.toFixed(1)+'% at the top to '+
+    bt.calibration[bt.calibration.length-1].hit.toFixed(1)+'% at the bottom. Note how lopsided the '+
+    'sample is — most fixtures land in the lowest band, because most football matches genuinely are '+
+    'close to a coin toss between three outcomes.</p></div></div>';
+
+  h += U.disclaimer() + U.footer() + '</section></div>';
+  return h;
+}
+
+function kpi(k, v, unit, note){
+  return '<div class="kpi"><div class="kpi-k">'+esc(k)+'</div>'+
+    '<div class="kpi-v tnum">'+v+(unit?'<span>'+unit+'</span>':"")+'</div>'+
+    '<div class="kpi-note">'+esc(note)+'</div></div>';
+}
+
+/* ============================================================
+   League tables — real standings from the real results
+   ============================================================ */
+
+function viewTables(state){
+  var div = P.tables[state.tableLg] ? state.tableLg : "E0";
+  var t = P.tables[div];
+  var played = t.rows.map(function(r){ return r.p; });
+  var lo = Math.min.apply(null, played), hi = Math.max.apply(null, played);
+
+  var h = '<div class="wrap"><section class="section" style="margin-top:34px">'+
+    '<div class="section-head"><div><h2>League tables</h2>'+
+    '<div class="sub">Standings computed from the same real 2025/26 results the model is fitted on. '+
+    'This is the table as it stood on the last date the source covers &mdash; not a final table.</div>'+
+    '</div></div>'+
+    '<div class="chiprow" style="margin-bottom:18px" role="group" aria-label="Choose a league">'+
+      Object.keys(L).map(function(k){
+        return '<button class="chip" data-table="'+k+'" aria-pressed="'+(div===k)+'">'+
+               esc(L[k].name)+'</button>';
+      }).join("")+
+    '</div>';
+
+  h += '<div class="note" style="margin-bottom:16px"><b>As of '+esc(U.fmtLong(t.asOf))+'.</b> '+
+    'Built from the '+t.matches+' matches the source carries for this division, which stops there. '+
+    'Every team has played '+(lo === hi ? lo : lo+' or '+hi)+
+    ', so the ordinary games-in-hand caveat applies &mdash; and the season ran on past this date. '+
+    'Read it as a mid-season snapshot, which is also exactly what the model was fitted on.</div>';
+
+  h += '<div class="card" style="padding:18px 18px 14px">'+
+    '<div class="card-k"><span>'+esc(L[div].name)+'</span>'+
+    '<span>'+t.rows.length+' teams &middot; '+t.matches+' matches played</span></div>'+
+    '<div class="table-scroll"><table class="lt"><thead><tr>'+
+      '<th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th>'+
+      '<th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Last 5</th></tr></thead><tbody>'+
+    t.rows.map(function(r, i){
+      var pos = i + 1, gd = r.gf - r.ga;
+      var zone = pos <= t.euro ? ' class="zone-ucl"'
+               : pos > t.rows.length - t.releg ? ' class="zone-rel"' : "";
+      return '<tr'+zone+'><td>'+pos+'</td>'+
+        '<td><span class="lt-team">'+U.crest(tidy(r.team))+
+          '<span class="nm">'+esc(tidy(r.team))+'</span></span></td>'+
+        '<td>'+r.p+'</td><td>'+r.w+'</td><td>'+r.d+'</td><td>'+r.l+'</td>'+
+        '<td>'+r.gf+'</td><td>'+r.ga+'</td><td>'+(gd>0?"+":"")+gd+'</td>'+
+        '<td class="pts">'+r.pts+'</td>'+
+        '<td>'+pips(r.form)+'</td></tr>';
+    }).join("")+'</tbody></table></div>'+
+    '<div class="zone-key"><span><i style="background:var(--turf)"></i>European places</span>'+
+    '<span><i style="background:var(--loss)"></i>Relegation</span>'+
+    '<span>Zones use the standard counts for this division and are indicative.</span></div>'+
+  '</div>';
+
+  if (t.recent && t.recent.length){
+    h += '<div class="section" style="margin-top:14px"><div class="card">'+
+      '<div class="card-k"><span>Last results in the file</span>'+
+      '<span>'+esc(U.fmtShort(t.recent[t.recent.length-1].date))+'</span></div>'+
+      '<div class="res">'+t.recent.slice().reverse().map(function(m){
+        return '<div class="res-row"><span class="dt">'+esc(U.fmtShort(m.date))+'</span>'+
+          '<span class="hm">'+esc(tidy(m.home))+'</span>'+
+          '<span class="sc tnum">'+m.hg+'&ndash;'+m.ag+'</span>'+
+          '<span class="aw">'+esc(tidy(m.away))+'</span></div>';
+      }).join("")+'</div></div></div>';
+  }
+
+  h += U.disclaimer() + U.footer() + '</section></div>';
+  return h;
+}
+
+function pips(form){
+  return '<span class="form">'+form.map(function(f){
+    return '<span class="pip sm'+(f==="D"?" d":f==="L"?" l":"")+'">'+f+'</span>';
+  }).join("")+'</span>';
+}
+
+/* ============================================================
+   Team strength — what the model actually learned
+   ============================================================ */
+
+function viewStrength(state){
+  var div = L[state.strengthLg] ? state.strengthLg : "E0";
+  var s = P.strength[div];
+  var maxAtt = Math.max.apply(null, s.rows.map(function(r){ return Math.abs(r.att); }));
+  var maxDfn = Math.max.apply(null, s.rows.map(function(r){ return Math.abs(r.dfn); }));
+
+  var h = '<div class="wrap"><section class="section" style="margin-top:34px">'+
+    '<div class="section-head"><div><h2>What the model learned</h2>'+
+    '<div class="sub">Fitted attack and defence strengths from 2025/26. These are the numbers every '+
+    'prediction is built from — not a league table.</div></div></div>'+
+    '<div class="chiprow" style="margin-bottom:18px" role="group" aria-label="Choose a league">'+
+      Object.keys(L).map(function(k){
+        return '<button class="chip" data-strength="'+k+'" aria-pressed="'+(div===k)+'">'+
+               esc(L[k].name)+'</button>';
+      }).join("")+
+    '</div>';
+
+  h += '<div class="card"><div class="card-k"><span>'+esc(L[div].name)+'</span>'+
+    '<span>'+s.n+' matches fitted &middot; home advantage &times;'+s.home_adv.toFixed(2)+
+    ' &middot; rho '+(s.rho>=0?"+":"")+s.rho.toFixed(3)+'</span></div>'+
+    '<div class="str-row head"><span>#</span><span>Team</span><span>Attack</span>'+
+    '<span>Defence</span><span style="text-align:right">Played</span></div>'+
+    s.rows.map(function(r, i){
+      return '<div class="str-row"><span class="acc-num dim" style="text-align:left">'+(i+1)+'</span>'+
+        '<span class="str-name">'+U.crest(tidy(r.team))+'<span class="nm">'+esc(tidy(r.team))+'</span></span>'+
+        dumbbell(r.att, maxAtt)+ dumbbell(r.dfn, maxDfn)+
+        '<span class="acc-num dim">'+r.played+'</span></div>';
+    }).join("")+
+    '<p style="margin-top:16px;font-size:12.5px;color:var(--muted)">Both scales are centred on the '+
+    'league average, so a bar to the right of the centre line is better than average and a bar to the '+
+    'left is worse. Attack is how many a side is expected to score; defence is how few they concede. '+
+    'Home advantage of &times;'+s.home_adv.toFixed(2)+' means the same side is expected to score '+
+    ((s.home_adv-1)*100).toFixed(0)+'% more at home than away.</p></div>';
+
+  h += '<div class="section" style="margin-top:14px"><div class="note">'+
+    '<b>This is not the league table.</b> Attack and defence strength are what the model learned, '+
+    'adjusted for the quality of the opposition each side actually faced. A team can sit high here and '+
+    'lower in the table if its results have run behind its performances. The real standings are on the '+
+    '<button data-go="tables" style="color:var(--turf-bright);text-decoration:underline">tables page</button>.'+
+    '</div></div>';
+
+  h += U.disclaimer() + U.footer() + '</section></div>';
+  return h;
+}
+
+function dumbbell(v, max){
+  var half = Math.abs(v) / max * 50;
+  var style = v >= 0
+    ? 'left:50%;width:'+half.toFixed(1)+'%'
+    : 'right:50%;width:'+half.toFixed(1)+'%';
+  return '<span class="dumb" role="img" aria-label="'+(v>=0?"+":"")+v.toFixed(2)+
+    '"><span class="zero"></span><i class="'+(v>=0?"pos":"neg")+'" style="'+style+'"></i></span>';
+}
+
+/* ============================================================
+   Method
+   ============================================================ */
+
+function viewMethod(){
+  var m = P.meta, bt = P.backtest;
+  var totalTrain = Object.keys(m.train).reduce(function(a,k){ return a + m.train[k].n; }, 0);
+
+  var h = '<div class="wrap"><section class="section" style="margin-top:34px">'+
+    '<div class="section-head"><div><h2>How Scorecast works</h2>'+
+    '<div class="sub">The model, the data behind it, and the things it cannot do.</div></div></div>';
+
+  h += '<div class="prose">'+
+    '<p>Scorecast fits a <b>Dixon-Coles bivariate Poisson</b> to real league results. Each team gets '+
+    'an attack strength and a defence strength; each league gets a home advantage and a correction '+
+    'term for the fact that real football produces more 0-0 and 1-1 draws than two independent '+
+    'Poisson distributions would. The parameters are fitted by maximum likelihood, with older results '+
+    'weighted less — a result counts half as much after '+m.half_life_days+' days.</p>'+
+    '<p>For a given fixture it yields two expected-goal rates, which give a probability for every '+
+    'scoreline up to '+m.maxg+'-'+m.maxg+'. Every published number — the predicted score, the '+
+    'win/draw/loss split, over/under, both teams to score, double chance, clean sheets — is read off '+
+    'that one grid. <b>Nothing is hand-picked and no human edits the output.</b></p>'+
+  '</div>';
+
+  h += '<div class="card" style="margin-top:18px"><div class="card-k"><span>The data</span></div>'+
+    '<div class="steps">'+
+    step("Results", totalTrain.toLocaleString()+" real matches from 2025/26",
+      "Fitted on "+totalTrain.toLocaleString()+" real results across "+Object.keys(m.train).length+
+      " leagues, each a complete 2025/26 season pulled from football-data.co.uk and reconciled before "+
+      "use. Each file is listed below with its coverage.",
+      Object.keys(m.train).map(function(k){
+        var t = m.train[k], div = fileToDiv(k);
+        return "<b>"+esc(L[div].name)+"</b> — "+t.n+" matches, "+esc(U.fmtShort(t.from))+
+               " to "+esc(U.fmtShort(t.to));
+      }))+
+    step("This season", "Everything 2026/27 has produced so far", thisSeasonBlurb(), null)+
+    step("Fixtures and prices", "Today's card, with real bookmaker odds",
+      "The fixture list and the average bookmaker odds beside each selection come from "+
+      "football-data.co.uk. The odds are used for one thing only: as a comparison. The model never "+
+      "sees them before making a prediction, so the gap between the two columns is a real "+
+      "disagreement rather than a restatement of the market. Not every league on the site has this "+
+      "feed — see Integrity below.", null)+
+    step("Calibration", "One correction, measured not assumed",
+      "The raw fit gets total goals about right but understates both-teams-to-score, because "+
+      "near-independent Poissons put too much weight on one-sided scorelines. A two-parameter logistic "+
+      "correction per goal market fixes that shape error. It is cross-fitted: the history is split in "+
+      "two, each half corrected by parameters fitted only on the other, so the figures on the record "+
+      "page are not the correction grading itself.", null)+
+    step("Scoring", "Refit weekly, predict forward, never look back",
+      "The track record is not the model grading its own training data. For every fortnight of the "+
+      "season the model is refitted on everything strictly before that date and then predicts the "+
+      "matches that follow. That produces the "+bt.n+" out-of-sample predictions on the record page. "+
+      "Nothing is removed afterwards, including the weeks it did badly.", null)+
+    step("Integrity", "What was cut, what's different, and why",
+      "La Liga and Serie A were cut once, for a bad extraction that silently dropped 0-0 results — "+
+      "verified by reconciling per-team appearance counts against twice the row count, so a dropped "+
+      "row shows up as a team with a missing fixture. Both were re-pulled clean and are back. "+
+      "MLS, Liga MX, Brazil's Série A, Argentina's Liga Profesional and Japan's J1 League are a "+
+      "different case: their historical results reconcile fine, but the source carries no bookmaker-odds "+
+      "feed for their upcoming fixtures, so there is nothing honest to price against. They get full "+
+      "team-strength ratings and a real walk-forward backtest, same as every other league, but no daily "+
+      "fixture card and no market comparison — that's not a feature it would be honest to fake.", null)+
+    '</div></div>';
+
+  h += '<div class="section" style="margin-top:14px"><div class="grid-2">'+
+    '<div class="card"><div class="card-k"><span>What the confidence rating is</span></div>'+
+      '<p>It measures how concentrated the simulated outcomes are, not how likely the model is to be '+
+      'right. A fixture where one result dominates scores high; a genuinely open one scores low. It '+
+      'is then cut when the inputs are thin — a promoted side with no record in the division starts '+
+      'from a league-floor prior and its fixtures are marked accordingly.</p>'+
+      '<p>The record page shows what the bands actually delivered. They rank in the right order, which '+
+      'is the useful property. They are not a probability of being right, and should not be read as one.</p>'+
+    '</div>'+
+    '<div class="card"><div class="card-k"><span>What it cannot do</span></div>'+
+      '<ul class="why-list">'+
+      ['It has limited 2026/27 data, because limited data exists this early in a season. '+
+       thisSeasonBlurb().split(" Those ")[0]+
+       ' Transfers and managerial changes over the summer are invisible to it.',
+       'It knows nothing that is not a past result. No injuries, no team news, no weather, no '+
+       'motivation in a dead rubber.',
+       'It cannot price a bet. There is no margin in these percentages and no staking advice anywhere '+
+       'in this product. A gap against a bookmaker is two estimates disagreeing.',
+       'It is beaten by the market more often than not. Bookmakers price with far more information '+
+       'than one season of scorelines, and a '+bt.overall.outcome.rate.toFixed(1)+'% outcome hit rate '+
+       'is a modest model, honestly reported.'
+      ].map(function(t){ return '<li><span class="mk"></span><span>'+t+'</span></li>'; }).join("")+
+      '</ul></div>'+
+  '</div></div>';
+
+  h += U.disclaimer() + U.footer() + '</section></div>';
+  return h;
+}
+
+function step(k, title, body, bullets){
+  return '<div class="step"><div class="step-k">'+esc(k)+'</div><div>'+
+    '<h4>'+esc(title)+'</h4><p>'+body+'</p>'+
+    (bullets ? '<ul>'+bullets.map(function(b){ return '<li>'+b+'</li>'; }).join("")+'</ul>' : "")+
+  '</div></div>';
+}
+
+function loadingState(){
+  var rows = "";
+  for (var i=0;i<7;i++){
+    rows += '<div class="skel-row">'+
+      '<div class="skel skel-line" style="width:38px"></div>'+
+      '<div class="skel-stack"><div class="skel skel-line" style="width:'+(52+(i*7)%34)+'%"></div>'+
+      '<div class="skel skel-line" style="width:'+(40+(i*11)%30)+'%"></div></div>'+
+      '<div class="skel skel-line" style="width:44px"></div>'+
+      '<div class="skel skel-line" style="width:100%"></div>'+
+      '<div class="skel skel-line" style="width:64px;justify-self:end"></div></div>';
+  }
+  return '<div class="wrap" aria-busy="true"><section class="section" style="margin-top:40px">'+
+    '<div class="section-head"><div><div class="skel" style="width:230px;height:22px"></div>'+
+    '<div class="skel" style="width:330px;height:11px;margin-top:11px"></div></div></div>'+
+    '<div class="picks" style="margin-bottom:26px">'+
+      '<div class="skel" style="height:168px;border-radius:8px"></div>'+
+      '<div class="skel" style="height:168px;border-radius:8px"></div>'+
+      '<div class="skel" style="height:168px;border-radius:8px"></div></div>'+ rows +
+    '<p role="status" style="font-family:var(--mono);font-size:11px;color:var(--faint);'+
+    'letter-spacing:.1em;text-transform:uppercase;margin-top:20px">Loading the card&hellip;</p>'+
+    '</section></div>';
+}
+
+window.__V = {
+  viewToday:viewToday, viewTips:viewTips, viewMatch:viewMatch, viewTables:viewTables,
+  viewRecord:viewRecord, viewStrength:viewStrength, viewMethod:viewMethod,
+  loadingState:loadingState, card:card
+};
+})();
+</script>

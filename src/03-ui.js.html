@@ -1,0 +1,280 @@
+
+<script>
+(function(){
+"use strict";
+var P = window.__P, L = window.__LEAGUES;
+
+/* ============================================================
+   Atoms
+   ============================================================ */
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+function pc(x, d){ return (x * 100).toFixed(d === undefined ? 0 : d); }
+function odds(x){ return x == null ? "—" : x.toFixed(2); }
+
+/* Crest placeholders: a monogram tinted from the club's own name.
+   Deliberately not a reproduction of anyone's badge. */
+function hash(str){
+  var h = 2166136261 >>> 0;
+  for (var i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h >>> 0;
+}
+function abbr(name){
+  var w = name.replace(/[^A-Za-zÀ-ÿ ]/g, "").split(" ").filter(Boolean);
+  if (w.length === 1) return name.slice(0,3).toUpperCase();
+  return (w[0][0] + w[1][0] + (w[2] ? w[2][0] : (w[1][1] || w[0][1]))).slice(0,3).toUpperCase();
+}
+function crest(name, big){
+  var hue = hash(name) % 360;
+  return '<span class="crest'+(big?" crest-lg":"")+'" aria-hidden="true" style="background:hsl('+
+    hue+' 28% 21%);color:hsl('+hue+' 46% 74%);border-color:hsl('+hue+' 26% 33%)">'+
+    esc(abbr(name))+'</span>';
+}
+
+var FLAGS = {
+  E0:'<rect width="20" height="14" fill="#F1F6F4"/><rect x="8.4" width="3.2" height="14" fill="#C8102E"/><rect y="5.4" width="20" height="3.2" fill="#C8102E"/>',
+  E1:'<rect width="20" height="14" fill="#F1F6F4"/><rect x="8.4" width="3.2" height="14" fill="#C8102E"/><rect y="5.4" width="20" height="3.2" fill="#C8102E"/>',
+  D1:'<rect width="20" height="14" fill="#111111"/><rect y="4.67" width="20" height="4.67" fill="#DD0000"/><rect y="9.34" width="20" height="4.66" fill="#FFCE00"/>',
+  F1:'<rect width="20" height="14" fill="#F1F6F4"/><rect width="6.67" height="14" fill="#002395"/><rect x="13.33" width="6.67" height="14" fill="#ED2939"/>',
+  N1:'<rect width="20" height="14" fill="#F1F6F4"/><rect width="20" height="4.67" fill="#AE1C28"/><rect y="9.34" width="20" height="4.66" fill="#21468B"/>'
+};
+function flag(div){
+  return '<span class="league-flag" aria-hidden="true"><svg width="20" height="14" viewBox="0 0 20 14">'+
+    (FLAGS[div]||"")+'</svg></span>';
+}
+
+function confBand(c){
+  if (c >= 80) return { label:"Very high", cls:"conf-hi" };
+  if (c >= 65) return { label:"High",      cls:"conf-hi" };
+  if (c >= 50) return { label:"Moderate",  cls:"" };
+  if (c >= 35) return { label:"Low",       cls:"conf-lo" };
+  return { label:"Very low", cls:"conf-lo" };
+}
+function confColor(c){
+  return c >= 65 ? "var(--turf-bright)" : c >= 50 ? "var(--amber)" : "var(--draw)";
+}
+function confChip(c){
+  var b = confBand(c);
+  return '<span class="conf '+b.cls+'"><span class="conf-bar"><i style="width:'+c+'%"></i></span>'+
+         '<span class="conf-val tnum">'+c+'</span></span>';
+}
+
+/* The signature: one three-segment rail at three scales. */
+function prail(p, size){
+  var cls = size === "lg" ? "prail prail-lg" : size === "md" ? "prail prail-md" : "prail";
+  var inner = size === "lg";
+  var v = p.map(function(x){ return pc(x); });
+  return '<div class="'+cls+'" role="img" aria-label="Home win '+v[0]+' percent, draw '+v[1]+
+    ' percent, away win '+v[2]+' percent">'+
+    '<span class="s-home" style="width:'+(p[0]*100)+'%">'+(inner?v[0]+"%":"")+'</span>'+
+    '<span class="s-draw" style="width:'+(p[1]*100)+'%">'+(inner?v[1]+"%":"")+'</span>'+
+    '<span class="s-away" style="width:'+(p[2]*100)+'%">'+(inner?v[2]+"%":"")+'</span></div>';
+}
+
+function dial(conf){
+  var b = confBand(conf), col = confColor(conf);
+  var r = 40, c = 2 * Math.PI * r, on = c * (conf/100);
+  return '<svg class="dial" width="96" height="96" viewBox="0 0 96 96" role="img" '+
+    'aria-label="Confidence '+conf+' out of 100, '+b.label.toLowerCase()+'">'+
+    '<circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#1C2933" stroke-width="7"/>'+
+    '<circle cx="48" cy="48" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="7" '+
+      'stroke-dasharray="'+on.toFixed(1)+' '+(c-on).toFixed(1)+'" transform="rotate(-90 48 48)"/>'+
+    '<circle cx="48" cy="48" r="23" fill="none" stroke="#2FCB77" stroke-opacity=".2"/>'+
+    '<path d="M48 21v54" stroke="#2FCB77" stroke-opacity=".15"/>'+
+    '<circle cx="48" cy="48" r="2" fill="'+col+'"/></svg>';
+}
+
+/* Pitch geometry in false perspective — lines only, no photograph. */
+function heroArt(){
+  var stripes = "";
+  for (var i=0;i<8;i++) stripes += '<rect x="'+(i*175)+'" y="150" width="87" height="270" fill="url(#mow)"/>';
+  return '<svg class="hero-art" viewBox="0 0 1400 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+
+    '<defs><linearGradient id="mow" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0%" stop-color="#1FA35C" stop-opacity=".07"/>'+
+      '<stop offset="100%" stop-color="#1FA35C" stop-opacity="0"/></linearGradient>'+
+    '<linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">'+
+      '<stop offset="0%" stop-color="#090E13" stop-opacity="1"/>'+
+      '<stop offset="55%" stop-color="#090E13" stop-opacity=".55"/>'+
+      '<stop offset="100%" stop-color="#090E13" stop-opacity="0"/></linearGradient></defs>'+
+    '<g opacity=".5">'+stripes+'</g>'+
+    '<g stroke="#2FCB77" stroke-opacity=".22" fill="none" stroke-width="1.25">'+
+      '<path d="M-40 168 H1440"/><path d="M-40 412 H1440"/><path d="M700 168 V412"/>'+
+      '<ellipse cx="700" cy="290" rx="118" ry="52"/>'+
+      '<circle cx="700" cy="290" r="2.5" fill="#2FCB77" fill-opacity=".5" stroke="none"/></g>'+
+    '<g stroke="#2FCB77" stroke-opacity=".16" fill="none" stroke-width="1.25">'+
+      '<path d="M1440 168 H1178 L1120 412 H1440"/><path d="M1440 224 H1288 L1258 356 H1440"/>'+
+      '<path d="M1178 232 a70 46 0 0 0 0 116"/>'+
+      '<path d="M-40 168 H222 L280 412 H-40"/><path d="M-40 224 H112 L142 356 H-40"/></g>'+
+    '<g stroke="#F5A524" fill="none">'+
+      '<path d="M1180 -60 a300 300 0 0 1 0 320" stroke-opacity=".10"/>'+
+      '<path d="M1180 -100 a360 360 0 0 1 0 400" stroke-opacity=".07"/>'+
+      '<path d="M1180 -140 a420 420 0 0 1 0 480" stroke-opacity=".05"/></g>'+
+    '<rect width="900" height="420" fill="url(#fade)"/></svg>';
+}
+
+function emptyPitch(){
+  return '<svg width="86" height="56" viewBox="0 0 86 56" fill="none" aria-hidden="true">'+
+    '<rect x=".6" y=".6" width="84.8" height="54.8" rx="2" stroke="#223039"/>'+
+    '<path d="M43 1v54" stroke="#223039"/><circle cx="43" cy="28" r="10" stroke="#223039"/>'+
+    '<path d="M1 16h13v24H1M85 16H72v24h13" stroke="#223039"/></svg>';
+}
+
+function infoIcon(){
+  return '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">'+
+    '<circle cx="8" cy="8" r="6.75" stroke="#788C96" stroke-width="1.1"/>'+
+    '<path d="M8 7.2v4M8 4.7v.9" stroke="#788C96" stroke-width="1.4" stroke-linecap="round"/></svg>';
+}
+
+/* ============================================================
+   Dates
+   ============================================================ */
+
+var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var DAY = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+function parseISO(s){ var p = s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+function fmtShort(s){ var d = parseISO(s); return d.getDate()+" "+MON[d.getMonth()]; }
+function fmtLong(s){ var d = parseISO(s); return DAY[d.getDay()]+" "+d.getDate()+" "+MON[d.getMonth()]+" "+d.getFullYear(); }
+
+/* Dates present on the card, in order, labelled relative to build day. */
+var DATES = (function(){
+  var seen = {}, out = [];
+  P.card.forEach(function(f){ if (!seen[f.date]){ seen[f.date] = 1; out.push(f.date); } });
+  out.sort();
+  return out.map(function(d, i){
+    return { date:d, key:d, label: i === 0 ? "Today" : (i === 1 ? "Tomorrow" : fmtShort(d)),
+             list: P.card.filter(function(f){ return f.date === d; }) };
+  });
+})();
+
+/* ============================================================
+   Market vocabulary — one place, so a selection is named the
+   same way in the tips list, the match card and the record.
+   ============================================================ */
+
+var MARKETS = {
+  home:    { label:"Home win",        group:"Match outcome" },
+  draw:    { label:"Draw",            group:"Match outcome" },
+  away:    { label:"Away win",        group:"Match outcome" },
+  o15:     { label:"Over 1.5 goals",  group:"Total goals" },
+  u15:     { label:"Under 1.5 goals", group:"Total goals" },
+  o25:     { label:"Over 2.5 goals",  group:"Total goals" },
+  u25:     { label:"Under 2.5 goals", group:"Total goals" },
+  o35:     { label:"Over 3.5 goals",  group:"Total goals" },
+  u35:     { label:"Under 3.5 goals", group:"Total goals" },
+  btts:    { label:"Both teams score",     group:"Both teams to score" },
+  nobtts:  { label:"Not both teams score", group:"Both teams to score" },
+  dc_1x:   { label:"Home or draw",    group:"Double chance" },
+  dc_12:   { label:"Home or away",    group:"Double chance" },
+  dc_x2:   { label:"Draw or away",    group:"Double chance" },
+  cs_home: { label:"Home clean sheet", group:"Clean sheet" },
+  cs_away: { label:"Away clean sheet", group:"Clean sheet" },
+  margin_1:  { label:"Winning margin 1",  group:"Winning margin" },
+  margin_2p: { label:"Winning margin 2+", group:"Winning margin" }
+};
+
+function selLabel(f, key){
+  var m = MARKETS[key];
+  if (!m) return key;
+  if (key === "home") return f.homeShort + " win";
+  if (key === "away") return f.awayShort + " win";
+  if (key === "dc_1x") return f.homeShort + " or draw";
+  if (key === "dc_x2") return "Draw or " + f.awayShort;
+  if (key === "dc_12") return f.homeShort + " or " + f.awayShort;
+  if (key === "cs_home") return f.homeShort + " clean sheet";
+  if (key === "cs_away") return f.awayShort + " clean sheet";
+  return m.label;
+}
+
+function prob(f, key){
+  if (key === "home") return f.probs[0];
+  if (key === "draw") return f.probs[1];
+  if (key === "away") return f.probs[2];
+  return f.mk[key];
+}
+
+/* Book probability for the selections we actually hold odds on. */
+function bookProb(f, key){
+  var b = f.book;
+  if (!b) return null;
+  if (b.probs){
+    if (key === "home") return b.probs[0];
+    if (key === "draw") return b.probs[1];
+    if (key === "away") return b.probs[2];
+  }
+  if (b.ou){
+    if (key === "o25") return b.ou[0];
+    if (key === "u25") return b.ou[1];
+  }
+  return null;
+}
+function bookOdds(f, key){
+  var o = f.odds || {};
+  return { home:o.h, draw:o.d, away:o.a, o25:o.o25, u25:o.u25 }[key];
+}
+
+/* Every selection the model has an opinion on, with its edge over the
+   book where a price exists. This is what the Tips view ranks. */
+function selections(f){
+  var keys = ["home","draw","away","o25","u25","o15","u15","o35","u35",
+              "btts","nobtts","dc_1x","dc_12","dc_x2","cs_home","cs_away",
+              "margin_1","margin_2p"];
+  return keys.map(function(k){
+    var mp = prob(f, k), bp = bookProb(f, k);
+    return {
+      fx:f, key:k, label:selLabel(f, k), group:MARKETS[k].group,
+      model:mp, book:bp, odds:bookOdds(f, k),
+      edge: bp == null ? null : mp - bp
+    };
+  });
+}
+
+function priced(f){
+  return selections(f).filter(function(s){ return s.edge != null; });
+}
+
+/* The single most likely selection in each market group (excluding match
+   outcome, which is already shown on its own everywhere) — "the highest
+   possible outcome of each market", read straight off the same selections
+   the market board and the tips page already use. o15/u35 are excluded:
+   they're near-certainties by construction and would win "Total goals"
+   every time without saying anything a reader doesn't already know. */
+function bestPerGroup(f){
+  var out = {};
+  selections(f).forEach(function(s){
+    if (s.group === "Match outcome" || s.key === "o15" || s.key === "u35") return;
+    if (!out[s.group] || s.model > out[s.group].model) out[s.group] = s;
+  });
+  return out;
+}
+
+function disclaimer(){
+  return '<section class="disclaim">'+infoIcon()+
+    '<div><p><b>These are probabilities, not forecasts of certainty.</b> Over the settled matches on '+
+    'the record page the model called the right result '+P.backtest.overall.outcome.rate.toFixed(1)+
+    '% of the time. Roughly half its calls were wrong.</p>'+
+    '<p>Scorecast publishes model output for information and analysis. It is not betting advice, it '+
+    'makes no claim about returns, and a positive gap against a bookmaker\'s price is a disagreement '+
+    'between two estimates — not a profit. Gambling carries real financial risk. 18+.</p></div></section>';
+}
+
+function footer(){
+  return '<footer class="foot"><span>Scorecast &middot; Dixon-Coles model, built '+
+    esc(fmtShort(P.built))+' 2026</span>'+
+    '<span>'+P.backtest.n+' out-of-sample matches scored &middot; 18+</span></footer>';
+}
+
+window.__U = {
+  esc:esc, pc:pc, odds:odds, crest:crest, flag:flag, prail:prail, dial:dial,
+  confChip:confChip, confBand:confBand, confColor:confColor,
+  heroArt:heroArt, emptyPitch:emptyPitch, infoIcon:infoIcon,
+  fmtShort:fmtShort, fmtLong:fmtLong, parseISO:parseISO,
+  DATES:DATES, MARKETS:MARKETS, selLabel:selLabel, prob:prob,
+  bookProb:bookProb, bookOdds:bookOdds, selections:selections, priced:priced,
+  bestPerGroup:bestPerGroup, disclaimer:disclaimer, footer:footer
+};
+})();
+</script>

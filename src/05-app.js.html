@@ -1,0 +1,165 @@
+
+<script>
+(function(){
+"use strict";
+var P = window.__P, L = window.__LEAGUES, U = window.__U, V = window.__V;
+var esc = U.esc;
+
+var ICONS = {
+  today:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.6" y="3.2" width="12.8" height="11.2" rx="1.6" stroke="currentColor" stroke-width="1.2"/><path d="M1.6 6.4h12.8M5.2 1.6v3M10.8 1.6v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
+  tips:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.8l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.6l-3.8 2 .7-4.3-3.1-3 4.3-.6z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>',
+  record:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1.8 12.2l3.4-4 2.8 2.4 4.4-5.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.8 1.8v12.4h12.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
+  tables:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.6" y="2.4" width="12.8" height="11.2" rx="1.4" stroke="currentColor" stroke-width="1.2"/><path d="M1.6 6.1h12.8M1.6 9.9h12.8M6 2.4v11.2" stroke="currentColor" stroke-width="1.1"/></svg>',
+  strength:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1.6" y="8.4" width="3.6" height="6" rx=".8" stroke="currentColor" stroke-width="1.2"/><rect x="6.2" y="4.4" width="3.6" height="10" rx=".8" stroke="currentColor" stroke-width="1.2"/><rect x="10.8" y="6.8" width="3.6" height="7.6" rx=".8" stroke="currentColor" stroke-width="1.2"/></svg>',
+  method:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.3" stroke="currentColor" stroke-width="1.2"/><path d="M8 7.4v4M8 4.9v.9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>'
+};
+
+var NAV = [
+  { key:"today",    label:"Today",         icon:"today",    group:"Matchday" },
+  { key:"tips",     label:"Tips",          icon:"tips",     group:"Matchday" },
+  { key:"record",   label:"Track record",  icon:"record",   group:"Evidence" },
+  { key:"tables",   label:"League tables", icon:"tables",   group:"Evidence" },
+  { key:"strength", label:"Team strength", icon:"strength", group:"Evidence" },
+  { key:"method",   label:"How it works",  icon:"method",   group:"Reference" }
+];
+
+var state = {
+  view: "today",
+  day: U.DATES[0] ? U.DATES[0].key : null,
+  league: "all",
+  match: null,
+  strengthLg: "E0",
+  tableLg: "E0",
+  loading: true
+};
+
+function navHTML(mobile){
+  var out = "", lastGroup = null;
+  NAV.forEach(function(n){
+    if (!mobile && n.group !== lastGroup){
+      out += '<div class="nav-label"'+(lastGroup?' style="margin-top:10px"':'')+'>'+esc(n.group)+'</div>';
+      lastGroup = n.group;
+    }
+    var active = state.view === n.key || (state.view === "match" && n.key === "today");
+    var count = n.key === "today"
+      ? String((U.DATES.filter(function(d){ return d.key === state.day; })[0] || U.DATES[0] || {list:[]}).list.length)
+      : "";
+    out += '<button class="nav-item" data-go="'+n.key+'"'+(active?' aria-current="page"':"")+'>'+
+      ICONS[n.icon]+'<span>'+esc(n.label)+'</span>'+
+      (count ? '<span class="nav-count tnum">'+count+'</span>' : "")+'</button>';
+  });
+  return out;
+}
+
+function renderNav(){
+  document.getElementById("rail-nav").innerHTML = navHTML(false);
+  document.getElementById("mobile-nav").innerHTML = navHTML(true);
+}
+
+function render(keepScroll){
+  var html;
+  if (state.loading)                    html = V.loadingState();
+  else if (state.view === "match")      html = V.viewMatch(state);
+  else if (state.view === "tips")       html = V.viewTips(state);
+  else if (state.view === "record")     html = V.viewRecord(state);
+  else if (state.view === "tables")     html = V.viewTables(state);
+  else if (state.view === "strength")   html = V.viewStrength(state);
+  else if (state.view === "method")     html = V.viewMethod(state);
+  else                                  html = V.viewToday(state);
+
+  document.getElementById("view").innerHTML = html;
+  renderNav();
+  if (!keepScroll) window.scrollTo(0, 0);
+  document.title = titleFor();
+}
+
+function titleFor(){
+  if (state.view === "match"){
+    var f = V.card(state.match);
+    if (f) return f.homeShort + " v " + f.awayShort + " · Scorecast";
+  }
+  var n = NAV.filter(function(x){ return x.key === state.view; })[0];
+  return (n && n.key !== "today" ? n.label + " · " : "") + "Scorecast";
+}
+
+/* ---- hash routing, so back and forward behave ---- */
+
+var VIEWS = ["today","tips","record","tables","strength","method"];
+
+function readHash(){
+  var h = (location.hash || "#/today").replace(/^#\/?/, "");
+  var parts = h.split("/");
+  if (parts[0] === "match" && parts[1]){
+    state.view = "match"; state.match = decodeURIComponent(parts[1]);
+  } else if (VIEWS.indexOf(parts[0]) > -1){
+    state.view = parts[0]; state.match = null;
+  } else {
+    state.view = "today"; state.match = null;
+  }
+}
+function writeHash(){
+  var target = state.view === "match"
+    ? "#/match/" + encodeURIComponent(state.match)
+    : "#/" + state.view;
+  if (location.hash !== target) location.hash = target;
+  else render();
+}
+
+window.addEventListener("hashchange", function(){
+  readHash();
+  render();
+  var m = document.getElementById("main");
+  if (m) m.focus({ preventScroll:true });
+});
+
+/* ---- one delegated listener for the whole app ---- */
+
+document.addEventListener("click", function(e){
+  var t = e.target.closest("[data-match],[data-go],[data-day],[data-league],[data-strength],[data-table]");
+  if (!t) return;
+
+  if (t.hasAttribute("data-match")){
+    state.match = t.getAttribute("data-match");
+    state.view = "match";
+    writeHash();
+    return;
+  }
+  if (t.hasAttribute("data-go")){
+    state.view = t.getAttribute("data-go");
+    state.match = null;
+    writeHash();
+    return;
+  }
+  if (t.hasAttribute("data-day")){
+    state.day = t.getAttribute("data-day");
+    render(true);
+    return;
+  }
+  if (t.hasAttribute("data-league")){
+    state.league = t.getAttribute("data-league");
+    render(true);
+    return;
+  }
+  if (t.hasAttribute("data-strength")){
+    state.strengthLg = t.getAttribute("data-strength");
+    render(true);
+    return;
+  }
+  if (t.hasAttribute("data-table")){
+    state.tableLg = t.getAttribute("data-table");
+    render(true);
+    return;
+  }
+});
+
+/* ---- first paint ---- */
+
+readHash();
+renderNav();
+render();
+
+var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+setTimeout(function(){ state.loading = false; render(); }, reduce ? 0 : 560);
+
+})();
+</script>

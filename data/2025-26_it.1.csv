@@ -1,0 +1,380 @@
+2025-08-23,AC Milan,US Cremonese,1,2
+2025-08-23,AS Roma,Bologna FC 1909,1,0
+2025-08-23,Genoa CFC,US Lecce,0,0
+2025-08-23,US Sassuolo Calcio,SSC Napoli,0,2
+2025-08-24,Atalanta BC,AC Pisa 1909,1,1
+2025-08-24,Cagliari Calcio,ACF Fiorentina,1,1
+2025-08-24,Como 1907,SS Lazio,2,0
+2025-08-24,Juventus FC,Parma Calcio 1913,2,0
+2025-08-25,FC Internazionale Milano,Torino FC,5,0
+2025-08-25,Udinese Calcio,Hellas Verona FC,1,1
+2025-08-29,US Cremonese,US Sassuolo Calcio,3,2
+2025-08-29,US Lecce,AC Milan,0,2
+2025-08-30,AC Pisa 1909,AS Roma,0,1
+2025-08-30,Bologna FC 1909,Como 1907,1,0
+2025-08-30,Parma Calcio 1913,Atalanta BC,1,1
+2025-08-30,SSC Napoli,Cagliari Calcio,1,0
+2025-08-31,FC Internazionale Milano,Udinese Calcio,1,2
+2025-08-31,Genoa CFC,Juventus FC,0,1
+2025-08-31,SS Lazio,Hellas Verona FC,4,0
+2025-08-31,Torino FC,ACF Fiorentina,0,0
+2025-09-13,ACF Fiorentina,SSC Napoli,1,3
+2025-09-13,Cagliari Calcio,Parma Calcio 1913,2,0
+2025-09-13,Juventus FC,FC Internazionale Milano,4,3
+2025-09-14,AC Milan,Bologna FC 1909,1,0
+2025-09-14,AC Pisa 1909,Udinese Calcio,0,1
+2025-09-14,AS Roma,Torino FC,0,1
+2025-09-14,Atalanta BC,US Lecce,4,1
+2025-09-14,US Sassuolo Calcio,SS Lazio,1,0
+2025-09-15,Como 1907,Genoa CFC,1,1
+2025-09-15,Hellas Verona FC,US Cremonese,0,0
+2025-09-19,US Lecce,Cagliari Calcio,1,2
+2025-09-20,Bologna FC 1909,Genoa CFC,2,1
+2025-09-20,Hellas Verona FC,Juventus FC,1,1
+2025-09-20,Udinese Calcio,AC Milan,0,3
+2025-09-21,ACF Fiorentina,Como 1907,1,2
+2025-09-21,FC Internazionale Milano,US Sassuolo Calcio,2,1
+2025-09-21,SS Lazio,AS Roma,0,1
+2025-09-21,Torino FC,Atalanta BC,0,3
+2025-09-21,US Cremonese,Parma Calcio 1913,0,0
+2025-09-22,SSC Napoli,AC Pisa 1909,3,2
+2025-09-27,Cagliari Calcio,FC Internazionale Milano,0,2
+2025-09-27,Como 1907,US Cremonese,1,1
+2025-09-27,Juventus FC,Atalanta BC,1,1
+2025-09-28,AC Milan,SSC Napoli,2,1
+2025-09-28,AC Pisa 1909,ACF Fiorentina,0,0
+2025-09-28,AS Roma,Hellas Verona FC,2,0
+2025-09-28,US Lecce,Bologna FC 1909,2,2
+2025-09-28,US Sassuolo Calcio,Udinese Calcio,3,1
+2025-09-29,Genoa CFC,SS Lazio,0,3
+2025-09-29,Parma Calcio 1913,Torino FC,2,1
+2025-10-03,Hellas Verona FC,US Sassuolo Calcio,0,1
+2025-10-04,Atalanta BC,Como 1907,1,1
+2025-10-04,FC Internazionale Milano,US Cremonese,4,1
+2025-10-04,Parma Calcio 1913,US Lecce,0,1
+2025-10-04,SS Lazio,Torino FC,3,3
+2025-10-05,ACF Fiorentina,AS Roma,1,2
+2025-10-05,Bologna FC 1909,AC Pisa 1909,4,0
+2025-10-05,Juventus FC,AC Milan,0,0
+2025-10-05,SSC Napoli,Genoa CFC,2,1
+2025-10-05,Udinese Calcio,Cagliari Calcio,1,1
+2025-10-18,AC Pisa 1909,Hellas Verona FC,0,0
+2025-10-18,AS Roma,FC Internazionale Milano,0,1
+2025-10-18,Torino FC,SSC Napoli,1,0
+2025-10-18,US Lecce,US Sassuolo Calcio,0,0
+2025-10-19,AC Milan,ACF Fiorentina,2,1
+2025-10-19,Atalanta BC,SS Lazio,0,0
+2025-10-19,Cagliari Calcio,Bologna FC 1909,0,2
+2025-10-19,Como 1907,Juventus FC,2,0
+2025-10-19,Genoa CFC,Parma Calcio 1913,0,0
+2025-10-20,US Cremonese,Udinese Calcio,1,1
+2025-10-24,AC Milan,AC Pisa 1909,2,2
+2025-10-25,Parma Calcio 1913,Como 1907,0,0
+2025-10-25,SSC Napoli,FC Internazionale Milano,3,1
+2025-10-25,US Cremonese,Atalanta BC,1,1
+2025-10-25,Udinese Calcio,US Lecce,3,2
+2025-10-26,ACF Fiorentina,Bologna FC 1909,2,2
+2025-10-26,Hellas Verona FC,Cagliari Calcio,2,2
+2025-10-26,SS Lazio,Juventus FC,1,0
+2025-10-26,Torino FC,Genoa CFC,2,1
+2025-10-26,US Sassuolo Calcio,AS Roma,0,1
+2025-10-28,Atalanta BC,AC Milan,1,1
+2025-10-28,US Lecce,SSC Napoli,0,1
+2025-10-29,AS Roma,Parma Calcio 1913,2,1
+2025-10-29,Bologna FC 1909,Torino FC,0,0
+2025-10-29,Como 1907,Hellas Verona FC,3,1
+2025-10-29,FC Internazionale Milano,ACF Fiorentina,3,0
+2025-10-29,Genoa CFC,US Cremonese,0,2
+2025-10-29,Juventus FC,Udinese Calcio,3,1
+2025-10-30,AC Pisa 1909,SS Lazio,0,0
+2025-10-30,Cagliari Calcio,US Sassuolo Calcio,1,2
+2025-11-01,SSC Napoli,Como 1907,0,0
+2025-11-01,US Cremonese,Juventus FC,1,2
+2025-11-01,Udinese Calcio,Atalanta BC,1,0
+2025-11-02,AC Milan,AS Roma,1,0
+2025-11-02,ACF Fiorentina,US Lecce,0,1
+2025-11-02,Hellas Verona FC,FC Internazionale Milano,1,2
+2025-11-02,Parma Calcio 1913,Bologna FC 1909,1,3
+2025-11-02,Torino FC,AC Pisa 1909,2,2
+2025-11-03,SS Lazio,Cagliari Calcio,2,0
+2025-11-03,US Sassuolo Calcio,Genoa CFC,1,2
+2025-11-07,AC Pisa 1909,US Cremonese,1,0
+2025-11-08,Como 1907,Cagliari Calcio,0,0
+2025-11-08,Juventus FC,Torino FC,0,0
+2025-11-08,Parma Calcio 1913,AC Milan,2,2
+2025-11-08,US Lecce,Hellas Verona FC,0,0
+2025-11-09,AS Roma,Udinese Calcio,2,0
+2025-11-09,Atalanta BC,US Sassuolo Calcio,0,3
+2025-11-09,Bologna FC 1909,SSC Napoli,2,0
+2025-11-09,FC Internazionale Milano,SS Lazio,2,0
+2025-11-09,Genoa CFC,ACF Fiorentina,2,2
+2025-11-22,ACF Fiorentina,Juventus FC,1,1
+2025-11-22,Cagliari Calcio,Genoa CFC,3,3
+2025-11-22,SSC Napoli,Atalanta BC,3,1
+2025-11-22,Udinese Calcio,Bologna FC 1909,0,3
+2025-11-23,FC Internazionale Milano,AC Milan,0,1
+2025-11-23,Hellas Verona FC,Parma Calcio 1913,1,2
+2025-11-23,SS Lazio,US Lecce,2,0
+2025-11-23,US Cremonese,AS Roma,1,3
+2025-11-24,Torino FC,Como 1907,1,5
+2025-11-24,US Sassuolo Calcio,AC Pisa 1909,2,2
+2025-11-28,Como 1907,US Sassuolo Calcio,2,0
+2025-11-29,AC Milan,SS Lazio,1,0
+2025-11-29,Genoa CFC,Hellas Verona FC,2,1
+2025-11-29,Juventus FC,Cagliari Calcio,2,1
+2025-11-29,Parma Calcio 1913,Udinese Calcio,0,2
+2025-11-30,AC Pisa 1909,FC Internazionale Milano,0,2
+2025-11-30,AS Roma,SSC Napoli,0,1
+2025-11-30,Atalanta BC,ACF Fiorentina,2,0
+2025-11-30,US Lecce,Torino FC,2,1
+2025-12-01,Bologna FC 1909,US Cremonese,1,3
+2025-12-06,FC Internazionale Milano,Como 1907,4,0
+2025-12-06,Hellas Verona FC,Atalanta BC,3,1
+2025-12-06,US Sassuolo Calcio,ACF Fiorentina,3,1
+2025-12-07,Cagliari Calcio,AS Roma,1,0
+2025-12-07,SS Lazio,Bologna FC 1909,1,1
+2025-12-07,SSC Napoli,Juventus FC,2,1
+2025-12-07,US Cremonese,US Lecce,2,0
+2025-12-08,AC Pisa 1909,Parma Calcio 1913,0,1
+2025-12-08,Torino FC,AC Milan,2,3
+2025-12-08,Udinese Calcio,Genoa CFC,1,2
+2025-12-12,US Lecce,AC Pisa 1909,1,0
+2025-12-13,Atalanta BC,Cagliari Calcio,2,1
+2025-12-13,Parma Calcio 1913,SS Lazio,0,1
+2025-12-13,Torino FC,US Cremonese,1,0
+2025-12-14,AC Milan,US Sassuolo Calcio,2,2
+2025-12-14,ACF Fiorentina,Hellas Verona FC,1,2
+2025-12-14,Bologna FC 1909,Juventus FC,0,1
+2025-12-14,Genoa CFC,FC Internazionale Milano,1,2
+2025-12-14,Udinese Calcio,SSC Napoli,1,0
+2025-12-15,AS Roma,Como 1907,1,0
+2025-12-20,Juventus FC,AS Roma,2,1
+2025-12-20,SS Lazio,US Cremonese,0,0
+2025-12-21,ACF Fiorentina,Udinese Calcio,5,1
+2025-12-21,Cagliari Calcio,AC Pisa 1909,2,2
+2025-12-21,Genoa CFC,Atalanta BC,0,1
+2025-12-21,US Sassuolo Calcio,Torino FC,0,1
+2025-12-27,AC Pisa 1909,Juventus FC,0,2
+2025-12-27,Parma Calcio 1913,ACF Fiorentina,1,0
+2025-12-27,Torino FC,Cagliari Calcio,1,2
+2025-12-27,US Lecce,Como 1907,0,3
+2025-12-27,Udinese Calcio,SS Lazio,1,1
+2025-12-28,AC Milan,Hellas Verona FC,3,0
+2025-12-28,Atalanta BC,FC Internazionale Milano,0,1
+2025-12-28,Bologna FC 1909,US Sassuolo Calcio,1,1
+2025-12-28,US Cremonese,SSC Napoli,0,2
+2025-12-29,AS Roma,Genoa CFC,3,1
+2026-01-02,Cagliari Calcio,AC Milan,0,1
+2026-01-03,Atalanta BC,AS Roma,1,0
+2026-01-03,Como 1907,Udinese Calcio,1,0
+2026-01-03,Genoa CFC,AC Pisa 1909,1,1
+2026-01-03,Juventus FC,US Lecce,1,1
+2026-01-03,US Sassuolo Calcio,Parma Calcio 1913,1,1
+2026-01-04,ACF Fiorentina,US Cremonese,1,0
+2026-01-04,FC Internazionale Milano,Bologna FC 1909,3,1
+2026-01-04,Hellas Verona FC,Torino FC,0,3
+2026-01-04,SS Lazio,SSC Napoli,0,2
+2026-01-06,AC Pisa 1909,Como 1907,0,3
+2026-01-06,US Lecce,AS Roma,0,2
+2026-01-06,US Sassuolo Calcio,Juventus FC,0,3
+2026-01-07,Bologna FC 1909,Atalanta BC,0,2
+2026-01-07,Parma Calcio 1913,FC Internazionale Milano,0,2
+2026-01-07,SS Lazio,ACF Fiorentina,2,2
+2026-01-07,SSC Napoli,Hellas Verona FC,2,2
+2026-01-07,Torino FC,Udinese Calcio,1,2
+2026-01-08,AC Milan,Genoa CFC,1,1
+2026-01-08,US Cremonese,Cagliari Calcio,2,2
+2026-01-10,AS Roma,US Sassuolo Calcio,2,0
+2026-01-10,Atalanta BC,Torino FC,2,0
+2026-01-10,Como 1907,Bologna FC 1909,1,1
+2026-01-10,Udinese Calcio,AC Pisa 1909,2,2
+2026-01-11,ACF Fiorentina,AC Milan,1,1
+2026-01-11,FC Internazionale Milano,SSC Napoli,2,2
+2026-01-11,Hellas Verona FC,SS Lazio,0,1
+2026-01-11,US Lecce,Parma Calcio 1913,1,2
+2026-01-12,Genoa CFC,Cagliari Calcio,3,0
+2026-01-12,Juventus FC,US Cremonese,5,0
+2026-01-14,FC Internazionale Milano,US Lecce,1,0
+2026-01-14,SSC Napoli,Parma Calcio 1913,0,0
+2026-01-15,Como 1907,AC Milan,1,3
+2026-01-15,Hellas Verona FC,Bologna FC 1909,2,3
+2026-01-16,AC Pisa 1909,Atalanta BC,1,1
+2026-01-17,Cagliari Calcio,Juventus FC,1,0
+2026-01-17,SSC Napoli,US Sassuolo Calcio,1,0
+2026-01-17,Udinese Calcio,FC Internazionale Milano,0,1
+2026-01-18,AC Milan,US Lecce,1,0
+2026-01-18,Bologna FC 1909,ACF Fiorentina,1,2
+2026-01-18,Parma Calcio 1913,Genoa CFC,0,0
+2026-01-18,Torino FC,AS Roma,0,2
+2026-01-19,SS Lazio,Como 1907,0,3
+2026-01-19,US Cremonese,Hellas Verona FC,0,0
+2026-01-23,FC Internazionale Milano,AC Pisa 1909,6,2
+2026-01-24,ACF Fiorentina,Cagliari Calcio,1,2
+2026-01-24,Como 1907,Torino FC,6,0
+2026-01-24,US Lecce,SS Lazio,0,0
+2026-01-25,AS Roma,AC Milan,1,1
+2026-01-25,Atalanta BC,Parma Calcio 1913,4,0
+2026-01-25,Genoa CFC,Bologna FC 1909,3,2
+2026-01-25,Juventus FC,SSC Napoli,3,0
+2026-01-25,US Sassuolo Calcio,US Cremonese,1,0
+2026-01-26,Hellas Verona FC,Udinese Calcio,1,3
+2026-01-30,SS Lazio,Genoa CFC,3,2
+2026-01-31,AC Pisa 1909,US Sassuolo Calcio,1,3
+2026-01-31,Cagliari Calcio,Hellas Verona FC,4,0
+2026-01-31,SSC Napoli,ACF Fiorentina,2,1
+2026-02-01,Como 1907,Atalanta BC,0,0
+2026-02-01,Parma Calcio 1913,Juventus FC,1,4
+2026-02-01,Torino FC,US Lecce,1,0
+2026-02-01,US Cremonese,FC Internazionale Milano,0,2
+2026-02-02,Udinese Calcio,AS Roma,1,0
+2026-02-03,Bologna FC 1909,AC Milan,0,3
+2026-02-06,Hellas Verona FC,AC Pisa 1909,0,0
+2026-02-07,ACF Fiorentina,Torino FC,2,2
+2026-02-07,Genoa CFC,SSC Napoli,2,3
+2026-02-08,Bologna FC 1909,Parma Calcio 1913,0,1
+2026-02-08,Juventus FC,SS Lazio,2,2
+2026-02-08,US Lecce,Udinese Calcio,2,1
+2026-02-08,US Sassuolo Calcio,FC Internazionale Milano,0,5
+2026-02-09,AS Roma,Cagliari Calcio,2,0
+2026-02-09,Atalanta BC,US Cremonese,2,1
+2026-02-13,AC Pisa 1909,AC Milan,1,2
+2026-02-14,Como 1907,ACF Fiorentina,1,2
+2026-02-14,FC Internazionale Milano,Juventus FC,3,2
+2026-02-14,SS Lazio,Atalanta BC,0,2
+2026-02-15,Parma Calcio 1913,Hellas Verona FC,2,1
+2026-02-15,SSC Napoli,AS Roma,2,2
+2026-02-15,Torino FC,Bologna FC 1909,1,2
+2026-02-15,US Cremonese,Genoa CFC,0,0
+2026-02-15,Udinese Calcio,US Sassuolo Calcio,1,2
+2026-02-16,Cagliari Calcio,US Lecce,0,2
+2026-02-18,AC Milan,Como 1907,1,1
+2026-02-20,US Sassuolo Calcio,Hellas Verona FC,3,0
+2026-02-21,Cagliari Calcio,SS Lazio,0,0
+2026-02-21,Juventus FC,Como 1907,0,2
+2026-02-21,US Lecce,FC Internazionale Milano,0,2
+2026-02-22,AC Milan,Parma Calcio 1913,0,1
+2026-02-22,AS Roma,US Cremonese,3,0
+2026-02-22,Atalanta BC,SSC Napoli,2,1
+2026-02-22,Genoa CFC,Torino FC,3,0
+2026-02-23,ACF Fiorentina,AC Pisa 1909,1,0
+2026-02-23,Bologna FC 1909,Udinese Calcio,1,0
+2026-02-27,Parma Calcio 1913,Cagliari Calcio,1,1
+2026-02-28,Como 1907,US Lecce,3,1
+2026-02-28,FC Internazionale Milano,Genoa CFC,2,0
+2026-02-28,Hellas Verona FC,SSC Napoli,1,2
+2026-03-01,AS Roma,Juventus FC,3,3
+2026-03-01,Torino FC,SS Lazio,2,0
+2026-03-01,US Cremonese,AC Milan,0,2
+2026-03-01,US Sassuolo Calcio,Atalanta BC,2,1
+2026-03-02,AC Pisa 1909,Bologna FC 1909,0,1
+2026-03-02,Udinese Calcio,ACF Fiorentina,3,0
+2026-03-06,SSC Napoli,Torino FC,2,1
+2026-03-07,Atalanta BC,Udinese Calcio,2,2
+2026-03-07,Cagliari Calcio,Como 1907,1,2
+2026-03-07,Juventus FC,AC Pisa 1909,4,0
+2026-03-08,AC Milan,FC Internazionale Milano,1,0
+2026-03-08,ACF Fiorentina,Parma Calcio 1913,0,0
+2026-03-08,Bologna FC 1909,Hellas Verona FC,1,2
+2026-03-08,Genoa CFC,AS Roma,2,1
+2026-03-08,US Lecce,US Cremonese,2,1
+2026-03-09,SS Lazio,US Sassuolo Calcio,2,1
+2026-03-13,Torino FC,Parma Calcio 1913,4,1
+2026-03-14,FC Internazionale Milano,Atalanta BC,1,1
+2026-03-14,SSC Napoli,US Lecce,2,1
+2026-03-14,Udinese Calcio,Juventus FC,0,1
+2026-03-15,AC Pisa 1909,Cagliari Calcio,3,1
+2026-03-15,Como 1907,AS Roma,2,1
+2026-03-15,Hellas Verona FC,Genoa CFC,0,2
+2026-03-15,SS Lazio,AC Milan,1,0
+2026-03-15,US Sassuolo Calcio,Bologna FC 1909,0,1
+2026-03-16,US Cremonese,ACF Fiorentina,1,4
+2026-03-20,Cagliari Calcio,SSC Napoli,0,1
+2026-03-20,Genoa CFC,Udinese Calcio,0,2
+2026-03-21,AC Milan,Torino FC,3,2
+2026-03-21,Juventus FC,US Sassuolo Calcio,1,1
+2026-03-21,Parma Calcio 1913,US Cremonese,0,2
+2026-03-22,ACF Fiorentina,FC Internazionale Milano,1,1
+2026-03-22,AS Roma,US Lecce,1,0
+2026-03-22,Atalanta BC,Hellas Verona FC,1,0
+2026-03-22,Bologna FC 1909,SS Lazio,0,2
+2026-03-22,Como 1907,AC Pisa 1909,5,0
+2026-04-04,Hellas Verona FC,ACF Fiorentina,0,1
+2026-04-04,SS Lazio,Parma Calcio 1913,1,1
+2026-04-04,US Sassuolo Calcio,Cagliari Calcio,2,1
+2026-04-05,AC Pisa 1909,Torino FC,0,1
+2026-04-05,FC Internazionale Milano,AS Roma,5,2
+2026-04-05,US Cremonese,Bologna FC 1909,1,2
+2026-04-06,Juventus FC,Genoa CFC,2,0
+2026-04-06,SSC Napoli,AC Milan,1,0
+2026-04-06,US Lecce,Atalanta BC,0,3
+2026-04-06,Udinese Calcio,Como 1907,0,0
+2026-04-10,AS Roma,AC Pisa 1909,3,0
+2026-04-11,AC Milan,Udinese Calcio,0,3
+2026-04-11,Atalanta BC,Juventus FC,0,1
+2026-04-11,Cagliari Calcio,US Cremonese,1,0
+2026-04-11,Torino FC,Hellas Verona FC,2,1
+2026-04-12,Bologna FC 1909,US Lecce,2,0
+2026-04-12,Como 1907,FC Internazionale Milano,3,4
+2026-04-12,Genoa CFC,US Sassuolo Calcio,2,1
+2026-04-12,Parma Calcio 1913,SSC Napoli,1,1
+2026-04-13,ACF Fiorentina,SS Lazio,1,0
+2026-04-17,FC Internazionale Milano,Cagliari Calcio,3,0
+2026-04-17,US Sassuolo Calcio,Como 1907,2,1
+2026-04-18,AS Roma,Atalanta BC,1,1
+2026-04-18,SSC Napoli,SS Lazio,0,2
+2026-04-18,Udinese Calcio,Parma Calcio 1913,0,1
+2026-04-19,AC Pisa 1909,Genoa CFC,1,2
+2026-04-19,Hellas Verona FC,AC Milan,0,1
+2026-04-19,Juventus FC,Bologna FC 1909,2,0
+2026-04-19,US Cremonese,Torino FC,0,0
+2026-04-20,US Lecce,ACF Fiorentina,1,1
+2026-04-24,SSC Napoli,US Cremonese,4,0
+2026-04-25,Bologna FC 1909,AS Roma,0,2
+2026-04-25,Hellas Verona FC,US Lecce,0,0
+2026-04-25,Parma Calcio 1913,AC Pisa 1909,1,0
+2026-04-26,AC Milan,Juventus FC,0,0
+2026-04-26,ACF Fiorentina,US Sassuolo Calcio,0,0
+2026-04-26,Genoa CFC,Como 1907,0,2
+2026-04-26,Torino FC,FC Internazionale Milano,2,2
+2026-04-27,Cagliari Calcio,Atalanta BC,3,2
+2026-04-27,SS Lazio,Udinese Calcio,3,3
+2026-05-01,AC Pisa 1909,US Lecce,1,2
+2026-05-02,Atalanta BC,Genoa CFC,0,0
+2026-05-02,Como 1907,SSC Napoli,0,0
+2026-05-02,Udinese Calcio,Torino FC,2,0
+2026-05-03,Bologna FC 1909,Cagliari Calcio,0,0
+2026-05-03,FC Internazionale Milano,Parma Calcio 1913,2,0
+2026-05-03,Juventus FC,Hellas Verona FC,1,1
+2026-05-03,US Sassuolo Calcio,AC Milan,2,0
+2026-05-04,AS Roma,ACF Fiorentina,4,0
+2026-05-04,US Cremonese,SS Lazio,1,2
+2026-05-08,Torino FC,US Sassuolo Calcio,2,1
+2026-05-09,Cagliari Calcio,Udinese Calcio,0,2
+2026-05-09,SS Lazio,FC Internazionale Milano,0,3
+2026-05-09,US Lecce,Juventus FC,0,1
+2026-05-10,AC Milan,Atalanta BC,2,3
+2026-05-10,ACF Fiorentina,Genoa CFC,0,0
+2026-05-10,Hellas Verona FC,Como 1907,0,1
+2026-05-10,Parma Calcio 1913,AS Roma,2,3
+2026-05-10,US Cremonese,AC Pisa 1909,3,0
+2026-05-11,SSC Napoli,Bologna FC 1909,2,3
+2026-05-17,AC Pisa 1909,SSC Napoli,0,3
+2026-05-17,AS Roma,SS Lazio,2,0
+2026-05-17,Atalanta BC,Bologna FC 1909,0,1
+2026-05-17,Cagliari Calcio,Torino FC,2,1
+2026-05-17,Como 1907,Parma Calcio 1913,1,0
+2026-05-17,FC Internazionale Milano,Hellas Verona FC,1,1
+2026-05-17,Genoa CFC,AC Milan,1,2
+2026-05-17,Juventus FC,ACF Fiorentina,0,2
+2026-05-17,US Sassuolo Calcio,US Lecce,2,3
+2026-05-17,Udinese Calcio,US Cremonese,0,1
+2026-05-22,ACF Fiorentina,Atalanta BC,1,1
+2026-05-23,Bologna FC 1909,FC Internazionale Milano,3,3
+2026-05-23,SS Lazio,AC Pisa 1909,2,1
+2026-05-24,AC Milan,Cagliari Calcio,1,2
+2026-05-24,Hellas Verona FC,AS Roma,0,2
+2026-05-24,Parma Calcio 1913,US Sassuolo Calcio,1,0
+2026-05-24,SSC Napoli,Udinese Calcio,1,0
+2026-05-24,Torino FC,Juventus FC,2,2
+2026-05-24,US Cremonese,Como 1907,1,4
+2026-05-24,US Lecce,Genoa CFC,1,0
