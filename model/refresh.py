@@ -56,7 +56,7 @@ def fetch(url, timeout=20):
 
 def write_rows(path, rows):
     """rows: iterable of (date_str, home, away, hg, ag), date_str already dd/mm/yyyy."""
-    with open(path, "w", newline="\n") as fh:
+    with open(path, "w", newline="\n", encoding="utf-8") as fh:
         fh.write("\n".join(",".join([d, h, a, str(hg), str(ag)]) for d, h, a, hg, ag in rows))
         if rows:
             fh.write("\n")
@@ -106,7 +106,7 @@ def refresh_fixtures_odds():
         print("  ! empty fixture pull — leaving fixtures_odds.csv untouched")
         return
     rows.sort(key=lambda r: (*reversed(r["Date"].split("/")), r["Time"]))
-    with open(os.path.join(DATA, "fixtures_odds.csv"), "w", newline="") as fh:
+    with open(os.path.join(DATA, "fixtures_odds.csv"), "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=["Div", "Date", "Time", "HomeTeam", "AwayTeam",
                                             "AvgH", "AvgD", "AvgA", "AvgO25", "AvgU25"])
         w.writeheader()
@@ -241,7 +241,7 @@ def refresh_fd_new(div):
         print(f"  {div}: fetch failed ({e}) — leaving current file untouched")
         return
 
-    with open(os.path.join(DATA, LAST_SEASON_FILE[div])) as fh:
+    with open(os.path.join(DATA, LAST_SEASON_FILE[div]), encoding="utf-8") as fh:
         cutoff = max(line.split(",", 1)[0] for line in fh if line.strip())  # "YYYY-MM-DD", sorts fine as text
 
     rows = []

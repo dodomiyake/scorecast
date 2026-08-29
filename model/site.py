@@ -52,11 +52,11 @@ def main():
     if not os.path.exists(payload_path):
         sys.exit("data/payload.json is missing — run model/build.py first")
 
-    with open(payload_path) as fh:
+    with open(payload_path, encoding="utf-8") as fh:
         payload = json.load(fh)
 
     # the data module is generated, never hand-edited
-    with open(os.path.join(SRC, "02-data.js.html"), "w") as fh:
+    with open(os.path.join(SRC, "02-data.js.html"), "w", encoding="utf-8") as fh:
         fh.write("\n<script>\nwindow.__P = " + json.dumps(payload, separators=(",", ":")) + ";\n")
         fh.write("window.__LEAGUES = " + json.dumps(LEAGUES, separators=(",", ":")) + ";\n</script>\n")
 
@@ -65,12 +65,12 @@ def main():
         path = os.path.join(SRC, part)
         if not os.path.exists(path):
             sys.exit(f"missing source part: src/{part}")
-        with open(path) as fh:
+        with open(path, encoding="utf-8") as fh:
             out.append(fh.read())
     out.append(RAIL)
 
     html = "".join(out)
-    with open(os.path.join(ROOT, "index.html"), "w") as fh:
+    with open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8") as fh:
         fh.write(html)
 
     print(f"wrote index.html  ({len(html)/1024:.0f} KB)")

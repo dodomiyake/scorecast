@@ -35,7 +35,7 @@ RIDGE = 0.60                 # shrinks thinly-observed teams toward the league m
 
 def load(fname):
     out = []
-    with open(os.path.join(DATA, fname)) as fh:
+    with open(os.path.join(DATA, fname), encoding="utf-8") as fh:
         for row in csv.reader(fh):
             if len(row) != 5:
                 continue

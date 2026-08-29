@@ -55,7 +55,7 @@ for div in N.DIV_PRIMARY:
         print(f"  {div}: 0 matches — season starts on this card")
         continue
     rows = []
-    with open(path) as fh:
+    with open(path, encoding="utf-8") as fh:
         for row in csv.reader(fh):
             if len(row) != 5:
                 continue
@@ -378,7 +378,7 @@ def devig(odds):
 
 
 fixtures = []
-with open(os.path.join(DATA, "fixtures_odds.csv")) as fh:
+with open(os.path.join(DATA, "fixtures_odds.csv"), encoding="utf-8") as fh:
     for row in csv.DictReader(fh):
         if row["Div"] not in N.DIV_PRIMARY:
             continue                     # league not covered — see FILES above
@@ -614,6 +614,6 @@ payload = {
 }
 
 out = os.path.join(DATA, "payload.json")
-with open(out, "w") as fh:
+with open(out, "w", encoding="utf-8") as fh:
     json.dump(payload, fh, separators=(",", ":"))
 print(f"\nwrote {out}  ({os.path.getsize(out)/1024:.0f} KB)")
