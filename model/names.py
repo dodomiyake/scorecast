@@ -168,6 +168,10 @@ ALIAS = {
     "Torino": "Torino FC",
     "Udinese": "Udinese Calcio",
     "Verona": "Hellas Verona FC",
+    # promoted into 2026/27 — no prior-season record in the top flight.
+    "Frosinone": "Frosinone Calcio",
+    "Monza": "AC Monza",
+    "Venezia": "Venezia FC",
     # --- Germany ---
     "Augsburg": "FC Augsburg",
     "Bayern Munich": "FC Bayern München",

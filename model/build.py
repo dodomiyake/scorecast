@@ -387,7 +387,10 @@ with open(os.path.join(DATA, "fixtures_odds.csv")) as fh:
             continue                     # already kicked off; we hold no result for it
         fixtures.append((d, row))
 fixtures.sort(key=lambda r: (r[0], r[1]["Time"]))
-print(f"\n{len(fixtures)} fixtures on the card from {fixtures[0][0]} to {fixtures[-1][0]}")
+if fixtures:
+    print(f"\n{len(fixtures)} fixtures on the card from {fixtures[0][0]} to {fixtures[-1][0]}")
+else:
+    print("\n0 fixtures on the card — none of the covered leagues have upcoming fixtures published yet")
 
 CARD = []
 for d, row in fixtures:
