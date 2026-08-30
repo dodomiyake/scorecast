@@ -10,8 +10,14 @@ name: Daily data refresh
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # 06:00 UTC daily — adjust to taste
-  workflow_dispatch: {}    # allows a manual "Run workflow" from the Actions tab
+    # GitHub's schedule trigger is documented as unreliable right at the top
+    # of the hour (congestion) and can simply not fire at all on quiet/new
+    # repos with no clear error surfaced. :17 avoids the congestion point;
+    # a local Claude scheduled task also fires this workflow directly via
+    # `gh workflow run` as a backup trigger, since GitHub's own schedule
+    # event went a full day without firing once on this repo.
+    - cron: "17 6 * * *"   # ~06:17 UTC daily
+  workflow_dispatch: {}    # allows a manual "Run workflow" from the Actions tab, or the backup trigger
 
 permissions:
   contents: write
