@@ -1,9 +1,11 @@
 name: Daily data refresh
 
-# Re-fetches fixtures, odds, and every league's current-season results, then
-# rebuilds and commits index.html + data/payload.json. Pushing to master is
-# what actually matters here: Vercel is linked to this repo and redeploys on
-# every push, so this is the step that gets fresh matches onto the live site.
+# Re-fetches fixtures, odds, and every league's current-season results,
+# rebuilds index.html + data/payload.json, commits, and deploys straight to
+# Vercel with the CLI using a token (see the Deploy step below) rather than
+# relying on Vercel's GitHub App to notice the push. That App connection
+# broke silently twice in two days with no error surfaced anywhere -- this
+# sidesteps it rather than trusting it again.
 #
 # Runs on GitHub's infrastructure, not the maintainer's machine, so it fires
 # on schedule regardless of whether anything local is open.
@@ -47,3 +49,14 @@ jobs:
             git commit -m "Daily data refresh: $(date -u +%Y-%m-%d)"
             git push
           fi
+
+      # Deploys directly via the Vercel CLI + API token, independent of
+      # whether Vercel's GitHub App can currently see this repo. This is
+      # the step that actually gets today's data live -- the git push
+      # above is for history/traceability, not what drives the deploy.
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_LsaGL88Nyd7xBPiX7Do9WynW
+          VERCEL_PROJECT_ID: prj_lJnYu5YHChd1vNFdX4kHyfdWQXPj
+        run: npx --yes vercel deploy --prod --yes --token="$VERCEL_TOKEN"
