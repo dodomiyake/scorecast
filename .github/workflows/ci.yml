@@ -13,7 +13,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,3 +23,7 @@ jobs:
         run: python3 -m py_compile model/refresh.py model/finalize_payload.py model/site.py
       - name: Regression tests
         run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Install pinned model dependencies
+        run: pip install -r requirements.txt
+      - name: Full refresh smoke test
+        run: python3 model/refresh.py
