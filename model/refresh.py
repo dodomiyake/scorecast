@@ -3,7 +3,8 @@ Re-fetch the fixture card and every division's current-season results, then
 rebuild the site.
 
 Run:  python3 model/refresh.py
-Out:  refreshed data/cur_*.csv + data/fixtures_odds.csv, then build.py + site.py
+Out:  refreshed data/cur_*.csv + data/fixtures_odds.csv, then build.py +
+      finalize_payload.py + site.py
 
 What this does NOT do: touch the 2025/26 (or equivalent) full-season files
 that the model is fitted on. Those are a one-time pull, verified once, and
@@ -19,19 +20,22 @@ calendar-year leagues — is detected at run time, not hand-maintained.
 
 import csv
 import io
+import json
 import os
 import re
 import subprocess
 import sys
+import time
 import urllib.error
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import names as N
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
+STATUS_PATH = os.path.join(DATA, "refresh_status.json")
 
 # every cur_*.csv on disk is keyed on the SHORT (football-data.co.uk-style)
 # name — that's what build.py's loader expects, converting to the long/
@@ -46,12 +50,70 @@ OF_SEASON = "2026-27"     # openfootball's folder/file naming
 FD_SEASON = "2627"        # football-data.co.uk's mmz4281 folder naming
 
 UA = {"User-Agent": "Mozilla/5.0 (scorecast data refresh)"}
+RETRYABLE_HTTP = {429, 500, 502, 503, 504}
+RUN_AT = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
-def fetch(url, timeout=20):
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read().decode("utf-8-sig")
+def _previous_status():
+    try:
+        with open(STATUS_PATH, encoding="utf-8") as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
+        return {}
+
+
+PREVIOUS_STATUS = _previous_status()
+REFRESH_STATUS = {"runAt": RUN_AT, "fixtures": {}}
+
+
+def mark_fixtures(state, detail=None):
+    previous = PREVIOUS_STATUS.get("fixtures", {})
+    last_success = RUN_AT if state == "fresh" else previous.get("lastSuccessfulFetch")
+    REFRESH_STATUS["fixtures"] = {
+        "state": state,
+        "lastSuccessfulFetch": last_success,
+        "detail": detail,
+    }
+
+
+def write_refresh_status():
+    os.makedirs(DATA, exist_ok=True)
+    with open(STATUS_PATH, "w", encoding="utf-8") as fh:
+        json.dump(REFRESH_STATUS, fh, separators=(",", ":"))
+
+
+def fetch(url, timeout=20, attempts=4):
+    """Fetch text with bounded exponential backoff for transient failures.
+
+    Provider-side 429/5xx responses and temporary network errors are retried.
+    Non-transient HTTP failures (for example a genuine 404) are surfaced
+    immediately so callers can keep their existing source-specific handling.
+    """
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        req = urllib.request.Request(url, headers=UA)
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read().decode("utf-8-sig")
+        except urllib.error.HTTPError as e:
+            last_error = e
+            if e.code not in RETRYABLE_HTTP or attempt == attempts:
+                raise
+            retry_after = e.headers.get("Retry-After") if e.headers else None
+            try:
+                delay = max(1, min(30, int(retry_after))) if retry_after else min(8, 2 ** (attempt - 1))
+            except ValueError:
+                delay = min(8, 2 ** (attempt - 1))
+            print(f"  transient HTTP {e.code}; retrying in {delay}s ({attempt}/{attempts})")
+            time.sleep(delay)
+        except (urllib.error.URLError, TimeoutError) as e:
+            last_error = e
+            if attempt == attempts:
+                raise
+            delay = min(8, 2 ** (attempt - 1))
+            print(f"  transient network error; retrying in {delay}s ({attempt}/{attempts})")
+            time.sleep(delay)
+    raise last_error or RuntimeError(f"fetch failed: {url}")
 
 
 def write_rows(path, rows):
@@ -89,7 +151,19 @@ PRICED_DIVS = tuple(d for d in N.DIV_PRIMARY if d not in
 
 def refresh_fixtures_odds():
     print("fixtures + odds")
-    text = fetch("https://www.football-data.co.uk/fixtures.csv")
+    path = os.path.join(DATA, "fixtures_odds.csv")
+    cached = os.path.exists(path) and os.path.getsize(path) > 0
+    try:
+        text = fetch("https://www.football-data.co.uk/fixtures.csv")
+    except Exception as e:
+        if cached:
+            detail = f"provider unavailable ({type(e).__name__}: {e}); using last-known-good fixtures"
+            mark_fixtures("cached", detail)
+            print(f"  ! {detail}")
+            return False
+        mark_fixtures("failed", f"provider unavailable and no cached fixture file ({e})")
+        raise
+
     rows = []
     for r in csv.DictReader(io.StringIO(text)):
         if r.get("Div") not in PRICED_DIVS:
@@ -103,10 +177,16 @@ def refresh_fixtures_odds():
             "AvgO25": r.get("Avg>2.5", ""), "AvgU25": r.get("Avg<2.5", ""),
         })
     if not rows:
-        print("  ! empty fixture pull — leaving fixtures_odds.csv untouched")
-        return
+        if cached:
+            detail = "fixture pull was empty; using last-known-good fixtures"
+            mark_fixtures("cached", detail)
+            print(f"  ! {detail}")
+            return False
+        mark_fixtures("failed", "fixture pull was empty and no cached fixture file exists")
+        raise RuntimeError("empty fixture pull and no cached fixtures_odds.csv")
+
     rows.sort(key=lambda r: (*reversed(r["Date"].split("/")), r["Time"]))
-    with open(os.path.join(DATA, "fixtures_odds.csv"), "w", newline="", encoding="utf-8") as fh:
+    with open(path, "w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=["Div", "Date", "Time", "HomeTeam", "AwayTeam",
                                             "AvgH", "AvgD", "AvgA", "AvgO25", "AvgU25"])
         w.writeheader()
@@ -114,7 +194,9 @@ def refresh_fixtures_odds():
     by_div = {}
     for r in rows:
         by_div[r["Div"]] = by_div.get(r["Div"], 0) + 1
+    mark_fixtures("fresh")
     print(f"  {len(rows)} fixtures  " + "  ".join(f"{d}:{n}" for d, n in sorted(by_div.items())))
+    return True
 
 
 # ---------------------------------------------------------------- openfootball (E0, E1, F1, N1)
@@ -266,24 +348,28 @@ def refresh_fd_new(div):
 # ---------------------------------------------------------------- main
 
 def main():
-    print(f"refresh run: {datetime.now().isoformat(timespec='seconds')}\n")
+    print(f"refresh run: {RUN_AT}\n")
 
-    refresh_fixtures_odds()
+    try:
+        refresh_fixtures_odds()
 
-    print("\ncurrent season — openfootball")
-    for div in ("E0", "E1", "D1", "F1", "N1"):
-        refresh_openfootball(div)
+        print("\ncurrent season — openfootball")
+        for div in ("E0", "E1", "D1", "F1", "N1"):
+            refresh_openfootball(div)
 
-    print("\ncurrent season — football-data.co.uk mmz4281")
-    for div in ("I1", "SP1"):
-        refresh_fd_mmz(div)
+        print("\ncurrent season — football-data.co.uk mmz4281")
+        for div in ("I1", "SP1"):
+            refresh_fd_mmz(div)
 
-    print("\ncurrent season — football-data.co.uk global archive")
-    for div in ("USA", "MEX", "BRA", "ARG", "JPN"):
-        refresh_fd_new(div)
+        print("\ncurrent season — football-data.co.uk global archive")
+        for div in ("USA", "MEX", "BRA", "ARG", "JPN"):
+            refresh_fd_new(div)
+    finally:
+        write_refresh_status()
 
-    print("\nrunning build.py + site.py")
+    print("\nrunning build.py + finalize_payload.py + site.py")
     subprocess.run([sys.executable, os.path.join(ROOT, "model", "build.py")], check=True)
+    subprocess.run([sys.executable, os.path.join(ROOT, "model", "finalize_payload.py")], check=True)
     subprocess.run([sys.executable, os.path.join(ROOT, "model", "site.py")], check=True)
 
 

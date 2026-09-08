@@ -3,30 +3,24 @@ name: Daily data refresh
 # Re-fetches fixtures, odds, and every league's current-season results,
 # rebuilds index.html + data/payload.json, commits, and deploys straight to
 # Vercel with the CLI using a token (see the Deploy step below) rather than
-# relying on Vercel's GitHub App to notice the push. That App connection
-# broke silently twice in two days with no error surfaced anywhere -- this
-# sidesteps it rather than trusting it again.
-#
-# Runs on GitHub's infrastructure, not the maintainer's machine, so it fires
-# on schedule regardless of whether anything local is open.
+# relying on Vercel's GitHub App to notice the push.
 
 on:
   schedule:
-    # GitHub's schedule trigger is documented as unreliable right at the top
-    # of the hour (congestion) and can simply not fire at all on quiet/new
-    # repos with no clear error surfaced. :17 avoids the congestion point;
-    # a local Claude scheduled task also fires this workflow directly via
-    # `gh workflow run` as a backup trigger, since GitHub's own schedule
-    # event went a full day without firing once on this repo.
     - cron: "17 6 * * *"   # ~06:17 UTC daily
-  workflow_dispatch: {}    # allows a manual "Run workflow" from the Actions tab, or the backup trigger
+  workflow_dispatch: {}
 
 permissions:
   contents: write
 
+concurrency:
+  group: scorecast-daily-refresh
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -34,9 +28,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install numpy scipy scikit-learn
+      - name: Install pinned model dependencies
+        run: pip install -r requirements.txt
 
-      - run: python3 model/refresh.py
+      - name: Run regression tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Refresh data and rebuild site
+        run: python3 model/refresh.py
 
       - name: Commit and push if anything changed
         run: |
@@ -50,10 +49,6 @@ jobs:
             git push
           fi
 
-      # Deploys directly via the Vercel CLI + API token, independent of
-      # whether Vercel's GitHub App can currently see this repo. This is
-      # the step that actually gets today's data live -- the git push
-      # above is for history/traceability, not what drives the deploy.
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
