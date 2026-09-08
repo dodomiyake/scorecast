@@ -3,6 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 python3 model/build.py
+python3 model/finalize_payload.py
 python3 model/site.py
 echo
 echo "open index.html in a browser, or serve it:"
