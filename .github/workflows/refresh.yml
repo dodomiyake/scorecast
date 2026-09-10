@@ -1,9 +1,8 @@
 name: Daily data refresh
 
-# Re-fetches fixtures, odds, and every league's current-season results,
-# rebuilds index.html + data/payload.json, commits, and deploys straight to
-# Vercel with the CLI using a token (see the Deploy step below) rather than
-# relying on Vercel's GitHub App to notice the push.
+# Uses football-data.co.uk when it is healthy (including bookmaker odds), with
+# OpenFootball as a fresh schedule/results fallback. Rebuilds index.html +
+# data/payload.json, commits, and deploys straight to Vercel with the CLI.
 
 on:
   schedule:
@@ -35,7 +34,7 @@ jobs:
         run: python3 -m unittest discover -s tests -p 'test_*.py'
 
       - name: Refresh data and rebuild site
-        run: python3 model/refresh.py
+        run: python3 model/production_refresh.py
 
       - name: Commit and push if anything changed
         run: |
