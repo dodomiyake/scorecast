@@ -28,7 +28,8 @@ LEAGUES = {
 }
 
 PARTS = ["01-head.html", "02-data.js.html", "03-ui.js.html",
-         "04-views.js.html", "05-app.js.html"]
+         "03b-date-fix.js.html", "04-views.js.html", "04b-empty-today.js.html",
+         "05-app.js.html"]
 
 # Written last: fills the left rail's footer from the payload rather than
 # hardcoding counts that go stale the moment the model is refitted.

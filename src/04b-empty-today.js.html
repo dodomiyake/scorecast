@@ -1,0 +1,23 @@
+
+<script>
+(function(){
+"use strict";
+var U = window.__U, V = window.__V;
+if (!U || !V || !V.viewToday) return;
+
+var originalViewToday = V.viewToday;
+V.viewToday = function(state){
+  var html = originalViewToday(state);
+  var day = U.DATES.filter(function(d){ return d.key === state.day; })[0];
+
+  if (day && day.label === "Today" && day.list.length === 0){
+    html = html
+      .replace(/<h3>No [^<]+ fixtures on this date<\/h3>/,
+               "<h3>No fixtures in the covered leagues today</h3>")
+      .replace("<p>There are 0 matches on the card in other leagues.</p>",
+               "<p>The next covered fixtures are available under Tomorrow and the following dates.</p>");
+  }
+  return html;
+};
+})();
+</script>
