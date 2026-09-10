@@ -1,0 +1,58 @@
+
+<script>
+(function(){
+"use strict";
+var P = window.__P, U = window.__U, L = window.__LEAGUES;
+if (!P || !U || !L) return;
+
+function localISO(d){
+  var y = d.getFullYear();
+  var m = String(d.getMonth() + 1).padStart(2, "0");
+  var day = String(d.getDate()).padStart(2, "0");
+  return y + "-" + m + "-" + day;
+}
+
+var now = new Date();
+var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+var tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+var todayKey = localISO(today);
+var tomorrowKey = localISO(tomorrow);
+
+var seen = {};
+var keys = [];
+function add(key){
+  if (!seen[key]){ seen[key] = true; keys.push(key); }
+}
+
+// Always expose the user's real local Today and Tomorrow, even if there are
+// zero covered fixtures. Then append every future date present in the card.
+add(todayKey);
+add(tomorrowKey);
+P.card.forEach(function(f){
+  if (f.date >= todayKey) add(f.date);
+});
+keys.sort();
+
+U.DATES = keys.map(function(d){
+  var label = d === todayKey ? "Today" : (d === tomorrowKey ? "Tomorrow" : U.fmtShort(d));
+  return {
+    date: d,
+    key: d,
+    label: label,
+    list: P.card.filter(function(f){ return f.date === d; })
+  };
+});
+
+// The legacy empty-state renderer expects L[state.league] to exist. Give the
+// synthetic "all" filter a non-enumerable label so Object.keys(L) still only
+// contains real leagues.
+if (!Object.prototype.hasOwnProperty.call(L, "all")){
+  Object.defineProperty(L, "all", {
+    value: {name: "covered", country: ""},
+    enumerable: false,
+    configurable: true
+  });
+}
+})();
+</script>
