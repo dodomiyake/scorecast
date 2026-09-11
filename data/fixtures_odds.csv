@@ -1,140 +1,70 @@
 Div,Date,Time,HomeTeam,AwayTeam,AvgH,AvgD,AvgA,AvgO25,AvgU25
-E1,11/09/2026,20:00,West Ham,Wrexham,,,,,
-N1,11/09/2026,20:00,AZ Alkmaar,Willem II,,,,,
-F1,11/09/2026,20:45,Rennes,Marseille,,,,,
-I1,11/09/2026,20:45,Venezia,Fiorentina,,,,,
-SP1,11/09/2026,21:00,Sevilla,Valencia,,,,,
-E1,12/09/2026,12:30,Bolton,Cardiff,,,,,
-E1,12/09/2026,12:30,Derby,Birmingham,,,,,
-E1,12/09/2026,12:30,West Brom,QPR,,,,,
-E0,12/09/2026,15:00,Aston Villa,Nott'm Forest,,,,,
-E0,12/09/2026,15:00,Bournemouth,Brentford,,,,,
-E0,12/09/2026,15:00,Chelsea,Hull,,,,,
-E0,12/09/2026,15:00,Crystal Palace,Ipswich,,,,,
-E0,12/09/2026,15:00,Liverpool,Fulham,,,,,
-E1,12/09/2026,15:00,Blackburn,Millwall,,,,,
-E1,12/09/2026,15:00,Charlton,Portsmouth,,,,,
-E1,12/09/2026,15:00,Middlesbrough,Norwich,,,,,
-E1,12/09/2026,15:00,Preston,Lincoln,,,,,
-E1,12/09/2026,15:00,Southampton,Bristol City,,,,,
-E1,12/09/2026,15:00,Swansea,Burnley,,,,,
-E1,12/09/2026,15:00,Watford,Stoke,,,,,
-I1,12/09/2026,15:00,Genoa,Frosinone,,,,,
-D1,12/09/2026,15:30,Augsburg,Leverkusen,,,,,
-D1,12/09/2026,15:30,Freiburg,M'gladbach,,,,,
-D1,12/09/2026,15:30,Hoffenheim,Stuttgart,,,,,
-D1,12/09/2026,15:30,Mainz,Ein Frankfurt,,,,,
-SP1,12/09/2026,16:15,Osasuna,Espanol,,,,,
-N1,12/09/2026,16:30,Twente,Den Haag,,,,,
-F1,12/09/2026,17:15,Strasbourg,Monaco,,,,,
-E0,12/09/2026,17:30,Tottenham,Everton,,,,,
-I1,12/09/2026,18:00,Lazio,Milan,,,,,
-D1,12/09/2026,18:30,FC Koln,Werder Bremen,,,,,
-SP1,12/09/2026,18:30,Ath Bilbao,Elche,,,,,
-N1,12/09/2026,18:45,Go Ahead Eagles,Groningen,,,,,
-E0,12/09/2026,20:00,Sunderland,Arsenal,,,,,
-N1,12/09/2026,20:00,For Sittard,Ajax,,,,,
-F1,12/09/2026,20:45,Auxerre,Nice,,,,,
-F1,12/09/2026,20:45,Le Havre,Angers,,,,,
-F1,12/09/2026,20:45,Lorient,Toulouse,,,,,
-F1,12/09/2026,20:45,Paris FC,Lyon,,,,,
-I1,12/09/2026,20:45,Atalanta,Cagliari,,,,,
-N1,12/09/2026,21:00,Cambuur,Nijmegen,,,,,
-SP1,12/09/2026,21:00,Real Madrid,Vallecano,,,,,
-E1,13/09/2026,12:00,Sheffield United,Wolves,,,,,
-N1,13/09/2026,12:15,Excelsior,Utrecht,,,,,
-E0,13/09/2026,14:00,Coventry,Brighton,,,,,
-SP1,13/09/2026,14:00,Celta,Malaga,,,,,
-N1,13/09/2026,14:30,Heerenveen,Telstar,,,,,
-F1,13/09/2026,15:00,Lille,Troyes,,,,,
-I1,13/09/2026,15:00,Lecce,Monza,,,,,
-D1,13/09/2026,15:30,RB Leipzig,Hamburg,,,,,
-SP1,13/09/2026,16:15,Levante,Barcelona,,,,,
-E0,13/09/2026,16:30,Man United,Man City,,,,,
-N1,13/09/2026,16:45,Zwolle,Feyenoord,,,,,
-F1,13/09/2026,17:15,Le Mans,Lens,,,,,
-I1,13/09/2026,18:00,Napoli,Bologna,,,,,
-N1,13/09/2026,20:00,PSV Eindhoven,Sparta Rotterdam,,,,,
-F1,13/09/2026,20:45,Brest,Paris SG,,,,,
-I1,13/09/2026,20:45,Sassuolo,Juventus,,,,,
-SP1,13/09/2026,21:00,Sociedad,Ath Madrid,,,,,
-I1,14/09/2026,18:30,Como,Parma,,,,,
-I1,14/09/2026,18:30,Torino,Roma,,,,,
-E0,14/09/2026,20:00,Leeds,Newcastle,,,,,
-I1,14/09/2026,20:45,Inter,Udinese,,,,,
-SP1,14/09/2026,21:00,Villarreal,Betis,,,,,
-SP1,15/09/2026,19:00,Vallecano,Espanol,,,,,
-E1,15/09/2026,19:45,Bristol City,Lincoln,,,,,
-E1,15/09/2026,19:45,Middlesbrough,Millwall,,,,,
-N1,15/09/2026,20:00,Ajax,Willem II,,,,,
-SP1,15/09/2026,20:00,Alaves,Valencia,,,,,
-SP1,15/09/2026,21:30,Elche,Real Madrid,,,,,
-SP1,16/09/2026,19:00,Ath Madrid,Osasuna,,,,,
-SP1,16/09/2026,21:30,Levante,Ath Bilbao,,,,,
-SP1,17/09/2026,19:00,Betis,Getafe,,,,,
-SP1,17/09/2026,21:30,Malaga,Villarreal,,,,,
-E0,18/09/2026,20:00,Brentford,Chelsea,,,,,
-E1,18/09/2026,20:00,Bristol City,Watford,,,,,
-N1,18/09/2026,20:00,Groningen,Zwolle,,,,,
-D1,18/09/2026,20:30,Bayern Munich,Union Berlin,,,,,
-F1,18/09/2026,20:45,Monaco,Lens,,,,,
-I1,18/09/2026,20:45,Monza,Sassuolo,,,,,
-SP1,18/09/2026,21:00,Espanol,Elche,,,,,
-E0,19/09/2026,12:30,Tottenham,Aston Villa,,,,,
-E1,19/09/2026,12:30,Cardiff,Charlton,,,,,
-E1,19/09/2026,12:30,Millwall,West Ham,,,,,
-E1,19/09/2026,12:30,Stoke,Sheffield United,,,,,
-SP1,19/09/2026,14:00,Osasuna,Vallecano,,,,,
-E0,19/09/2026,15:00,Brighton,Arsenal,,,,,
-E0,19/09/2026,15:00,Everton,Ipswich,,,,,
-E0,19/09/2026,15:00,Newcastle,Hull,,,,,
-E1,19/09/2026,15:00,Birmingham,Middlesbrough,,,,,
-E1,19/09/2026,15:00,Burnley,Derby,,,,,
-E1,19/09/2026,15:00,Lincoln,Swansea,,,,,
-E1,19/09/2026,15:00,Portsmouth,Blackburn,,,,,
-E1,19/09/2026,15:00,QPR,Preston,,,,,
-E1,19/09/2026,15:00,Wrexham,Southampton,,,,,
-I1,19/09/2026,15:00,Bologna,Torino,,,,,
-I1,19/09/2026,15:00,Udinese,Cagliari,,,,,
-D1,19/09/2026,15:30,Ein Frankfurt,Freiburg,,,,,
-D1,19/09/2026,15:30,Hamburg,FC Koln,,,,,
-D1,19/09/2026,15:30,M'gladbach,Mainz,,,,,
-D1,19/09/2026,15:30,Werder Bremen,Augsburg,,,,,
-SP1,19/09/2026,16:15,Ath Bilbao,Alaves,,,,,
-N1,19/09/2026,16:30,Den Haag,Cambuur,,,,,
-F1,19/09/2026,17:15,Paris FC,Strasbourg,,,,,
-E0,19/09/2026,17:30,Nott'm Forest,Coventry,,,,,
-I1,19/09/2026,18:00,Roma,Inter,,,,,
-D1,19/09/2026,18:30,Stuttgart,Dortmund,,,,,
-N1,19/09/2026,18:45,Sparta Rotterdam,Heerenveen,,,,,
-N1,19/09/2026,20:00,Ajax,Excelsior,,,,,
-F1,19/09/2026,20:45,Angers,Troyes,,,,,
-F1,19/09/2026,20:45,Le Mans,Lorient,,,,,
-F1,19/09/2026,20:45,Lyon,Rennes,,,,,
-F1,19/09/2026,20:45,Toulouse,Le Havre,,,,,
-I1,19/09/2026,20:45,Venezia,Lazio,,,,,
-N1,19/09/2026,21:00,Willem II,For Sittard,,,,,
-SP1,19/09/2026,21:00,Sevilla,Barcelona,,,,,
-E1,20/09/2026,12:00,Wolves,West Brom,,,,,
-N1,20/09/2026,12:15,Feyenoord,Utrecht,,,,,
-I1,20/09/2026,12:30,Fiorentina,Napoli,,,,,
-E1,20/09/2026,13:30,Norwich,Bolton,,,,,
-E0,20/09/2026,14:00,Bournemouth,Liverpool,,,,,
-E0,20/09/2026,14:00,Leeds,Crystal Palace,,,,,
-E0,20/09/2026,14:00,Man City,Sunderland,,,,,
-SP1,20/09/2026,14:00,Getafe,Malaga,,,,,
-N1,20/09/2026,14:30,AZ Alkmaar,Telstar,,,,,
-N1,20/09/2026,14:30,Twente,PSV Eindhoven,,,,,
-F1,20/09/2026,15:00,Auxerre,Brest,,,,,
-I1,20/09/2026,15:00,Frosinone,Como,,,,,
-I1,20/09/2026,15:00,Parma,Genoa,,,,,
-D1,20/09/2026,15:30,Leverkusen,RB Leipzig,,,,,
-SP1,20/09/2026,16:15,Ath Madrid,Real Madrid,,,,,
-E0,20/09/2026,16:30,Fulham,Man United,,,,,
-N1,20/09/2026,16:45,Nijmegen,Go Ahead Eagles,,,,,
-F1,20/09/2026,17:15,Nice,Lille,,,,,
-I1,20/09/2026,18:00,Juventus,Atalanta,,,,,
-SP1,20/09/2026,18:30,Villarreal,Levante,,,,,
-F1,20/09/2026,20:45,Marseille,Paris SG,,,,,
-I1,20/09/2026,20:45,Milan,Lecce,,,,,
-SP1,20/09/2026,21:00,Valencia,Sociedad,,,,,
+N1,11/09/2026,19:00,AZ Alkmaar,Willem II,1.14,7.94,13.69,1.26,3.59
+D1,11/09/2026,19:30,Union Berlin,Schalke 04,2.34,3.52,2.79,1.62,2.23
+F1,11/09/2026,19:45,Rennes,Marseille,2.09,3.81,3.07,1.49,2.52
+I1,11/09/2026,19:45,Venezia,Fiorentina,2.8,3.4,2.44,1.7,2.1
+E1,11/09/2026,20:00,West Ham,Wrexham,1.57,4.21,5.36,1.62,2.22
+SP1,11/09/2026,20:00,Sevilla,Valencia,1.96,3.31,4.02,2.25,1.6
+E1,12/09/2026,12:30,Bolton,Cardiff,2.53,3.63,2.53,1.58,2.28
+E1,12/09/2026,12:30,Derby,Birmingham,3.33,3.28,2.17,2.05,1.72
+E1,12/09/2026,12:30,West Brom,QPR,2.06,3.46,3.44,1.79,1.96
+SP1,12/09/2026,13:00,Santander,Alaves,2.42,3.5,2.76,1.7,2.07
+I1,12/09/2026,14:00,Genoa,Frosinone,2.1,3.37,3.46,1.89,1.86
+D1,12/09/2026,14:30,Augsburg,Leverkusen,3.9,4.08,1.76,1.4,2.85
+D1,12/09/2026,14:30,Dortmund,Paderborn,1.23,6.42,10.04,1.34,3.15
+D1,12/09/2026,14:30,Freiburg,M'gladbach,1.68,4.02,4.41,1.53,2.42
+D1,12/09/2026,14:30,Hoffenheim,Stuttgart,2.3,3.94,2.63,1.33,3.17
+D1,12/09/2026,14:30,Mainz,Ein Frankfurt,1.97,3.85,3.32,1.48,2.58
+E0,12/09/2026,15:00,Aston Villa,Nott'm Forest,2.22,3.39,3.17,1.89,1.83
+E0,12/09/2026,15:00,Bournemouth,Brentford,2.45,3.58,2.68,1.67,2.2
+E0,12/09/2026,15:00,Chelsea,Hull,1.21,6.5,11.92,1.39,2.83
+E0,12/09/2026,15:00,Crystal Palace,Ipswich,1.84,3.74,3.98,1.76,1.99
+E0,12/09/2026,15:00,Liverpool,Fulham,1.44,4.85,6.37,1.5,2.59
+E1,12/09/2026,15:00,Blackburn,Millwall,2.71,3.37,2.51,1.84,1.9
+E1,12/09/2026,15:00,Charlton,Portsmouth,2.72,3.19,2.6,2.13,1.66
+E1,12/09/2026,15:00,Middlesbrough,Norwich,1.85,3.91,3.72,1.53,2.38
+E1,12/09/2026,15:00,Preston,Lincoln,2.3,3.47,2.93,1.81,1.93
+E1,12/09/2026,15:00,Southampton,Bristol City,1.66,4.02,4.64,1.56,2.33
+E1,12/09/2026,15:00,Swansea,Burnley,2.14,3.47,3.23,1.82,1.91
+E1,12/09/2026,15:00,Watford,Stoke,2.34,3.38,2.94,1.86,1.86
+SP1,12/09/2026,15:15,Osasuna,Espanol,2.11,3.25,3.58,2.16,1.65
+N1,12/09/2026,15:30,Twente,Den Haag,1.22,6.4,9.97,1.3,3.33
+F1,12/09/2026,16:15,Strasbourg,Monaco,3.01,3.71,2.15,1.54,2.37
+I1,12/09/2026,17:00,Lazio,Milan,3.28,3.21,2.26,2.22,1.63
+D1,12/09/2026,17:30,FC Koln,Werder Bremen,2.07,3.73,3.18,1.53,2.4
+E0,12/09/2026,17:30,Tottenham,Everton,2.02,3.53,3.55,1.9,1.84
+SP1,12/09/2026,17:30,Ath Bilbao,Elche,1.41,4.73,7.35,1.67,2.13
+N1,12/09/2026,17:45,Go Ahead Eagles,Groningen,2.25,3.83,2.69,1.43,2.67
+N1,12/09/2026,19:00,For Sittard,Ajax,5.97,4.88,1.41,1.35,2.99
+F1,12/09/2026,19:45,Auxerre,Nice,2.54,3.32,2.71,1.9,1.83
+F1,12/09/2026,19:45,Le Havre,Angers,2.46,3.21,2.86,2.03,1.73
+F1,12/09/2026,19:45,Lorient,Toulouse,2.56,3.3,2.68,1.9,1.84
+F1,12/09/2026,19:45,Paris FC,Lyon,2.62,3.58,2.47,1.64,2.18
+I1,12/09/2026,19:45,Atalanta,Cagliari,1.57,3.97,5.79,1.9,1.85
+E0,12/09/2026,20:00,Sunderland,Arsenal,7.36,4.12,1.46,2.02,1.74
+N1,12/09/2026,20:00,Cambuur,Nijmegen,4.96,4.68,1.51,1.33,3.15
+SP1,12/09/2026,20:00,Real Madrid,Vallecano,1.11,9.06,18.38,1.26,3.67
+N1,13/09/2026,11:15,Excelsior,Utrecht,2.21,3.6,2.86,1.59,2.25
+E1,13/09/2026,12:00,Sheffield United,Wolves,3.16,3.52,2.12,1.7,2.07
+SP1,13/09/2026,13:00,Celta,Malaga,1.7,3.62,4.89,2.03,1.72
+N1,13/09/2026,13:30,Heerenveen,Telstar,1.61,4.28,4.46,1.39,2.79
+E0,13/09/2026,14:00,Coventry,Brighton,3.91,3.73,1.85,1.72,2.03
+F1,13/09/2026,14:00,Lille,Troyes,1.39,4.69,7.36,1.66,2.13
+I1,13/09/2026,14:00,Lecce,Monza,2.6,3.09,2.78,2.21,1.63
+D1,13/09/2026,14:30,RB Leipzig,Hamburg,1.34,5.24,7.53,1.39,2.85
+SP1,13/09/2026,15:15,Levante,Barcelona,14.46,7.89,1.15,1.25,3.71
+N1,13/09/2026,15:45,Zwolle,Feyenoord,5.98,4.91,1.42,1.33,3.11
+F1,13/09/2026,16:15,Le Mans,Lens,4.77,4.02,1.64,1.63,2.18
+D1,13/09/2026,16:30,Elversberg,Bayern Munich,12.77,8.35,1.15,1.16,4.89
+E0,13/09/2026,16:30,Man United,Man City,3.08,3.78,2.1,1.5,2.49
+I1,13/09/2026,17:00,Napoli,Bologna,1.75,3.53,4.72,2.05,1.72
+SP1,13/09/2026,17:30,Getafe,La Coruna,2.4,2.79,3.38,3.02,1.36
+N1,13/09/2026,19:00,PSV Eindhoven,Sparta Rotterdam,1.16,7.63,11.58,1.17,4.49
+F1,13/09/2026,19:45,Brest,Paris SG,9.85,5.88,1.25,1.39,2.84
+I1,13/09/2026,19:45,Sassuolo,Juventus,5.12,3.94,1.62,1.78,1.97
+SP1,13/09/2026,20:00,Sociedad,Ath Madrid,2.81,3.48,2.35,1.64,2.17
+I1,14/09/2026,17:30,Como,Parma,1.22,5.86,13.15,1.68,2.12
+I1,14/09/2026,17:30,Torino,Roma,5.71,3.98,1.56,1.77,1.97
+I1,14/09/2026,19:45,Inter,Udinese,1.25,5.85,11.15,1.53,2.42
+E0,14/09/2026,20:00,Leeds,Newcastle,2.38,3.45,2.81,1.75,2
+SP1,14/09/2026,20:00,Villarreal,Betis,1.88,3.79,3.62,1.54,2.36
