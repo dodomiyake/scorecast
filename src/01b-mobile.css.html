@@ -1,0 +1,172 @@
+<style>
+/* Mobile layout hardening. Kept separate so generated data and the main visual system stay untouched. */
+@media (max-width:760px){
+  .wrap{
+    padding-left:14px;
+    padding-right:14px;
+    padding-bottom:56px;
+  }
+
+  .section{
+    margin-top:30px;
+  }
+
+  .section-head{
+    align-items:flex-start;
+    gap:12px;
+  }
+
+  .section-head > *{
+    min-width:0;
+  }
+
+  .section-head .right{
+    width:100%;
+    text-align:left;
+  }
+
+  .seg{
+    max-width:100%;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .seg::-webkit-scrollbar{ display:none; }
+  .seg button{ flex:0 0 auto; }
+
+  .chiprow{
+    width:100%;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:2px;
+    scrollbar-width:none;
+  }
+  .chiprow::-webkit-scrollbar{ display:none; }
+  .chip{ flex:0 0 auto; }
+
+  .picks,
+  .grid-2,
+  .grid-3{
+    grid-template-columns:minmax(0,1fr);
+  }
+
+  .pick{
+    min-width:0;
+    padding:15px 14px 13px;
+  }
+
+  .pick-top,
+  .pick-team,
+  .pick-foot{
+    min-width:0;
+  }
+
+  .pick-team .nm{
+    min-width:0;
+  }
+
+  /* "This season so far" had a desktop-only five-column inline grid.
+     The inline declaration wins normal media-query rules, so force the
+     mobile three-column result layout and remove secondary metadata. */
+  .res-row{
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) !important;
+    gap:8px !important;
+    padding:10px 0;
+    align-items:center;
+  }
+
+  .res-row .dt,
+  .res-row > :nth-child(5){
+    display:none !important;
+  }
+
+  .res-row .hm,
+  .res-row .aw{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .res-row .hm{ text-align:right; }
+  .res-row .aw{ text-align:left; }
+
+  .res-row .sc{
+    min-width:54px;
+    text-align:center;
+    white-space:nowrap;
+    padding:4px 9px;
+  }
+
+  .card{
+    min-width:0;
+  }
+
+  .card-k{
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .fx{
+    min-width:0;
+  }
+
+  .fx-teams,
+  .fx-team,
+  .fx-team .nm,
+  .fx-prob{
+    min-width:0;
+  }
+}
+
+@media (max-width:420px){
+  .mobile-top{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .mobile-nav{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .hero-inner{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .hero h1{
+    font-size:29px;
+    line-height:1.06;
+  }
+
+  .hero p.lede{
+    font-size:14px;
+  }
+
+  .section-head h2{
+    font-size:20px;
+  }
+
+  .section-head .sub{
+    font-size:12.5px;
+    line-height:1.55;
+  }
+
+  .card{
+    padding:13px;
+  }
+
+  .pick-team .nm{
+    font-size:14.5px;
+  }
+
+  .pick-foot{
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .conf{
+    margin-left:auto;
+  }
+}
+</style>
