@@ -1,6 +1,4 @@
 Div,Date,Time,HomeTeam,AwayTeam,AvgH,AvgD,AvgA,AvgO25,AvgU25
-SP1,17/09/2026,19:00,Betis,Getafe,,,,,
-SP1,17/09/2026,21:30,Malaga,Villarreal,,,,,
 E0,18/09/2026,20:00,Brentford,Chelsea,,,,,
 E1,18/09/2026,20:00,Bristol City,Watford,,,,,
 N1,18/09/2026,20:00,Groningen,Zwolle,,,,,
@@ -66,3 +64,5 @@ SP1,20/09/2026,18:30,Villarreal,Levante,,,,,
 F1,20/09/2026,20:45,Marseille,Paris SG,,,,,
 I1,20/09/2026,20:45,Milan,Lecce,,,,,
 SP1,20/09/2026,21:00,Valencia,Sociedad,,,,,
+E1,09/10/2026,20:00,West Ham,QPR,,,,,
+F1,09/10/2026,20:45,Lens,Lyon,,,,,
