@@ -207,16 +207,38 @@ OF_REPO = {
     "D1": "https://raw.githubusercontent.com/openfootball/deutschland/master/{s}/1-bundesliga.txt",
     "F1": "https://raw.githubusercontent.com/openfootball/europe/master/france/{s}_fr1.txt",
     "N1": "https://raw.githubusercontent.com/openfootball/europe/master/netherlands/{s}_nl1.txt",
+    "P1": "https://raw.githubusercontent.com/openfootball/europe/master/portugal/{s}_pt1.txt",
+    "SC0": "https://raw.githubusercontent.com/openfootball/europe/master/scotland/{s}_sco1.txt",
 }
 
 MONTHS = {m: i + 1 for i, m in enumerate(
     ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])}
 DATE_RE = re.compile(r"^\s*(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+(\w{3})\w*\s+(\d{1,2})(?:\s+(\d{4}))?\s*$")
 MATCH_RE = re.compile(r"^\s*(?:(\d{1,2}:\d{2})\s+)?(.+?)\s+v\s+(.+?)(?:\s+(\d+)-(\d+)(?:\s*\([^)]*\))?)?\s*$")
+SCORE_MIDDLE_RE = re.compile(
+    r"^\s*(?:(\d{1,2}:\d{2})\s+)?(.+?)\s{2,}(\d+)-(\d+)"
+    r"(?:\s+\([^)]*\))?\s{2,}(.+?)\s*$"
+)
+
+
+def match_openfootball_line(line):
+    """Parse both common Football.TXT league layouts."""
+    mm = MATCH_RE.match(line)
+    if mm:
+        kickoff, home, away, hg, ag = mm.groups()
+    else:
+        sm = SCORE_MIDDLE_RE.match(line)
+        if not sm:
+            return None
+        kickoff, home, hg, ag, away = sm.groups()
+    home = re.sub(r"\s+\(\*\)$", "", home.strip())
+    away = re.sub(r"\s+\[[^\]]+\]\s*$", "", away.strip())
+    away = re.sub(r"\s+\(\*\)$", "", away)
+    return kickoff, home, away, hg, ag
 
 
 def parse_openfootball(text):
-    year, cur_date, out = None, None, []
+    year, cur_date, out, last_month = None, None, [], None
     for line in text.splitlines():
         s = line.strip()
         if not s:
@@ -229,15 +251,19 @@ def parse_openfootball(text):
         dm = DATE_RE.match(line)
         if dm:
             _, mon, day, yr = dm.groups()
+            month = MONTHS[mon]
             if yr:
                 year = int(yr)
-            cur_date = (year, MONTHS[mon], int(day))
+            elif year is not None and last_month is not None and last_month >= 11 and month <= 2:
+                year += 1
+            last_month = month
+            cur_date = (year, month, int(day))
             continue
-        mm = MATCH_RE.match(line)
-        if mm and cur_date:
-            _, home, away, hg, ag = mm.groups()
+        parsed = match_openfootball_line(line)
+        if parsed and cur_date:
+            _, home, away, hg, ag = parsed
             if hg is not None and ag is not None:
-                out.append((cur_date, home.strip(), away.strip(), int(hg), int(ag)))
+                out.append((cur_date, home, away, int(hg), int(ag)))
     return out
 
 
@@ -354,11 +380,11 @@ def main():
         refresh_fixtures_odds()
 
         print("\ncurrent season — openfootball")
-        for div in ("E0", "E1", "D1", "F1", "N1"):
+        for div in ("E0", "E1", "D1", "F1", "N1", "P1", "SC0"):
             refresh_openfootball(div)
 
         print("\ncurrent season — football-data.co.uk mmz4281")
-        for div in ("I1", "SP1"):
+        for div in ("I1", "SP1", "P1", "SC0", "B1", "T1"):
             refresh_fd_mmz(div)
 
         print("\ncurrent season — football-data.co.uk global archive")

@@ -37,6 +37,9 @@ OPENFOOTBALL_FIXTURES = {
     "N1": "https://raw.githubusercontent.com/openfootball/europe/master/netherlands/{s}_nl1.txt",
     "SP1": "https://raw.githubusercontent.com/openfootball/espana/master/{s}/1-liga.txt",
     "I1": "https://raw.githubusercontent.com/openfootball/italy/master/{s}/1-seriea.txt",
+    "P1": "https://raw.githubusercontent.com/openfootball/europe/master/portugal/{s}_pt1.txt",
+    "SC0": "https://raw.githubusercontent.com/openfootball/europe/master/scotland/{s}_sco1.txt",
+    "B1": "https://raw.githubusercontent.com/openfootball/belgium/master/{s}/be1.txt",
 }
 
 # The legacy refresh already uses OpenFootball for five leagues. Add Spain and
@@ -58,6 +61,7 @@ def parse_openfootball_schedule(text):
     year = None
     cur_date = None
     carried_time = None
+    last_month = None
     out = []
 
     for line in text.splitlines():
@@ -76,19 +80,23 @@ def parse_openfootball_schedule(text):
         dm = R.DATE_RE.match(line)
         if dm:
             _, mon, day, explicit_year = dm.groups()
+            month = R.MONTHS[mon]
             if explicit_year:
                 year = int(explicit_year)
+            elif year is not None and last_month is not None and last_month >= 11 and month <= 2:
+                year += 1
+            last_month = month
             if year is None:
                 continue
-            cur_date = date(year, R.MONTHS[mon], int(day))
+            cur_date = date(year, month, int(day))
             carried_time = None
             continue
 
-        mm = R.MATCH_RE.match(line)
-        if not mm or cur_date is None:
+        parsed = R.match_openfootball_line(line)
+        if not parsed or cur_date is None:
             continue
 
-        kickoff, home, away, hg, ag = mm.groups()
+        kickoff, home, away, hg, ag = parsed
         if kickoff:
             carried_time = kickoff
         kickoff = kickoff or carried_time or "TBC"

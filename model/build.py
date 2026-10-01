@@ -28,6 +28,8 @@ TODAY = datetime.now().date()
 FILES = ["2025-26_en.1.csv", "2025-26_en.2.csv", "2025-26_de.1.csv",
          "2025-26_fr.1.csv", "2025-26_nl.1.csv",
          "2025-26_sp.1.csv", "2025-26_it.1.csv",
+         "2025-26_pt.1.csv", "2025-26_sco.1.csv",
+         "2025-26_be.1.csv", "2025-26_tr.1.csv",
          # backtest-only: MLS, Liga MX, Brazil, Argentina, J1 League — real
          # results, reconciled the same way, but no bookmaker-odds feed for
          # their upcoming fixtures, so they get a fit and a backtest and

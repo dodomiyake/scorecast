@@ -74,5 +74,45 @@ class CurrentTableTests(unittest.TestCase):
         self.assertEqual(by_team["Alpha"]["form"], ["W", "D"])
 
 
+class LeagueExpansionTests(unittest.TestCase):
+    def test_new_divisions_have_complete_registry_entries(self):
+        expected = {
+            "P1": ("2025-26_pt.1.csv", "cur_2627_P1.csv"),
+            "SC0": ("2025-26_sco.1.csv", "cur_2627_SC0.csv"),
+            "B1": ("2025-26_be.1.csv", "cur_2627_B1.csv"),
+            "T1": ("2025-26_tr.1.csv", "cur_2627_T1.csv"),
+        }
+        for div, (history, current) in expected.items():
+            self.assertEqual(refresh.N.DIV_PRIMARY[div], history)
+            self.assertEqual(refresh.N.CURRENT_STEM[div], current)
+            self.assertIn(div, refresh.N.DIV_META)
+
+    def test_scotland_score_middle_layout_is_parsed(self):
+        self.assertEqual(
+            refresh.match_openfootball_line("  20:00   Dundee United  1-1 (1-0)  Rangers"),
+            ("20:00", "Dundee United", "Rangers", "1", "1"),
+        )
+        self.assertEqual(
+            refresh.match_openfootball_line("  15:00   Falkirk   v   Dundee"),
+            ("15:00", "Falkirk", "Dundee", None, None),
+        )
+
+    def test_new_historical_training_files_are_complete(self):
+        minimum_rows = {"P1": 300, "SC0": 220, "B1": 300, "T1": 300}
+        for div, minimum in minimum_rows.items():
+            path = os.path.join(refresh.DATA, refresh.N.DIV_PRIMARY[div])
+            with open(path, encoding="utf-8") as fh:
+                rows = [line for line in fh if line.strip()]
+            self.assertGreaterEqual(len(rows), minimum, div)
+
+    def test_promoted_team_aliases_exist(self):
+        for short_name in (
+            "Academico Viseu", "Maritimo", "St Johnstone",
+            "Beveren", "Kortrijk", "Lommel SK",
+            "Amedspor", "Corum", "Erzurumspor",
+        ):
+            self.assertIsNotNone(refresh.N.historic_key(short_name), short_name)
+
+
 if __name__ == "__main__":
     unittest.main()

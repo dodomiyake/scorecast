@@ -381,6 +381,67 @@ ALIAS = {
     "Yokohama FC": "Yokohama FC",
 }
 
+
+# --- October 2026 domestic-league expansion ---------------------------------
+DIV_SOURCES.update({
+    "P1": ["2025-26_pt.1.csv"], "SC0": ["2025-26_sco.1.csv"],
+    "B1": ["2025-26_be.1.csv"], "T1": ["2025-26_tr.1.csv"],
+})
+DIV_PRIMARY.update({
+    "P1": "2025-26_pt.1.csv", "SC0": "2025-26_sco.1.csv",
+    "B1": "2025-26_be.1.csv", "T1": "2025-26_tr.1.csv",
+})
+CURRENT_STEM.update({
+    "P1": "cur_2627_P1.csv", "SC0": "cur_2627_SC0.csv",
+    "B1": "cur_2627_B1.csv", "T1": "cur_2627_T1.csv",
+})
+DIV_META.update({
+    "P1": ("Primeira Liga", "Portugal", "pt"),
+    "SC0": ("Premiership", "Scotland", "sct"),
+    "B1": ("Pro League", "Belgium", "be"),
+    "T1": ("Süper Lig", "Turkey", "tr"),
+})
+ALIAS.update({
+    "Academico Viseu": "Académico de Viseu FC", "Alverca": "FC Alverca",
+    "Arouca": "FC Arouca", "Benfica": "Sport Lisboa e Benfica",
+    "Casa Pia": "Casa Pia AC", "Estoril": "GD Estoril Praia",
+    "Estrela": "CF Estrela da Amadora", "Famalicao": "FC Famalicão",
+    "Gil Vicente": "Gil Vicente FC", "Guimaraes": "Vitória Guimarães",
+    "Maritimo": "CS Marítimo", "Moreirense": "Moreirense FC",
+    "Nacional": "CD Nacional", "Porto": "FC Porto", "Rio Ave": "Rio Ave FC",
+    "Santa Clara": "CD Santa Clara", "Sp Braga": "Sporting Clube de Braga",
+    "Sp Lisbon": "Sporting Clube de Portugal", "AVS": "AVS", "Tondela": "CD Tondela",
+
+    "Aberdeen": "Aberdeen", "Celtic": "Celtic", "Dundee": "Dundee",
+    "Dundee United": "Dundee United", "Falkirk": "Falkirk",
+    "Hearts": "Heart of Midlothian", "Hibernian": "Hibernian",
+    "Kilmarnock": "Kilmarnock", "Livingston": "Livingston FC",
+    "Motherwell": "Motherwell", "Rangers": "Rangers",
+    "St Johnstone": "Saint Johnstone FC", "St Mirren": "St. Mirren",
+
+    "Anderlecht": "RSC Anderlecht", "Antwerp": "Royal Antwerp FC",
+    "Beveren": "SK Beveren", "Cercle Brugge": "Cercle Brugge",
+    "Charleroi": "Sporting Charleroi", "Club Brugge": "Club Brugge",
+    "Dender": "FCV Dender EH", "Genk": "KRC Genk", "Gent": "KAA Gent",
+    "Kortrijk": "KV Kortrijk", "Lommel SK": "Lommel SK",
+    "Mechelen": "KV Mechelen", "Oud-Heverlee Leuven": "OH Leuven",
+    "RAAL La Louviere": "RAAL La Louvière", "St Truiden": "STVV",
+    "St. Gilloise": "Royale Union Saint-Gilloise", "Standard": "Standard de Liège",
+    "Waregem": "SV Zulte Waregem", "Westerlo": "KVC Westerlo",
+
+    "Alanyaspor": "Alanyaspor", "Amedspor": "Amedspor",
+    "Antalyaspor": "Antalyaspor", "Besiktas": "Beşiktaş",
+    "Buyuksehyr": "İstanbul Başakşehir", "Corum": "Çorum FK",
+    "Erzurumspor": "Erzurumspor FK", "Eyupspor": "Eyüpspor",
+    "Fenerbahce": "Fenerbahçe", "Galatasaray": "Galatasaray",
+    "Gaziantep": "Gaziantep FK", "Genclerbirligi": "Gençlerbirliği",
+    "Goztep": "Göztepe", "Goztepe": "Göztepe",
+    "Karagumruk": "Fatih Karagümrük", "Kasimpasa": "Kasımpaşa SK",
+    "Kayserispor": "Kayserispor", "Kocaelispor": "Kocaelispor",
+    "Konyaspor": "Konyaspor", "Rizespor": "Çaykur Rizespor",
+    "Samsunspor": "Samsunspor", "Trabzonspor": "Trabzonspor",
+})
+
 # How a club is shown in the interface. Anything absent keeps its short name.
 DISPLAY = {
     "Nott'm Forest": "Nottingham Forest", "Man United": "Manchester United",
@@ -403,6 +464,15 @@ DISPLAY = {
     "Stoke": "Stoke City", "Swansea": "Swansea City", "Blackburn": "Blackburn Rovers",
     "Birmingham": "Birmingham City", "Charlton": "Charlton Athletic",
     "Leicester": "Leicester City", "Oxford": "Oxford United",
+    "Academico Viseu": "Académico Viseu", "Famalicao": "Famalicão",
+    "Guimaraes": "Vitória Guimarães", "Maritimo": "Marítimo",
+    "Sp Braga": "Braga", "Sp Lisbon": "Sporting CP",
+    "St Johnstone": "St Johnstone", "St. Gilloise": "Union SG",
+    "Oud-Heverlee Leuven": "OH Leuven", "RAAL La Louviere": "RAAL La Louvière",
+    "St Truiden": "STVV", "Besiktas": "Beşiktaş",
+    "Buyuksehyr": "İstanbul Başakşehir", "Corum": "Çorum FK",
+    "Fenerbahce": "Fenerbahçe", "Genclerbirligi": "Gençlerbirliği",
+    "Goztep": "Göztepe", "Goztepe": "Göztepe", "Kasimpasa": "Kasımpaşa",
 }
 
 # Short label used in tight columns and market lines.
@@ -427,6 +497,8 @@ SHORT = {
     "Leicester City": "Leicester", "Oxford United": "Oxford",
     "Lincoln City": "Lincoln", "Cardiff City": "Cardiff", "Bristol City": "Bristol City",
     "Le Mans FC": "Le Mans", "ES Troyes AC": "Troyes",
+    "Vitória Guimarães": "Guimarães", "Sporting CP": "Sporting",
+    "İstanbul Başakşehir": "Başakşehir", "Royale Union Saint-Gilloise": "Union SG",
 }
 
 
