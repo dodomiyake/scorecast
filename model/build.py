@@ -523,6 +523,9 @@ if GRADED:
 ZONES = {  # (european places, relegation places) as normally applied
     "E0": (4, 3), "E1": (2, 3), "D1": (4, 2), "F1": (3, 2), "N1": (2, 2),
     "SP1": (4, 3), "I1": (4, 3),
+    # New leagues are kept unshaded here as well; finalize_payload.py
+    # replaces these legacy tables with current-season-only standings.
+    "P1": (0, 0), "SC0": (0, 0), "B1": (0, 0), "T1": (0, 0),
     # MLS has no relegation and splits into conferences; Liga MX runs two
     # short tournaments with a play-in bracket, not a single table; Brazil,
     # Argentina and Japan do promote/relegate but the site isn't confident
