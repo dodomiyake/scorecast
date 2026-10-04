@@ -1,1 +1,1 @@
-{"runAt":"2026-10-04T09:28:04Z","fixtures":{"state":"fallback","source":"openfootball","lastSuccessfulFetch":"2026-10-04T09:28:04Z","detail":"football-data.co.uk unavailable or stale; using 241 fresh OpenFootball fixtures without bookmaker odds"}}
+{"runAt":"2026-10-04T11:31:25Z","fixtures":{"state":"fallback","source":"multi-source-fallback","lastSuccessfulFetch":"2026-10-04T11:31:25Z","detail":"football-data.co.uk unavailable or stale; using 283 fresh public-schedule fixtures without bookmaker odds"}}
