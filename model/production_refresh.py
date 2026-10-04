@@ -287,10 +287,15 @@ def build_openfootball_fixture_rows(fetcher=None, today=None, horizon_days=FALLB
     end = today + timedelta(days=horizon_days)
     collected = []
     unresolved = {}
+    errors = {}
 
     for div, template in repos.items():
         url = template.format(s=R.OF_SEASON)
-        text = fetcher(url, attempts=2)
+        try:
+            text = fetcher(url, attempts=2)
+        except Exception as exc:
+            errors[div] = f"{type(exc).__name__}: {exc}"
+            continue
         missing = set()
 
         for match_date, kickoff, home, away, played in parse_openfootball_schedule(text):
@@ -323,7 +328,7 @@ def build_openfootball_fixture_rows(fetcher=None, today=None, horizon_days=FALLB
 
     collected.sort(key=lambda item: (item[0], item[1]["Time"], item[1]["Div"], item[1]["HomeTeam"]))
     rows = [row for _, row in collected]
-    return rows, unresolved
+    return rows, unresolved, errors
 
 
 def write_fixture_rows(rows, path=FIXTURE_PATH):
@@ -366,13 +371,15 @@ def _rebuild_payload_metadata():
 
 
 def main():
-    print("preparing OpenFootball fixture fallback")
+    print("preparing fixture fallbacks")
     fallback_rows = []
     fallback_error = None
     try:
-        fallback_rows, unresolved = build_openfootball_fixture_rows()
+        open_rows, open_unresolved, open_errors = build_openfootball_fixture_rows()
+        web_rows, web_unresolved, web_errors = build_footballwebpages_fixture_rows()
+        fallback_rows = merge_fixture_rows(open_rows, web_rows)
         if not fallback_rows:
-            raise RuntimeError("OpenFootball returned no mapped upcoming fixtures in the fallback window")
+            raise RuntimeError("all fallback sources returned no mapped upcoming fixtures")
         write_fixture_rows(fallback_rows)
         by_div = {}
         for row in fallback_rows:
@@ -381,11 +388,17 @@ def main():
             len(fallback_rows),
             "  ".join(f"{div}:{count}" for div, count in sorted(by_div.items())),
         ))
-        for div, names in sorted(unresolved.items()):
-            print(f"  ! {div}: fallback skipped unmapped OpenFootball team name(s): {names}")
+        for div, names in sorted(open_unresolved.items()):
+            print(f"  ! {div}: OpenFootball skipped unmapped team name(s): {names}")
+        for div, names in sorted(web_unresolved.items()):
+            print(f"  ! {div}: FootballWebPages skipped unmapped team name(s): {names}")
+        for div, detail in sorted(open_errors.items()):
+            print(f"  ! {div}: OpenFootball fixture source unavailable ({detail})")
+        for div, details in sorted(web_errors.items()):
+            print(f"  ! {div}: FootballWebPages fixture source issue ({'; '.join(details)})")
     except Exception as exc:
         fallback_error = exc
-        print(f"  ! OpenFootball fallback unavailable: {type(exc).__name__}: {exc}")
+        print(f"  ! fixture fallbacks unavailable: {type(exc).__name__}: {exc}")
 
     # Add OpenFootball result coverage for Spain and Italy before the normal
     # refresh. If the bookmaker-provider result CSVs work, they still win later.
@@ -408,8 +421,8 @@ def main():
         if result and not fixture_file_has_upcoming():
             if fallback_rows:
                 write_fixture_rows(fallback_rows)
-                R.mark_fixtures("cached", "bookmaker fixture feed contained no upcoming matches; using OpenFootball fallback")
-                print("  ! bookmaker fixture feed was stale; restored OpenFootball fallback")
+                R.mark_fixtures("cached", "bookmaker fixture feed contained no upcoming matches; using public schedule fallback")
+                print("  ! bookmaker fixture feed was stale; restored public schedule fallback")
                 return False
             raise RuntimeError("bookmaker fixture feed contained no upcoming matches and fallback was unavailable")
         return result
@@ -421,21 +434,21 @@ def main():
     if state == "cached":
         if not fallback_rows:
             raise RuntimeError(
-                "football-data.co.uk did not provide current fixtures and OpenFootball fallback failed: "
+                "football-data.co.uk did not provide current fixtures and all schedule fallbacks failed: "
                 f"{fallback_error}"
             )
         R.REFRESH_STATUS["fixtures"] = {
             "state": "fallback",
-            "source": "openfootball",
+            "source": "multi-source-fallback",
             "lastSuccessfulFetch": R.RUN_AT,
             "detail": (
                 f"football-data.co.uk unavailable or stale; using {len(fallback_rows)} fresh "
-                "OpenFootball fixtures without bookmaker odds"
+                "public-schedule fixtures without bookmaker odds"
             ),
         }
         R.write_refresh_status()
         _rebuild_payload_metadata()
-        print("  fixture status: fallback/openfootball (fresh schedule, no bookmaker odds)")
+        print("  fixture status: fallback/multi-source (fresh schedule, no bookmaker odds)")
 
 
 if __name__ == "__main__":
