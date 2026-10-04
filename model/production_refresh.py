@@ -328,7 +328,10 @@ def build_openfootball_fixture_rows(fetcher=None, today=None, horizon_days=FALLB
 
     collected.sort(key=lambda item: (item[0], item[1]["Time"], item[1]["Div"], item[1]["HomeTeam"]))
     rows = [row for _, row in collected]
-    return rows, unresolved, errors
+    if errors:
+        for div, detail in sorted(errors.items()):
+            print(f"  ! {div}: OpenFootball fixture source unavailable ({detail})")
+    return rows, unresolved
 
 
 def write_fixture_rows(rows, path=FIXTURE_PATH):
@@ -375,7 +378,7 @@ def main():
     fallback_rows = []
     fallback_error = None
     try:
-        open_rows, open_unresolved, open_errors = build_openfootball_fixture_rows()
+        open_rows, open_unresolved = build_openfootball_fixture_rows()
         web_rows, web_unresolved, web_errors = build_footballwebpages_fixture_rows()
         fallback_rows = merge_fixture_rows(open_rows, web_rows)
         if not fallback_rows:
@@ -392,8 +395,6 @@ def main():
             print(f"  ! {div}: OpenFootball skipped unmapped team name(s): {names}")
         for div, names in sorted(web_unresolved.items()):
             print(f"  ! {div}: FootballWebPages skipped unmapped team name(s): {names}")
-        for div, detail in sorted(open_errors.items()):
-            print(f"  ! {div}: OpenFootball fixture source unavailable ({detail})")
         for div, details in sorted(web_errors.items()):
             print(f"  ! {div}: FootballWebPages fixture source issue ({'; '.join(details)})")
     except Exception as exc:
