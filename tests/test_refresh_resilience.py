@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(ROOT, "model"))
 
 import refresh
 import finalize_payload
+import production_refresh
 
 
 class FakeResponse:
@@ -112,6 +113,52 @@ class LeagueExpansionTests(unittest.TestCase):
             "Amedspor", "Corum", "Erzurumspor",
         ):
             self.assertIsNotNone(refresh.N.historic_key(short_name), short_name)
+
+
+class FixtureFallbackTests(unittest.TestCase):
+    def test_footballwebpages_parser_builds_belgium_and_turkey_rows(self):
+        from datetime import date
+        belgium = """
+        <h3>Friday 9th October 2026</h3>
+        <span>7.45pm</span><span>KSV Beveren</span><span>v</span><span>Lommel</span>
+        """
+        rows, missing = production_refresh.parse_footballwebpages_schedule(
+            belgium, "B1",
+            production_refresh.FOOTBALLWEBPAGES_FIXTURES["B1"]["aliases"],
+            today=date(2026, 10, 4),
+        )
+        self.assertEqual(missing, [])
+        self.assertEqual(rows[0]["Date"], "09/10/2026")
+        self.assertEqual(rows[0]["Time"], "19:45")
+        self.assertEqual(rows[0]["HomeTeam"], "Beveren")
+        self.assertEqual(rows[0]["AwayTeam"], "Lommel SK")
+
+        turkey = """
+        <h3>Saturday 10th October 2026</h3>
+        <span>5pm</span><span>Çaykur Rizespor</span><span>v</span><span>Fenerbahçe</span>
+        """
+        rows, missing = production_refresh.parse_footballwebpages_schedule(
+            turkey, "T1",
+            production_refresh.FOOTBALLWEBPAGES_FIXTURES["T1"]["aliases"],
+            today=date(2026, 10, 4),
+        )
+        self.assertEqual(missing, [])
+        self.assertEqual(rows[0]["Time"], "17:00")
+        self.assertEqual(rows[0]["HomeTeam"], "Rizespor")
+        self.assertEqual(rows[0]["AwayTeam"], "Fenerbahce")
+
+    def test_fallback_merge_prefers_confirmed_time_over_tbc(self):
+        base = {
+            "Div": "B1", "Date": "09/10/2026", "HomeTeam": "Beveren",
+            "AwayTeam": "Lommel SK", "AvgH": "", "AvgD": "", "AvgA": "",
+            "AvgO25": "", "AvgU25": "",
+        }
+        rows = production_refresh.merge_fixture_rows(
+            [dict(base, Time="TBC")],
+            [dict(base, Time="19:45")],
+        )
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["Time"], "19:45")
 
 
 if __name__ == "__main__":
