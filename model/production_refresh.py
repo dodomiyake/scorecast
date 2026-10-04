@@ -11,9 +11,11 @@ Run: python3 model/production_refresh.py
 
 import csv
 import os
+import re
 import subprocess
 import sys
 from datetime import date, datetime, timedelta, timezone
+from html.parser import HTMLParser
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import refresh as R
@@ -49,6 +51,177 @@ OPENFOOTBALL_RESULTS_EXTRA = {
     "SP1": OPENFOOTBALL_FIXTURES["SP1"],
     "I1": OPENFOOTBALL_FIXTURES["I1"],
 }
+
+
+FOOTBALLWEBPAGES_FIXTURES = {
+    "B1": {
+        "slug": "belgian-pro-league",
+        "aliases": {
+            "KSV Beveren": "Beveren", "SK Beveren": "Beveren",
+            "Lommel": "Lommel SK", "Lommel SK": "Lommel SK",
+            "RSC Anderlecht": "Anderlecht", "Anderlecht": "Anderlecht",
+            "KRC Genk": "Genk", "Genk": "Genk",
+            "KV Kortrijk": "Kortrijk", "Kortrijk": "Kortrijk",
+            "La Louvière": "RAAL La Louviere", "RAAL La Louvière": "RAAL La Louviere",
+            "SV Zulte Waregem": "Waregem", "Zulte-Waregem": "Waregem",
+            "KAA Gent": "Gent", "AA Gent": "Gent", "Gent": "Gent",
+            "KVC Westerlo": "Westerlo", "Westerlo": "Westerlo",
+            "Royal Antwerp": "Antwerp", "Antwerp": "Antwerp",
+            "Mechelen": "Mechelen", "KV Mechelen": "Mechelen",
+            "Sint-Truidense VV": "St Truiden", "Sint-Truiden": "St Truiden",
+            "Standard Liège": "Standard", "Standard Liege": "Standard",
+            "Sporting de Charleroi": "Charleroi", "Charleroi": "Charleroi",
+            "Union Saint-Gilloise": "St. Gilloise", "Union SG": "St. Gilloise",
+            "Oud-Heverlee Leuven": "Oud-Heverlee Leuven", "OH Leuven": "Oud-Heverlee Leuven",
+            "Cercle Brugge": "Cercle Brugge", "Cercle Brugge KSV": "Cercle Brugge",
+            "Club Brugge": "Club Brugge",
+        },
+    },
+    "T1": {
+        "slug": "turkish-super-lig",
+        "aliases": {
+            "Galatasaray": "Galatasaray", "Kasımpaşa SK": "Kasimpasa", "Kasimpasa": "Kasimpasa",
+            "Gençlerbirliği": "Genclerbirligi", "Gençlerbirligi": "Genclerbirligi",
+            "Amedspor": "Amedspor", "Amed SFK": "Amedspor",
+            "Alanyaspor": "Alanyaspor", "Erzurumspor": "Erzurumspor", "Erzurumspor FK": "Erzurumspor",
+            "Samsunspor": "Samsunspor", "Trabzonspor": "Trabzonspor",
+            "Çaykur Rizespor": "Rizespor", "Rizespor": "Rizespor",
+            "Fenerbahçe": "Fenerbahce", "Fenerbahce": "Fenerbahce",
+            "Beşiktaş": "Besiktas", "Besiktas": "Besiktas",
+            "Gazişehir Gaziantep": "Gaziantep", "Gaziantep FK": "Gaziantep",
+            "Çorum": "Corum", "Çorum FK": "Corum", "Yeni Çorumspor": "Corum",
+            "Konyaspor": "Konyaspor", "İstanbul Başakşehir": "Buyuksehyr",
+            "Basaksehir": "Buyuksehyr", "Başakşehir": "Buyuksehyr",
+            "Eyüpspor": "Eyupspor", "Eyupspor": "Eyupspor",
+            "Göztepe SK": "Goztep", "Göztepe": "Goztep", "Goztepe": "Goztep",
+            "Kocaelispor": "Kocaelispor",
+        },
+    },
+}
+
+FWP_FIXTURE_DATE_RE = re.compile(
+    r"^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+"
+    r"(\d{1,2})(?:st|nd|rd|th)?\s+"
+    r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+"
+    r"(\d{4})$",
+    re.I,
+)
+FWP_TIME_RE = re.compile(r"^(\d{1,2})(?:[.:](\d{2}))?(am|pm)$", re.I)
+FWP_MONTHS = {name.lower(): i for i, name in enumerate(
+    ("January","February","March","April","May","June",
+     "July","August","September","October","November","December"), start=1)}
+
+
+class _VisibleText(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.parts = []
+
+    def handle_data(self, data):
+        value = " ".join(data.split())
+        if value:
+            self.parts.append(value)
+
+
+def _fwp_time_24h(value):
+    match = FWP_TIME_RE.match(value.strip())
+    if not match:
+        return None
+    hour, minute, period = match.groups()
+    hour = int(hour); minute = int(minute or 0)
+    if period.lower() == "pm" and hour != 12:
+        hour += 12
+    if period.lower() == "am" and hour == 12:
+        hour = 0
+    return f"{hour:02d}:{minute:02d}"
+
+
+def parse_footballwebpages_schedule(html_text, div, aliases, today=None,
+                                    horizon_days=FALLBACK_HORIZON_DAYS):
+    today = today or datetime.now(timezone.utc).date()
+    end = today + timedelta(days=horizon_days)
+    parser = _VisibleText(); parser.feed(html_text)
+    nodes = parser.parts
+    current_date = None
+    rows, unresolved = [], set()
+
+    for i, token in enumerate(nodes):
+        dm = FWP_FIXTURE_DATE_RE.match(token)
+        if dm:
+            _, day, month_name, year = dm.groups()
+            current_date = date(int(year), FWP_MONTHS[month_name.lower()], int(day))
+            continue
+        kickoff = _fwp_time_24h(token)
+        if not kickoff or current_date is None or not (today <= current_date <= end):
+            continue
+        for j in range(i + 2, min(i + 8, len(nodes) - 1)):
+            if nodes[j].strip().lower() != "v":
+                continue
+            home, away = nodes[j - 1].strip(), nodes[j + 1].strip()
+            hs, as_ = aliases.get(home), aliases.get(away)
+            if not hs: unresolved.add(home)
+            if not as_: unresolved.add(away)
+            if hs and as_:
+                rows.append({
+                    "Div": div, "Date": current_date.strftime("%d/%m/%Y"),
+                    "Time": kickoff, "HomeTeam": hs, "AwayTeam": as_,
+                    "AvgH": "", "AvgD": "", "AvgA": "", "AvgO25": "", "AvgU25": "",
+                })
+            break
+    return rows, sorted(unresolved)
+
+
+def _month_starts(start, end):
+    cur = date(start.year, start.month, 1)
+    final = date(end.year, end.month, 1)
+    while cur <= final:
+        yield cur
+        cur = date(cur.year + (cur.month == 12), 1 if cur.month == 12 else cur.month + 1, 1)
+
+
+def build_footballwebpages_fixture_rows(fetcher=None, today=None,
+                                        horizon_days=FALLBACK_HORIZON_DAYS):
+    fetcher = fetcher or R.fetch
+    today = today or datetime.now(timezone.utc).date()
+    end = today + timedelta(days=horizon_days)
+    rows, unresolved, errors = [], {}, {}
+
+    for div, config in FOOTBALLWEBPAGES_FIXTURES.items():
+        missing = set()
+        for month_start in _month_starts(today, end):
+            url = (
+                f"https://www.footballwebpages.co.uk/{config['slug']}/fixtures-results/"
+                f"{month_start.strftime('%B').lower()}"
+            )
+            try:
+                html_text = fetcher(url, attempts=2)
+            except Exception as exc:
+                errors.setdefault(div, []).append(
+                    f"{month_start.strftime('%B')}: {type(exc).__name__}: {exc}"
+                )
+                continue
+            parsed, names = parse_footballwebpages_schedule(
+                html_text, div, config["aliases"], today=today, horizon_days=horizon_days
+            )
+            rows.extend(parsed); missing.update(names)
+        if missing:
+            unresolved[div] = sorted(missing)
+    return rows, unresolved, errors
+
+
+def merge_fixture_rows(*groups):
+    merged = {}
+    for rows in groups:
+        for row in rows:
+            key = (row["Div"], row["Date"], row["HomeTeam"], row["AwayTeam"])
+            current = merged.get(key)
+            if current is None or (current.get("Time") == "TBC" and row.get("Time") != "TBC"):
+                merged[key] = row
+    return sorted(
+        merged.values(),
+        key=lambda r: (datetime.strptime(r["Date"], "%d/%m/%Y").date(),
+                       r["Time"], r["Div"], r["HomeTeam"]),
+    )
 
 
 def parse_openfootball_schedule(text):
@@ -114,10 +287,15 @@ def build_openfootball_fixture_rows(fetcher=None, today=None, horizon_days=FALLB
     end = today + timedelta(days=horizon_days)
     collected = []
     unresolved = {}
+    errors = {}
 
     for div, template in repos.items():
         url = template.format(s=R.OF_SEASON)
-        text = fetcher(url, attempts=2)
+        try:
+            text = fetcher(url, attempts=2)
+        except Exception as exc:
+            errors[div] = f"{type(exc).__name__}: {exc}"
+            continue
         missing = set()
 
         for match_date, kickoff, home, away, played in parse_openfootball_schedule(text):
@@ -150,6 +328,9 @@ def build_openfootball_fixture_rows(fetcher=None, today=None, horizon_days=FALLB
 
     collected.sort(key=lambda item: (item[0], item[1]["Time"], item[1]["Div"], item[1]["HomeTeam"]))
     rows = [row for _, row in collected]
+    if errors:
+        for div, detail in sorted(errors.items()):
+            print(f"  ! {div}: OpenFootball fixture source unavailable ({detail})")
     return rows, unresolved
 
 
@@ -193,13 +374,15 @@ def _rebuild_payload_metadata():
 
 
 def main():
-    print("preparing OpenFootball fixture fallback")
+    print("preparing fixture fallbacks")
     fallback_rows = []
     fallback_error = None
     try:
-        fallback_rows, unresolved = build_openfootball_fixture_rows()
+        open_rows, open_unresolved = build_openfootball_fixture_rows()
+        web_rows, web_unresolved, web_errors = build_footballwebpages_fixture_rows()
+        fallback_rows = merge_fixture_rows(open_rows, web_rows)
         if not fallback_rows:
-            raise RuntimeError("OpenFootball returned no mapped upcoming fixtures in the fallback window")
+            raise RuntimeError("all fallback sources returned no mapped upcoming fixtures")
         write_fixture_rows(fallback_rows)
         by_div = {}
         for row in fallback_rows:
@@ -208,11 +391,15 @@ def main():
             len(fallback_rows),
             "  ".join(f"{div}:{count}" for div, count in sorted(by_div.items())),
         ))
-        for div, names in sorted(unresolved.items()):
-            print(f"  ! {div}: fallback skipped unmapped OpenFootball team name(s): {names}")
+        for div, names in sorted(open_unresolved.items()):
+            print(f"  ! {div}: OpenFootball skipped unmapped team name(s): {names}")
+        for div, names in sorted(web_unresolved.items()):
+            print(f"  ! {div}: FootballWebPages skipped unmapped team name(s): {names}")
+        for div, details in sorted(web_errors.items()):
+            print(f"  ! {div}: FootballWebPages fixture source issue ({'; '.join(details)})")
     except Exception as exc:
         fallback_error = exc
-        print(f"  ! OpenFootball fallback unavailable: {type(exc).__name__}: {exc}")
+        print(f"  ! fixture fallbacks unavailable: {type(exc).__name__}: {exc}")
 
     # Add OpenFootball result coverage for Spain and Italy before the normal
     # refresh. If the bookmaker-provider result CSVs work, they still win later.
@@ -235,8 +422,8 @@ def main():
         if result and not fixture_file_has_upcoming():
             if fallback_rows:
                 write_fixture_rows(fallback_rows)
-                R.mark_fixtures("cached", "bookmaker fixture feed contained no upcoming matches; using OpenFootball fallback")
-                print("  ! bookmaker fixture feed was stale; restored OpenFootball fallback")
+                R.mark_fixtures("cached", "bookmaker fixture feed contained no upcoming matches; using public schedule fallback")
+                print("  ! bookmaker fixture feed was stale; restored public schedule fallback")
                 return False
             raise RuntimeError("bookmaker fixture feed contained no upcoming matches and fallback was unavailable")
         return result
@@ -248,21 +435,21 @@ def main():
     if state == "cached":
         if not fallback_rows:
             raise RuntimeError(
-                "football-data.co.uk did not provide current fixtures and OpenFootball fallback failed: "
+                "football-data.co.uk did not provide current fixtures and all schedule fallbacks failed: "
                 f"{fallback_error}"
             )
         R.REFRESH_STATUS["fixtures"] = {
             "state": "fallback",
-            "source": "openfootball",
+            "source": "multi-source-fallback",
             "lastSuccessfulFetch": R.RUN_AT,
             "detail": (
                 f"football-data.co.uk unavailable or stale; using {len(fallback_rows)} fresh "
-                "OpenFootball fixtures without bookmaker odds"
+                "public-schedule fixtures without bookmaker odds"
             ),
         }
         R.write_refresh_status()
         _rebuild_payload_metadata()
-        print("  fixture status: fallback/openfootball (fresh schedule, no bookmaker odds)")
+        print("  fixture status: fallback/multi-source (fresh schedule, no bookmaker odds)")
 
 
 if __name__ == "__main__":

@@ -2,8 +2,8 @@
 <script>
 (function(){
 "use strict";
-var U = window.__U, V = window.__V;
-if (!U || !V || !V.viewToday) return;
+var P = window.__P, U = window.__U, V = window.__V;
+if (!P || !U || !V || !V.viewToday) return;
 
 var originalViewToday = V.viewToday;
 V.viewToday = function(state){
@@ -11,11 +11,57 @@ V.viewToday = function(state){
   var day = U.DATES.filter(function(d){ return d.key === state.day; })[0];
 
   if (day && day.label === "Today" && day.list.length === 0){
-    html = html
-      .replace(/<h3>No [^<]+ fixtures on this date<\/h3>/,
-               "<h3>No fixtures in the covered leagues today</h3>")
-      .replace("<p>There are 0 matches on the card in other leagues.</p>",
-               "<p>The next covered fixtures are available under Tomorrow and the following dates.</p>");
+    var next = U.DATES.filter(function(d){
+      return d.key > day.key && d.list.length > 0;
+    })[0];
+    var future = P.card.filter(function(f){ return f.date > day.key; });
+    var leagueCount = Object.keys(future.reduce(function(acc, f){
+      acc[f.div] = true; return acc;
+    }, {})).length;
+
+    if (next){
+      var nextLong = U.fmtLong(next.date);
+      var nextShort = U.fmtShort(next.date);
+
+      html = html
+        .replace(
+          "<h1>No fixtures priced for this date.</h1>",
+          "<h1>No fixtures today. Next predictions: " + nextLong + ".</h1>"
+        )
+        .replace("Every fixture below is priced", "Every upcoming fixture is priced")
+        .replace(
+          /<div class="hstat"><span class="hstat-k">Fixtures priced<\/span><div class="hstat-v tnum">0<\/div><div class="hstat-note">across 0 leagues<\/div><\/div>/,
+          '<div class="hstat"><span class="hstat-k">Upcoming fixtures priced</span>'+
+          '<div class="hstat-v tnum">'+future.length+'</div>'+
+          '<div class="hstat-note">across '+leagueCount+' leagues</div></div>'
+        )
+        .replace(
+          /<h3>No [^<]+ fixtures on this date<\/h3>/,
+          "<h3>No fixtures in the covered leagues today</h3>"
+        )
+        .replace(
+          "<p>There are 0 matches on the card in other leagues.</p>",
+          "<p>The next predictions are " + nextLong + ". " +
+          next.list.length + " fixtures are on that date, with " +
+          future.length + " upcoming fixtures currently priced.</p>" +
+          '<button class="btn btn-ghost" data-day="'+next.key+'">' +
+          "View " + nextShort + " predictions &rarr;</button>"
+        );
+    } else {
+      html = html
+        .replace(
+          "<h1>No fixtures priced for this date.</h1>",
+          "<h1>No covered fixtures today.</h1>"
+        )
+        .replace(
+          /<h3>No [^<]+ fixtures on this date<\/h3>/,
+          "<h3>No fixtures in the covered leagues today</h3>"
+        )
+        .replace(
+          "<p>There are 0 matches on the card in other leagues.</p>",
+          "<p>No later fixtures are currently available in the active schedule feed.</p>"
+        );
+    }
   }
   return html;
 };
