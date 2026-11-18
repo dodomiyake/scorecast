@@ -3,9 +3,9 @@
 08/08/2026,Guimaraes,Arouca,0,1
 08/08/2026,Estrela,Sp Lisbon,2,2
 09/08/2026,Porto,Alverca,2,0
-09/08/2026,Moreirense,Sp Braga,2,2
-09/08/2026,Gil Vicente,Rio Ave,1,0
 09/08/2026,Benfica,Academico Viseu,2,2
+09/08/2026,Gil Vicente,Rio Ave,1,0
+09/08/2026,Moreirense,Sp Braga,2,2
 10/08/2026,Santa Clara,Nacional,2,2
 14/08/2026,Sp Lisbon,Guimaraes,3,2
 15/08/2026,Alverca,Estrela,2,2
@@ -45,18 +45,54 @@
 12/09/2026,Nacional,Alverca,1,3
 12/09/2026,Casa Pia,Porto,1,4
 12/09/2026,Academico Viseu,Guimaraes,2,1
-13/09/2026,Benfica,Gil Vicente,3,1
 13/09/2026,Arouca,Santa Clara,1,2
+13/09/2026,Benfica,Gil Vicente,3,1
 13/09/2026,Famalicao,Sp Lisbon,1,1
 14/09/2026,Rio Ave,Estrela,3,3
 14/09/2026,Moreirense,Maritimo,3,1
 14/09/2026,Sp Braga,Estoril,1,0
-19/09/2026,Nacional,Famalicao,0,4
 19/09/2026,Gil Vicente,Maritimo,1,1
+19/09/2026,Nacional,Famalicao,0,4
 19/09/2026,Alverca,Rio Ave,1,0
 19/09/2026,Sp Lisbon,Arouca,2,2
-20/09/2026,Guimaraes,Moreirense,1,1
 20/09/2026,Estrela,Academico Viseu,0,2
-20/09/2026,Santa Clara,Sp Braga,0,0
+20/09/2026,Guimaraes,Moreirense,1,1
 20/09/2026,Estoril,Casa Pia,1,2
+20/09/2026,Santa Clara,Sp Braga,0,0
 20/09/2026,Porto,Benfica,3,1
+09/10/2026,Moreirense,Gil Vicente,0,1
+09/10/2026,Sp Braga,Sp Lisbon,1,3
+10/10/2026,Maritimo,Porto,1,2
+10/10/2026,Academico Viseu,Estoril,2,1
+10/10/2026,Casa Pia,Santa Clara,0,1
+11/10/2026,Rio Ave,Nacional,3,2
+11/10/2026,Benfica,Guimaraes,2,0
+11/10/2026,Arouca,Estrela,1,0
+12/10/2026,Famalicao,Alverca,1,4
+19/10/2026,Sp Braga,Gil Vicente,1,2
+23/10/2026,Guimaraes,Maritimo,5,0
+24/10/2026,Estrela,Casa Pia,0,2
+24/10/2026,Alverca,Arouca,0,1
+24/10/2026,Gil Vicente,Porto,0,1
+25/10/2026,Estoril,Moreirense,1,3
+25/10/2026,Nacional,Sp Braga,1,0
+25/10/2026,Rio Ave,Famalicao,0,4
+25/10/2026,Sp Lisbon,Academico Viseu,1,2
+26/10/2026,Santa Clara,Benfica,1,2
+30/10/2026,Casa Pia,Sp Lisbon,0,2
+31/10/2026,Moreirense,Estrela,2,1
+31/10/2026,Porto,Estoril,4,0
+01/11/2026,Arouca,Nacional,1,0
+01/11/2026,Academico Viseu,Rio Ave,2,1
+01/11/2026,Maritimo,Santa Clara,0,2
+01/11/2026,Sp Braga,Famalicao,3,0
+02/11/2026,Benfica,Alverca,1,0
+02/11/2026,Gil Vicente,Guimaraes,0,0
+06/11/2026,Famalicao,Arouca,1,0
+07/11/2026,Alverca,Casa Pia,1,1
+07/11/2026,Sp Lisbon,Moreirense,1,0
+08/11/2026,Nacional,Academico Viseu,1,0
+08/11/2026,Santa Clara,Gil Vicente,1,2
+08/11/2026,Guimaraes,Porto,1,2
+08/11/2026,Estrela,Benfica,2,3
+08/11/2026,Rio Ave,Sp Braga,0,1
