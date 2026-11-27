@@ -1,313 +1,103 @@
 Div,Date,Time,HomeTeam,AwayTeam,AvgH,AvgD,AvgA,AvgO25,AvgU25
-T1,27/11/2026,17:00,Alanyaspor,Konyaspor,,,,,
-T1,27/11/2026,17:00,Rizespor,Kasimpasa,,,,,
-B1,27/11/2026,19:45,Oud-Heverlee Leuven,Kortrijk,,,,,
-E1,27/11/2026,20:00,Southampton,Middlesbrough,,,,,
-N1,27/11/2026,20:00,Groningen,Willem II,,,,,
-P1,27/11/2026,20:15,Maritimo,Nacional,,,,,
-D1,27/11/2026,20:30,Werder Bremen,M'gladbach,,,,,
-F1,27/11/2026,20:45,Brest,Paris FC,,,,,
-E1,28/11/2026,12:30,Blackburn,Charlton,,,,,
-E1,28/11/2026,12:30,Lincoln,Wolves,,,,,
-E1,28/11/2026,12:30,Preston,Norwich,,,,,
-T1,28/11/2026,13:00,Samsunspor,Genclerbirligi,,,,,
-B1,28/11/2026,15:00,Westerlo,RAAL La Louviere,,,,,
-E0,28/11/2026,15:00,Arsenal,Man City,,,,,
-E0,28/11/2026,15:00,Brighton,Newcastle,,,,,
-E0,28/11/2026,15:00,Crystal Palace,Hull,,,,,
-E0,28/11/2026,15:00,Everton,Liverpool,,,,,
-E0,28/11/2026,15:00,Fulham,Bournemouth,,,,,
-E0,28/11/2026,15:00,Ipswich,Aston Villa,,,,,
-E0,28/11/2026,15:00,Leeds,Coventry,,,,,
-E0,28/11/2026,15:00,Man United,Brentford,,,,,
-E0,28/11/2026,15:00,Nott'm Forest,Chelsea,,,,,
-E0,28/11/2026,15:00,Sunderland,Tottenham,,,,,
-E1,28/11/2026,15:00,Birmingham,Bolton,,,,,
-E1,28/11/2026,15:00,Derby,Watford,,,,,
-E1,28/11/2026,15:00,Millwall,Burnley,,,,,
-E1,28/11/2026,15:00,QPR,Sheffield United,,,,,
-E1,28/11/2026,15:00,West Brom,Bristol City,,,,,
-E1,28/11/2026,15:00,West Ham,Stoke,,,,,
-E1,28/11/2026,15:00,Wrexham,Portsmouth,,,,,
-SC0,28/11/2026,15:00,Aberdeen,Dundee,,,,,
-SC0,28/11/2026,15:00,Dundee United,St Johnstone,,,,,
-SC0,28/11/2026,15:00,Rangers,Falkirk,,,,,
-SC0,28/11/2026,15:00,St Mirren,Kilmarnock,,,,,
-D1,28/11/2026,15:30,Hamburg,Bayern Munich,,,,,
-D1,28/11/2026,15:30,Mainz,Union Berlin,,,,,
-P1,28/11/2026,15:30,Arouca,Rio Ave,,,,,
-P1,28/11/2026,15:30,Moreirense,Santa Clara,,,,,
-T1,28/11/2026,16:00,Gaziantep,Amedspor,,,,,
-N1,28/11/2026,16:30,Excelsior,Telstar,,,,,
-B1,28/11/2026,17:15,Cercle Brugge,Mechelen,,,,,
-F1,28/11/2026,17:15,Angers,Lens,,,,,
-SC0,28/11/2026,17:45,Motherwell,Hibernian,,,,,
-P1,28/11/2026,18:00,Academico Viseu,Alverca,,,,,
-D1,28/11/2026,18:30,Stuttgart,Ein Frankfurt,,,,,
-N1,28/11/2026,18:45,PSV Eindhoven,Go Ahead Eagles,,,,,
-B1,28/11/2026,19:45,Charleroi,Beveren,,,,,
-B1,28/11/2026,19:45,Lommel SK,Waregem,,,,,
-P1,28/11/2026,20:30,Guimaraes,Estrela,,,,,
-F1,28/11/2026,20:45,Le Havre,Strasbourg,,,,,
-F1,28/11/2026,20:45,Le Mans,Lille,,,,,
-F1,28/11/2026,20:45,Nice,Troyes,,,,,
-F1,28/11/2026,20:45,Paris SG,Lorient,,,,,
-N1,28/11/2026,21:00,Cambuur,Sparta Rotterdam,,,,,
-T1,29/11/2026,10:30,Corum,Kocaelispor,,,,,
-E1,29/11/2026,12:00,Swansea,Cardiff,,,,,
-N1,29/11/2026,12:15,Den Haag,Utrecht,,,,,
-B1,29/11/2026,12:30,St Truiden,Genk,,,,,
-T1,29/11/2026,13:00,Eyupspor,Buyuksehyr,,,,,
-N1,29/11/2026,14:30,Feyenoord,Ajax,,,,,
-N1,29/11/2026,14:30,For Sittard,Heerenveen,,,,,
-B1,29/11/2026,15:00,Antwerp,Anderlecht,,,,,
-F1,29/11/2026,15:00,Auxerre,Marseille,,,,,
-SC0,29/11/2026,15:00,Hearts,Celtic,,,,,
-D1,29/11/2026,15:30,Freiburg,RB Leipzig,,,,,
-T1,29/11/2026,16:00,Fenerbahce,Erzurumspor,,,,,
-N1,29/11/2026,16:45,Zwolle,AZ Alkmaar,,,,,
-F1,29/11/2026,17:15,Toulouse,Rennes,,,,,
-B1,29/11/2026,17:30,Standard,Club Brugge,,,,,
-D1,29/11/2026,17:30,Hoffenheim,Augsburg,,,,,
-P1,29/11/2026,18:00,Gil Vicente,Estoril,,,,,
-B1,29/11/2026,18:15,St. Gilloise,Gent,,,,,
-D1,29/11/2026,19:30,Dortmund,Leverkusen,,,,,
-N1,29/11/2026,20:00,Nijmegen,Twente,,,,,
-P1,29/11/2026,20:30,Porto,Sp Lisbon,,,,,
-F1,29/11/2026,20:45,Lyon,Monaco,,,,,
-I1,29/11/2026,TBC,Cagliari,Milan,,,,,
-I1,29/11/2026,TBC,Como,Juventus,,,,,
-I1,29/11/2026,TBC,Frosinone,Parma,,,,,
-I1,29/11/2026,TBC,Inter,Genoa,,,,,
-I1,29/11/2026,TBC,Lecce,Atalanta,,,,,
-I1,29/11/2026,TBC,Roma,Monza,,,,,
-I1,29/11/2026,TBC,Sassuolo,Napoli,,,,,
-I1,29/11/2026,TBC,Torino,Lazio,,,,,
-I1,29/11/2026,TBC,Udinese,Fiorentina,,,,,
-I1,29/11/2026,TBC,Venezia,Bologna,,,,,
-SP1,29/11/2026,TBC,Betis,Vallecano,,,,,
-SP1,29/11/2026,TBC,Celta,Villarreal,,,,,
-SP1,29/11/2026,TBC,Elche,Ath Madrid,,,,,
-SP1,29/11/2026,TBC,Espanol,Getafe,,,,,
-SP1,29/11/2026,TBC,Malaga,Ath Bilbao,,,,,
-SP1,29/11/2026,TBC,Real Madrid,Alaves,,,,,
-SP1,29/11/2026,TBC,Sociedad,Sevilla,,,,,
-SP1,29/11/2026,TBC,Valencia,Osasuna,,,,,
-T1,30/11/2026,16:00,Goztep,Trabzonspor,,,,,
-T1,30/11/2026,18:00,Besiktas,Galatasaray,,,,,
-P1,30/11/2026,20:15,Benfica,Famalicao,,,,,
-P1,30/11/2026,20:15,Casa Pia,Sp Braga,,,,,
-SC0,02/12/2026,19:45,Dundee,Celtic,,,,,
-SC0,02/12/2026,19:45,Falkirk,Motherwell,,,,,
-SC0,02/12/2026,19:45,Hearts,Aberdeen,,,,,
-SC0,02/12/2026,19:45,Kilmarnock,Hibernian,,,,,
-SC0,02/12/2026,19:45,Rangers,Dundee United,,,,,
-SC0,02/12/2026,19:45,St Johnstone,St Mirren,,,,,
-E0,02/12/2026,20:00,Aston Villa,Everton,,,,,
-E0,02/12/2026,20:00,Bournemouth,Brighton,,,,,
-E0,02/12/2026,20:00,Brentford,Arsenal,,,,,
-E0,02/12/2026,20:00,Chelsea,Crystal Palace,,,,,
-E0,02/12/2026,20:00,Coventry,Ipswich,,,,,
-E0,02/12/2026,20:00,Hull,Nott'm Forest,,,,,
-E0,02/12/2026,20:00,Liverpool,Sunderland,,,,,
-E0,02/12/2026,20:00,Man City,Leeds,,,,,
-E0,02/12/2026,20:00,Newcastle,Man United,,,,,
-E0,02/12/2026,20:00,Tottenham,Fulham,,,,,
-T1,04/12/2026,17:00,Galatasaray,Rizespor,,,,,
-E1,04/12/2026,20:00,Sheffield United,West Ham,,,,,
-N1,04/12/2026,20:00,Telstar,Groningen,,,,,
-T1,05/12/2026,10:30,Konyaspor,Gaziantep,,,,,
-E1,05/12/2026,12:30,Bolton,Blackburn,,,,,
-E1,05/12/2026,12:30,Bristol City,Swansea,,,,,
-E1,05/12/2026,12:30,Middlesbrough,Derby,,,,,
-T1,05/12/2026,13:00,Amedspor,Alanyaspor,,,,,
-E0,05/12/2026,15:00,Aston Villa,Crystal Palace,,,,,
-E0,05/12/2026,15:00,Bournemouth,Hull,,,,,
-E0,05/12/2026,15:00,Brentford,Man City,,,,,
-E0,05/12/2026,15:00,Chelsea,Liverpool,,,,,
-E0,05/12/2026,15:00,Everton,Fulham,,,,,
-E0,05/12/2026,15:00,Leeds,Ipswich,,,,,
-E0,05/12/2026,15:00,Man United,Coventry,,,,,
-E0,05/12/2026,15:00,Newcastle,Sunderland,,,,,
-E0,05/12/2026,15:00,Nott'm Forest,Brighton,,,,,
-E0,05/12/2026,15:00,Tottenham,Arsenal,,,,,
-E1,05/12/2026,15:00,Cardiff,Lincoln,,,,,
-E1,05/12/2026,15:00,Charlton,Birmingham,,,,,
-E1,05/12/2026,15:00,Norwich,Wrexham,,,,,
-E1,05/12/2026,15:00,Portsmouth,West Brom,,,,,
-E1,05/12/2026,15:00,Stoke,QPR,,,,,
-E1,05/12/2026,15:00,Watford,Millwall,,,,,
-E1,05/12/2026,15:00,Wolves,Southampton,,,,,
-SC0,05/12/2026,15:00,Aberdeen,Dundee United,,,,,
-SC0,05/12/2026,15:00,Celtic,St Johnstone,,,,,
-SC0,05/12/2026,15:00,Dundee,Falkirk,,,,,
-SC0,05/12/2026,15:00,Hibernian,Rangers,,,,,
-SC0,05/12/2026,15:00,Motherwell,Kilmarnock,,,,,
-SC0,05/12/2026,15:00,St Mirren,Hearts,,,,,
-T1,05/12/2026,16:00,Buyuksehyr,Fenerbahce,,,,,
-N1,05/12/2026,16:30,Willem II,Feyenoord,,,,,
-N1,05/12/2026,18:45,Sparta Rotterdam,Nijmegen,,,,,
-N1,05/12/2026,20:00,AZ Alkmaar,PSV Eindhoven,,,,,
-N1,05/12/2026,21:00,For Sittard,Zwolle,,,,,
-D1,05/12/2026,TBC,Augsburg,FC Koln,,,,,
-D1,05/12/2026,TBC,Ein Frankfurt,Werder Bremen,,,,,
-D1,05/12/2026,TBC,Freiburg,Hoffenheim,,,,,
-D1,05/12/2026,TBC,Leverkusen,M'gladbach,,,,,
-D1,05/12/2026,TBC,RB Leipzig,Mainz,,,,,
-D1,05/12/2026,TBC,Union Berlin,Hamburg,,,,,
-F1,05/12/2026,TBC,Lens,Le Havre,,,,,
-F1,05/12/2026,TBC,Lille,Auxerre,,,,,
-F1,05/12/2026,TBC,Marseille,Nice,,,,,
-F1,05/12/2026,TBC,Monaco,Angers,,,,,
-F1,05/12/2026,TBC,Paris FC,Le Mans,,,,,
-F1,05/12/2026,TBC,Rennes,Brest,,,,,
-F1,05/12/2026,TBC,Strasbourg,Lorient,,,,,
-F1,05/12/2026,TBC,Toulouse,Paris SG,,,,,
-F1,05/12/2026,TBC,Troyes,Lyon,,,,,
-T1,06/12/2026,10:30,Erzurumspor,Kocaelispor,,,,,
-E1,06/12/2026,12:00,Burnley,Preston,,,,,
-N1,06/12/2026,12:15,Heerenveen,Cambuur,,,,,
-T1,06/12/2026,13:00,Besiktas,Samsunspor,,,,,
-T1,06/12/2026,13:00,Genclerbirligi,Eyupspor,,,,,
-N1,06/12/2026,14:30,Ajax,Utrecht,,,,,
-N1,06/12/2026,14:30,Go Ahead Eagles,Twente,,,,,
-T1,06/12/2026,16:00,Trabzonspor,Corum,,,,,
-N1,06/12/2026,16:45,Den Haag,Excelsior,,,,,
-I1,06/12/2026,TBC,Bologna,Roma,,,,,
-I1,06/12/2026,TBC,Fiorentina,Cagliari,,,,,
-I1,06/12/2026,TBC,Frosinone,Inter,,,,,
-I1,06/12/2026,TBC,Genoa,Torino,,,,,
-I1,06/12/2026,TBC,Juventus,Udinese,,,,,
-I1,06/12/2026,TBC,Lazio,Atalanta,,,,,
-I1,06/12/2026,TBC,Milan,Parma,,,,,
-I1,06/12/2026,TBC,Monza,Como,,,,,
-I1,06/12/2026,TBC,Napoli,Lecce,,,,,
-I1,06/12/2026,TBC,Venezia,Sassuolo,,,,,
-P1,06/12/2026,TBC,Alverca,Moreirense,,,,,
-P1,06/12/2026,TBC,Estoril,Guimaraes,,,,,
-P1,06/12/2026,TBC,Estrela,Gil Vicente,,,,,
-P1,06/12/2026,TBC,Famalicao,Academico Viseu,,,,,
-P1,06/12/2026,TBC,Nacional,Benfica,,,,,
-P1,06/12/2026,TBC,Rio Ave,Casa Pia,,,,,
-P1,06/12/2026,TBC,Santa Clara,Porto,,,,,
-P1,06/12/2026,TBC,Sp Braga,Arouca,,,,,
-P1,06/12/2026,TBC,Sp Lisbon,Maritimo,,,,,
-SP1,06/12/2026,TBC,Alaves,Espanol,,,,,
-SP1,06/12/2026,TBC,Ath Bilbao,Real Madrid,,,,,
-SP1,06/12/2026,TBC,Ath Madrid,Betis,,,,,
-SP1,06/12/2026,TBC,Barcelona,Celta,,,,,
-SP1,06/12/2026,TBC,Getafe,Valencia,,,,,
-SP1,06/12/2026,TBC,Osasuna,Elche,,,,,
-SP1,06/12/2026,TBC,Sevilla,Malaga,,,,,
-SP1,06/12/2026,TBC,Vallecano,Levante,,,,,
-SP1,06/12/2026,TBC,Villarreal,Sociedad,,,,,
-T1,07/12/2026,17:00,Kasimpasa,Goztep,,,,,
-E1,08/12/2026,19:45,Birmingham,Watford,,,,,
-E1,08/12/2026,19:45,Blackburn,Norwich,,,,,
-E1,08/12/2026,19:45,Millwall,Sheffield United,,,,,
-E1,08/12/2026,19:45,QPR,Wolves,,,,,
-E1,08/12/2026,19:45,Swansea,Bolton,,,,,
-E1,08/12/2026,19:45,West Brom,Cardiff,,,,,
-E1,08/12/2026,19:45,Wrexham,Charlton,,,,,
-E1,08/12/2026,20:45,West Ham,Middlesbrough,,,,,
-E1,09/12/2026,19:45,Derby,Bristol City,,,,,
-E1,09/12/2026,19:45,Lincoln,Stoke,,,,,
-E1,09/12/2026,19:45,Preston,Portsmouth,,,,,
-E1,09/12/2026,20:00,Southampton,Burnley,,,,,
-T1,11/12/2026,17:00,Corum,Amedspor,,,,,
-B1,11/12/2026,19:45,Genk,Oud-Heverlee Leuven,,,,,
-E1,11/12/2026,20:00,Bolton,Wrexham,,,,,
-T1,12/12/2026,10:30,Erzurumspor,Kasimpasa,,,,,
-E1,12/12/2026,12:30,Preston,Middlesbrough,,,,,
-E1,12/12/2026,12:30,QPR,Watford,,,,,
-E1,12/12/2026,12:30,Stoke,West Brom,,,,,
-T1,12/12/2026,13:00,Alanyaspor,Samsunspor,,,,,
-B1,12/12/2026,15:00,Kortrijk,Lommel SK,,,,,
-E0,12/12/2026,15:00,Arsenal,Bournemouth,,,,,
-E0,12/12/2026,15:00,Brighton,Everton,,,,,
-E0,12/12/2026,15:00,Coventry,Aston Villa,,,,,
-E0,12/12/2026,15:00,Crystal Palace,Man United,,,,,
-E0,12/12/2026,15:00,Fulham,Brentford,,,,,
-E0,12/12/2026,15:00,Hull,Tottenham,,,,,
-E0,12/12/2026,15:00,Ipswich,Newcastle,,,,,
-E0,12/12/2026,15:00,Liverpool,Leeds,,,,,
-E0,12/12/2026,15:00,Man City,Chelsea,,,,,
-E0,12/12/2026,15:00,Sunderland,Nott'm Forest,,,,,
-E1,12/12/2026,15:00,Blackburn,Derby,,,,,
-E1,12/12/2026,15:00,Cardiff,Southampton,,,,,
-E1,12/12/2026,15:00,Charlton,Swansea,,,,,
-E1,12/12/2026,15:00,Lincoln,Norwich,,,,,
-E1,12/12/2026,15:00,Portsmouth,Birmingham,,,,,
-E1,12/12/2026,15:00,Sheffield United,Burnley,,,,,
-E1,12/12/2026,15:00,West Ham,Bristol City,,,,,
-E1,12/12/2026,15:00,Wolves,Millwall,,,,,
-SC0,12/12/2026,15:00,Dundee United,St Mirren,,,,,
-SC0,12/12/2026,15:00,Falkirk,Aberdeen,,,,,
-SC0,12/12/2026,15:00,Kilmarnock,Dundee,,,,,
-SC0,12/12/2026,15:00,St Johnstone,Rangers,,,,,
-T1,12/12/2026,16:00,Eyupspor,Galatasaray,,,,,
-N1,12/12/2026,16:30,Utrecht,For Sittard,,,,,
-B1,12/12/2026,17:15,RAAL La Louviere,Antwerp,,,,,
-N1,12/12/2026,18:45,Heerenveen,Go Ahead Eagles,,,,,
-B1,12/12/2026,19:45,Beveren,Cercle Brugge,,,,,
-B1,12/12/2026,19:45,Waregem,Standard,,,,,
-N1,12/12/2026,21:00,Zwolle,Excelsior,,,,,
-D1,12/12/2026,TBC,Dortmund,Augsburg,,,,,
-D1,12/12/2026,TBC,FC Koln,RB Leipzig,,,,,
-D1,12/12/2026,TBC,Hoffenheim,Bayern Munich,,,,,
-D1,12/12/2026,TBC,M'gladbach,Ein Frankfurt,,,,,
-D1,12/12/2026,TBC,Mainz,Freiburg,,,,,
-D1,12/12/2026,TBC,Stuttgart,Union Berlin,,,,,
-D1,12/12/2026,TBC,Werder Bremen,Leverkusen,,,,,
-F1,12/12/2026,TBC,Angers,Strasbourg,,,,,
-F1,12/12/2026,TBC,Auxerre,Toulouse,,,,,
-F1,12/12/2026,TBC,Brest,Troyes,,,,,
-F1,12/12/2026,TBC,Le Havre,Le Mans,,,,,
-F1,12/12/2026,TBC,Lorient,Lille,,,,,
-F1,12/12/2026,TBC,Nice,Lens,,,,,
-F1,12/12/2026,TBC,Paris SG,Paris FC,,,,,
-F1,12/12/2026,TBC,Rennes,Monaco,,,,,
-T1,13/12/2026,10:30,Kocaelispor,Genclerbirligi,,,,,
-N1,13/12/2026,12:15,PSV Eindhoven,Telstar,,,,,
-B1,13/12/2026,12:30,Anderlecht,Charleroi,,,,,
-T1,13/12/2026,13:00,Goztep,Konyaspor,,,,,
-T1,13/12/2026,13:00,Rizespor,Buyuksehyr,,,,,
-N1,13/12/2026,14:30,Groningen,Feyenoord,,,,,
-N1,13/12/2026,14:30,Willem II,Den Haag,,,,,
-B1,13/12/2026,15:00,Club Brugge,Westerlo,,,,,
-SC0,13/12/2026,15:00,Celtic,Hibernian,,,,,
-SC0,13/12/2026,15:00,Hearts,Motherwell,,,,,
-T1,13/12/2026,16:00,Fenerbahce,Trabzonspor,,,,,
-N1,13/12/2026,16:45,AZ Alkmaar,Nijmegen,,,,,
-B1,13/12/2026,17:30,Mechelen,St. Gilloise,,,,,
-B1,13/12/2026,18:15,Gent,St Truiden,,,,,
-N1,13/12/2026,20:00,Ajax,Cambuur,,,,,
-F1,13/12/2026,20:45,Lyon,Marseille,,,,,
-I1,13/12/2026,TBC,Atalanta,Genoa,,,,,
-I1,13/12/2026,TBC,Cagliari,Venezia,,,,,
-I1,13/12/2026,TBC,Como,Bologna,,,,,
-I1,13/12/2026,TBC,Inter,Torino,,,,,
-I1,13/12/2026,TBC,Juventus,Monza,,,,,
-I1,13/12/2026,TBC,Lazio,Roma,,,,,
-I1,13/12/2026,TBC,Lecce,Sassuolo,,,,,
-I1,13/12/2026,TBC,Napoli,Milan,,,,,
-I1,13/12/2026,TBC,Parma,Fiorentina,,,,,
-I1,13/12/2026,TBC,Udinese,Frosinone,,,,,
-P1,13/12/2026,TBC,Academico Viseu,Arouca,,,,,
-P1,13/12/2026,TBC,Benfica,Sp Braga,,,,,
-P1,13/12/2026,TBC,Casa Pia,Nacional,,,,,
-P1,13/12/2026,TBC,Estoril,Santa Clara,,,,,
-P1,13/12/2026,TBC,Gil Vicente,Sp Lisbon,,,,,
-P1,13/12/2026,TBC,Guimaraes,Alverca,,,,,
-P1,13/12/2026,TBC,Maritimo,Rio Ave,,,,,
-P1,13/12/2026,TBC,Moreirense,Famalicao,,,,,
-P1,13/12/2026,TBC,Porto,Estrela,,,,,
-SP1,13/12/2026,TBC,Ath Madrid,Valencia,,,,,
-SP1,13/12/2026,TBC,Elche,Sevilla,,,,,
-SP1,13/12/2026,TBC,Espanol,Celta,,,,,
-SP1,13/12/2026,TBC,Levante,Alaves,,,,,
-SP1,13/12/2026,TBC,Malaga,Barcelona,,,,,
-SP1,13/12/2026,TBC,Real Madrid,Osasuna,,,,,
-SP1,13/12/2026,TBC,Sociedad,Getafe,,,,,
-SP1,13/12/2026,TBC,Villarreal,Vallecano,,,,,
-T1,14/12/2026,17:00,Gaziantep,Besiktas,,,,,
+T1,27/11/2026,17:00,Alanyaspor,Konyaspor,2.66,3.04,2.63,2.17,1.63
+T1,27/11/2026,17:00,Rizespor,Kasimpasa,1.91,3.61,3.51,1.64,2.14
+N1,27/11/2026,19:00,Groningen,Willem II,1.28,5.69,8.59,1.42,2.73
+D1,27/11/2026,19:30,Werder Bremen,M'gladbach,1.65,4.21,4.5,1.52,2.45
+B1,27/11/2026,19:45,Oud-Heverlee Leuven,Kortrijk,1.95,3.58,3.45,1.63,2.18
+F1,27/11/2026,19:45,Brest,Paris FC,3.3,3.36,2.15,1.86,1.88
+I1,27/11/2026,19:45,Venezia,Bologna,3.01,3.19,2.4,2.07,1.71
+E0,27/11/2026,20:00,Nott'm Forest,Chelsea,2.41,3.34,2.88,1.86,1.87
+E1,27/11/2026,20:00,Southampton,Middlesbrough,2.97,3.65,2.19,1.55,2.34
+SP1,27/11/2026,20:00,Levante,Santander,2,3.94,3.24,1.39,2.86
+P1,27/11/2026,20:15,Maritimo,Nacional,2.14,3.15,3.44,2.27,1.58
+E1,28/11/2026,12:30,Blackburn,Charlton,2.02,3.43,3.52,1.94,1.8
+E1,28/11/2026,12:30,Lincoln,Wolves,5.63,4.09,1.54,1.75,2
+E1,28/11/2026,12:30,Preston,Norwich,4.48,4.01,1.68,1.56,2.34
+SP1,28/11/2026,13:00,Betis,Vallecano,1.58,4.26,5.02,1.54,2.39
+T1,28/11/2026,13:00,Samsunspor,Genclerbirligi,1.85,3.51,3.84,1.8,1.92
+I1,28/11/2026,14:00,Frosinone,Parma,1.47,4.97,5.51,1.37,2.96
+D1,28/11/2026,14:30,FC Koln,Elversberg,1.98,3.72,3.4,1.58,2.29
+D1,28/11/2026,14:30,Hamburg,Bayern Munich,9.28,6.46,1.25,1.29,3.43
+D1,28/11/2026,14:30,Mainz,Union Berlin,1.49,4.52,5.7,1.53,2.41
+D1,28/11/2026,14:30,Paderborn,Schalke 04,2.51,3.4,2.67,1.75,2.01
+B1,28/11/2026,15:00,Westerlo,RAAL La Louviere,1.93,3.58,3.54,1.67,2.1
+E0,28/11/2026,15:00,Leeds,Coventry,1.46,4.44,6.36,1.65,2.16
+E0,28/11/2026,15:00,Man United,Brentford,2.09,3.7,3.17,1.54,2.37
+E1,28/11/2026,15:00,Birmingham,Bolton,1.52,4.35,5.51,1.55,2.35
+E1,28/11/2026,15:00,Derby,Watford,2.2,3.33,3.19,1.93,1.81
+E1,28/11/2026,15:00,Millwall,Burnley,2.11,3.56,3.2,1.65,2.15
+E1,28/11/2026,15:00,QPR,Sheffield United,2,3.53,3.49,1.79,1.96
+E1,28/11/2026,15:00,West Brom,Bristol City,1.65,3.83,4.93,1.83,1.9
+E1,28/11/2026,15:00,West Ham,Stoke,1.64,4.11,4.66,1.68,2.12
+E1,28/11/2026,15:00,Wrexham,Portsmouth,2.1,3.23,3.51,2.23,1.61
+SC0,28/11/2026,15:00,Aberdeen,Dundee,1.85,3.74,3.73,1.61,2.21
+SC0,28/11/2026,15:00,Dundee United,St Johnstone,1.65,4.13,4.39,1.48,2.52
+SC0,28/11/2026,15:00,Rangers,Falkirk,1.23,6.32,9.88,1.35,3.07
+SC0,28/11/2026,15:00,St Mirren,Kilmarnock,2.16,3.51,3.06,1.6,2.23
+SP1,28/11/2026,15:15,Malaga,Ath Bilbao,4.59,3.76,1.72,1.8,1.94
+N1,28/11/2026,15:30,Excelsior,Telstar,1.98,3.53,3.49,1.66,2.12
+P1,28/11/2026,15:30,Arouca,Rio Ave,1.66,3.71,4.83,1.88,1.83
+P1,28/11/2026,15:30,Moreirense,Santa Clara,3.07,3.03,2.36,2.37,1.53
+T1,28/11/2026,16:00,Gaziantep,Amedspor,3.31,3.57,1.99,1.62,2.18
+F1,28/11/2026,16:15,Angers,Lens,4.57,3.97,1.68,1.67,2.12
+I1,28/11/2026,17:00,Torino,Lazio,3.38,3.37,2.13,1.84,1.9
+B1,28/11/2026,17:15,Cercle Brugge,Mechelen,1.94,3.59,3.48,1.65,2.13
+D1,28/11/2026,17:30,Stuttgart,Ein Frankfurt,1.8,4.38,3.54,1.26,3.67
+E0,28/11/2026,17:30,Ipswich,Aston Villa,3.49,3.77,1.96,1.53,2.4
+SP1,28/11/2026,17:30,Elche,Ath Madrid,6.2,4.68,1.45,1.53,2.4
+N1,28/11/2026,17:45,PSV Eindhoven,Go Ahead Eagles,1.22,6.92,9.33,1.18,4.46
+SC0,28/11/2026,17:45,Motherwell,Hibernian,2.57,3.46,2.5,1.67,2.11
+P1,28/11/2026,18:00,Academico Viseu,Alverca,2.53,3.13,2.76,1.96,1.77
+B1,28/11/2026,19:45,Charleroi,Beveren,1.5,4.26,5.63,1.59,2.24
+B1,28/11/2026,19:45,Lommel SK,Waregem,2.61,3.58,2.38,1.54,2.35
+F1,28/11/2026,19:45,Le Havre,Strasbourg,3.08,3.5,2.18,1.67,2.12
+F1,28/11/2026,19:45,Le Mans,Lille,3.62,3.34,2.03,2.03,1.73
+F1,28/11/2026,19:45,Nice,Troyes,1.67,3.96,4.69,1.63,2.19
+F1,28/11/2026,19:45,Paris SG,Lorient,1.2,6.54,12.25,1.42,2.72
+I1,28/11/2026,19:45,Inter,Genoa,1.3,5.49,9.06,1.52,2.44
+N1,28/11/2026,20:00,Cambuur,Sparta Rotterdam,2.11,3.86,2.92,1.39,2.81
+SP1,28/11/2026,20:00,Real Madrid,Alaves,1.12,9.19,17.16,1.3,3.4
+P1,28/11/2026,20:30,Guimaraes,Estrela,1.67,3.78,4.66,1.77,1.97
+T1,29/11/2026,10:30,Corum,Kocaelispor,1.88,3.42,3.78,1.87,1.84
+N1,29/11/2026,11:15,Den Haag,Utrecht,2.64,3.6,2.38,1.56,2.29
+I1,29/11/2026,11:30,Udinese,Fiorentina,3.04,3.52,2.21,1.68,2.11
+E0,29/11/2026,12:00,Everton,Liverpool,4.33,3.78,1.76,1.64,2.17
+E1,29/11/2026,12:00,Swansea,Cardiff,2.04,3.77,3.16,1.46,2.59
+B1,29/11/2026,12:30,St Truiden,Genk,2.33,3.61,2.65,1.5,2.46
+SP1,29/11/2026,13:00,Valencia,Osasuna,2.13,3.22,3.49,2.21,1.62
+T1,29/11/2026,13:00,Eyupspor,Buyuksehyr,6.04,4.48,1.43,1.56,2.29
+N1,29/11/2026,13:30,Feyenoord,Ajax,2.14,3.86,2.82,1.36,2.93
+N1,29/11/2026,13:30,For Sittard,Heerenveen,3.49,3.72,1.92,1.52,2.41
+F1,29/11/2026,14:00,Auxerre,Marseille,3.53,3.74,1.93,1.59,2.27
+I1,29/11/2026,14:00,Sassuolo,Napoli,4.58,4.18,1.65,1.54,2.38
+E0,29/11/2026,14:05,Brighton,Newcastle,1.56,4.4,5.15,1.51,2.46
+E0,29/11/2026,14:05,Crystal Palace,Hull,1.87,3.69,3.85,1.71,2.06
+E0,29/11/2026,14:05,Fulham,Bournemouth,2.73,3.42,2.46,1.73,2.02
+E0,29/11/2026,14:05,Sunderland,Tottenham,3.62,3.36,2.04,1.93,1.81
+D1,29/11/2026,14:30,Freiburg,RB Leipzig,2.66,3.76,2.34,1.46,2.62
+B1,29/11/2026,15:00,Antwerp,Anderlecht,3.41,3.72,1.92,1.6,2.23
+SC0,29/11/2026,15:00,Hearts,Celtic,3.48,3.85,1.88,1.46,2.57
+SP1,29/11/2026,15:15,La Coruna,Barcelona,9.8,7.12,1.21,1.23,3.91
+N1,29/11/2026,15:45,Zwolle,AZ Alkmaar,5.05,4.44,1.53,1.43,2.65
+T1,29/11/2026,16:00,Fenerbahce,Erzurumspor,1.23,5.66,9.86,1.52,2.4
+F1,29/11/2026,16:15,Toulouse,Rennes,2.51,3.53,2.58,1.65,2.16
+D1,29/11/2026,16:30,Hoffenheim,Augsburg,1.7,4.42,3.93,1.29,3.41
+E0,29/11/2026,16:30,Arsenal,Man City,1.97,3.65,3.55,1.71,2.07
+I1,29/11/2026,17:00,Roma,Monza,1.19,7.13,12.03,1.33,3.2
+B1,29/11/2026,17:30,Standard,Club Brugge,4.89,4.48,1.53,1.38,2.85
+SP1,29/11/2026,17:30,Celta,Villarreal,2.7,3.45,2.46,1.73,2.03
+P1,29/11/2026,18:00,Gil Vicente,Estoril,1.8,3.55,4.14,1.91,1.81
+B1,29/11/2026,18:15,St. Gilloise,Gent,1.45,4.29,6.25,1.7,2.05
+D1,29/11/2026,18:30,Dortmund,Leverkusen,2.09,3.87,3,1.45,2.64
+N1,29/11/2026,19:00,Nijmegen,Twente,3.66,3.96,1.81,1.36,2.94
+F1,29/11/2026,19:45,Lyon,Monaco,2.35,3.31,2.93,1.9,1.83
+I1,29/11/2026,19:45,Como,Juventus,1.95,3.53,3.69,1.77,1.97
+SP1,29/11/2026,20:00,Sociedad,Sevilla,2.12,3.49,3.2,1.75,1.98
+P1,29/11/2026,20:30,Porto,Sp Lisbon,1.9,3.33,4,1.83,1.89
+T1,30/11/2026,16:00,Goztep,Trabzonspor,3.16,3.67,2,1.57,2.27
+I1,30/11/2026,17:30,Lecce,Atalanta,3.85,3.79,1.84,1.6,2.25
+T1,30/11/2026,18:00,Besiktas,Galatasaray,2,3.72,3.13,1.46,2.54
+I1,30/11/2026,19:45,Cagliari,Milan,4.74,3.76,1.7,1.82,1.92
+SP1,30/11/2026,20:00,Espanol,Getafe,2.06,3.13,3.82,2.41,1.52
+P1,30/11/2026,20:15,Benfica,Famalicao,1.17,6.93,12.53,1.41,2.71
+P1,30/11/2026,20:15,Casa Pia,Sp Braga,6.56,4.15,1.45,1.91,1.81
